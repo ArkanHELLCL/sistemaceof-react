@@ -1,6 +1,7 @@
+/* eslint-disable react/prop-types */
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 
-export default function Footer () {
+export default function Footer({user}) {
   return (
     <footer className="footer text-white bg-black bg-opacity-30 pl-4 py-4">
       <div className='flex justify-between align-top'>
@@ -10,7 +11,7 @@ export default function Footer () {
           <a href="#" className="text-gray-300 no-underline text-lg">Salir</a>
         </div>
       </div>
-      <h2 className="opacity-30">Luis Castillo</h2>      
+      <h2 className="opacity-30">{user?.nombre}</h2>      
     </footer>
   );
 }

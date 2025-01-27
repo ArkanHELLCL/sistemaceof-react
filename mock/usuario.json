@@ -1,0 +1,11 @@
+{
+    "data":
+    {
+        "id": 1,
+        "nombre": "Luis Castillo",
+        "empresa": "CEOF Consultores",
+        "perfil": "Administrador",
+        "idperfil": 1,
+        "logo": "https://ceofconsultores.com/wp-content/uploads/2025/01/logo-BLANCO-400px.png"
+    }
+}

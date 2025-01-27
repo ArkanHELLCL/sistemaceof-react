@@ -69,24 +69,35 @@ const CustomTreeItem = forwardRef(function CustomTreeItem(props, ref) {
   );
 });
 
-export default function Menu({setTitle}) {
-  return (
-    <>
-      <SimpleTreeView defaultExpandedItems={['2', '5']}>
-        <CustomTreeItem itemId="1" label="Dashboard" setTitle={setTitle}>
-        </CustomTreeItem>
-        <CustomTreeItem itemId="2" label="Datos" >
-          <CustomTreeItem itemId="3" label="Carga" setTitle={setTitle} />
-          <CustomTreeItem itemId="4" label="Informe de errores" setTitle={setTitle} />          
-        </CustomTreeItem>
-        <CustomTreeItem itemId="5" label="Mantenedores" >
-            <CustomTreeItem itemId="6" label="Empresas" setTitle={setTitle} />
-            <CustomTreeItem itemId="7" label="Usuarios" setTitle={setTitle} />
-        </CustomTreeItem>
-        <CustomTreeItem itemId="8" label="Contacto" setTitle={setTitle}>
-        </CustomTreeItem>
-      </SimpleTreeView>
-    </>
-    
-  );
+export default function Menu({setTitle, user}) {
+    return (
+        user?.idperfil === 1 ?
+            <>
+                <Box sx={{ minHeight: 200, minWidth: 250, maxHeight: 600, overflow: 'auto' }}>
+                    <SimpleTreeView defaultExpandedItems={['2', '5']}>
+                        <CustomTreeItem itemId="1" label="Dashboard" setTitle={setTitle}>
+                        </CustomTreeItem>
+                        <CustomTreeItem itemId="2" label="Datos" >
+                            <CustomTreeItem itemId="3" label="Carga" setTitle={setTitle} />
+                            <CustomTreeItem itemId="4" label="Informe de errores" setTitle={setTitle} />          
+                        </CustomTreeItem>
+                        <CustomTreeItem itemId="5" label="Mantenedores" >
+                            <CustomTreeItem itemId="6" label="Empresas" setTitle={setTitle} />
+                            <CustomTreeItem itemId="7" label="Usuarios" setTitle={setTitle} />
+                        </CustomTreeItem>
+                        <CustomTreeItem itemId="8" label="Contacto" setTitle={setTitle}>
+                        </CustomTreeItem>
+                    </SimpleTreeView>
+                </Box>                
+            </>
+        : 
+            <>
+                <SimpleTreeView>
+                    <CustomTreeItem itemId="1" label="Dashboard" setTitle={setTitle}>
+                    </CustomTreeItem>
+                    <CustomTreeItem itemId="8" label="Contacto" setTitle={setTitle}>
+                    </CustomTreeItem>
+                </SimpleTreeView>
+            </>
+    )
 }

@@ -1,0 +1,11 @@
+{
+    "graficos": [
+        { "title": "Panel Financiero", "year": 1994 },
+        { "title": "Cubo", "year": 1972 },
+        { "title": "Ventas", "year": 1974 },
+        { "title": "Utilidad Mes", "year": 2008 },
+        { "title": "Utilidad YTD", "year": 1957 },
+        { "title": "Remunearaciones", "year": 1993 },
+        { "title": "GOA", "year": 1994 }
+    ]
+}
