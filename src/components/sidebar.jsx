@@ -14,16 +14,17 @@ export default function Sidebar ({setTitle}) {
         </div>
         <div className='flex flex-col h-full pb-[150px] pt-2 gap-2'>
             <Menu setTitle={setTitle}/>       
-            <div className='grid grid-cols-2 gap-4 p-4 border-t border-b border-purple-500'>
+            <div className='grid grid-cols-2 gap-4 p-4 border-t border-b border-purple-500 w-full truncate'>
                 <FormGroup className='truncate w-full'>
-                    <FormControlLabel control={<Checkbox defaultChecked />} label="Panel Financiero" className=''/>
-                    <FormControlLabel required control={<Checkbox />} label="Required" className='!truncate !text-nowrap'/>
-                    <FormControlLabel disabled control={<Checkbox />} label="Disabled" className='!truncate !text-nowrap'/>
+                    <FormControlLabel control={<Checkbox defaultChecked />} label="Panel Financiero" className='!truncate'/>
+                    <FormControlLabel control={<Checkbox />} label="Cubo" className='!truncate'/>
+                    <FormControlLabel control={<Checkbox />} label="Ventas" className='!truncate'/>
                 </FormGroup>
-                <FormGroup>
-                    <FormControlLabel control={<Checkbox defaultChecked />} label="Label" className='!truncate !text-nowrap'/>
-                    <FormControlLabel required control={<Checkbox />} label="Required" className='!truncate !text-nowrap'/>
-                    <FormControlLabel disabled control={<Checkbox />} label="Disabled" className='!truncate !text-nowrap'/>
+                <FormGroup className='truncate w-full'>
+                    <FormControlLabel control={<Checkbox defaultChecked />} label="Utilidad Mes" className='!truncate'/>
+                    <FormControlLabel control={<Checkbox />} label="Utilidad YTD" className='!truncate'/>
+                    <FormControlLabel control={<Checkbox />} label="Remuneraciones" className='!truncate'/>
+                    <FormControlLabel control={<Checkbox />} label="GOA" className='!truncate'/>
                 </FormGroup>                
             </div>
         </div>
