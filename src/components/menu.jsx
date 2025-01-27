@@ -60,7 +60,7 @@ const CustomTreeItem = forwardRef(function CustomTreeItem(props, ref) {
           <TreeItem2Checkbox {...getCheckboxProps()} />
           <Box sx={{ flexGrow: 1, display: 'flex', gap: 1 }}>{
             itemId === '1' ? <DashboardIcon /> : itemId === '2' ? <AddchartIcon /> : itemId === '5' ? <StorageIcon /> : itemId === '8' ? <ContactSupportIcon /> : itemId === '3' ? <CloudUploadIcon /> : itemId === '4' ? <SummarizeIcon /> : itemId === '6' ? <BusinessIcon /> : itemId === '7' ? <PeopleAltIcon /> : null}
-            <TreeItem2Label {...getLabelProps()} className={` ${(itemId === '1' || itemId === '2' || itemId === '5' || itemId === '8') ? ' !text-lg !font-bold' : '' }  `} onClick={()=>onClickHandle(itemId, label, setTitle)}/>
+            <TreeItem2Label {...getLabelProps()} className={` ${(itemId === '1' || itemId === '2' || itemId === '5' || itemId === '8') ? ' !text-lg !font-bold' : '' }  !truncate`} onClick={()=>onClickHandle(itemId, label, setTitle)} />
           </Box>
         </CustomTreeItemContent>
         {children && <TreeItem2GroupTransition {...getGroupTransitionProps()} />}
@@ -73,7 +73,7 @@ export default function Menu({setTitle, user}) {
     return (
         user?.idperfil === 1 ?
             <>
-                <Box sx={{ minHeight: 200, minWidth: 250, maxHeight: 600, overflow: 'auto' }}>
+                <Box sx={{ minHeight: 200, minWidth: 250, maxHeight: 600, overflowY: 'auto' }} >
                     <SimpleTreeView defaultExpandedItems={['2', '5']}>
                         <CustomTreeItem itemId="1" label="Dashboard" setTitle={setTitle}>
                         </CustomTreeItem>

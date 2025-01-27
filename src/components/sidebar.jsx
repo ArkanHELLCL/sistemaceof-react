@@ -5,7 +5,7 @@ export default function Sidebar ({setTitle, user}) {
     return (
       <section className="sidebar text-white pl-4 pt-4">
         <div className='text-center pr-4'>
-            <img src={user?.logo} className="h-16 w-auto"/>
+            <img src={user?.logo} className=""/>
             <span>{user?.empresa}</span>
             <div className="pt-4 mt-4 space-y-2 font-medium border-t border-purple-500"></div>
         </div>

@@ -22,7 +22,7 @@
     "sidebar header"
     "sidebar main"
     "footer main";
-  grid-template-columns: 20% 80%;
+  grid-template-columns: 1fr 11fr;
   grid-template-rows: 70px calc(100vh - 156px) 100px;
 }
 
