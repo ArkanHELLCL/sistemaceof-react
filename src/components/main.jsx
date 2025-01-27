@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Chip from '@mui/material/Chip';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import ChartArea from './graficos/chartArea.jsx';
+//import ChartArea from './graficos/chartArea.jsx';
 import BarChart from './graficos/barChart.jsx';
 import Grid from '@mui/material/Grid';
 
@@ -22,12 +22,11 @@ export default function Main () {
         setEmpresa(emps[0]);
     }, []);
 
-
     const [userData, setUserData] = useState({
         labels: UserData.map((data) => data.month),
         datasets: [
           {
-            label: "Ventas",
+            label: "Users Gained",
             data: UserData.map((data) => data.venta),
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
@@ -38,8 +37,8 @@ export default function Main () {
                 'rgba(153, 102, 255, 0.2)',
                 'rgba(201, 203, 207, 0.2)',
                 'rgba(233, 180, 257, 0.2)'
-              ],
-              borderColor: [
+            ],
+            borderColor: [
                 'rgb(255, 99, 132)',
                 'rgb(255, 159, 64)',
                 'rgb(255, 205, 86)',
@@ -48,11 +47,11 @@ export default function Main () {
                 'rgb(153, 102, 255)',
                 'rgb(201, 203, 207)',
                 'rgb(233, 180, 257)'
-              ],
-            borderWidth: 1,
+            ],
+            borderWidth: 1
           },
         ],
-    });
+      });
 
     return (
         <section className="main bg-white w-full px-10 pt-4 pb-20">
@@ -108,10 +107,10 @@ export default function Main () {
                     <BarChart chartData={userData} title={'Gráfico de Ventas'}/>
                 </Grid>
                 <Grid item xs={6} className='h-[400px]'>
-                    <BarChart chartData={userData} />
+                    <BarChart chartData={userData} title={'Gráfico 2'}/>
                 </Grid>
                 <Grid item xs={12} className='h-[600px] w-full'>
-                    <BarChart chartData={userData} />
+                    <BarChart chartData={userData} title={''} />
                 </Grid>
             </Grid>
                             
