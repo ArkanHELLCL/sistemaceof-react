@@ -24,9 +24,12 @@ import { TreeItem2Provider } from '@mui/x-tree-view/TreeItem2Provider';
 import { forwardRef } from 'react';
 
 const onClickHandle = (itemId, label, setTitle) => {
+    let msg = label;
     if(itemId === '2' || itemId === '5')
         return;
-    setTitle(label);
+    //if(itemId === '1')
+     //   msg = 'Dashboard - Empresa 1';
+    setTitle(msg);
 }
 
 
