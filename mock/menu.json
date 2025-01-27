@@ -1,0 +1,50 @@
+{
+    "menu": [
+        {
+            "id": 1,
+            "name": "Dashboard",
+            "url": "/",
+            "submenu": []
+        },
+        {
+            "id": 2,
+            "name": "Datos",
+            "url": "/datos",
+            "submenu": [
+                {
+                    "id": 21,
+                    "name": "Carga",
+                    "url": "/datos/carga"
+                },
+                {
+                    "id": 22,
+                    "name": "Informe de cargas",
+                    "url": "/datos/informe-de-cargas"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "Maestros",
+            "url": "/maestros",
+            "submenu": [
+                {
+                    "id": 31,
+                    "name": "Empresas",
+                    "url": "/maestros/empresas"
+                },
+                {
+                    "id": 32,
+                    "name": "Usuarios",
+                    "url": "/maestros/usuarios"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "Contacto",
+            "url": "/contacto",
+            "submenu": []
+        }
+    ]
+}
