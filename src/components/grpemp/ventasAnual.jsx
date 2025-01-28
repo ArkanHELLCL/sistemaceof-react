@@ -22,6 +22,7 @@ export default function VentasAnual({empresa, anio}){
     const fixedOptions = [];
     const selectedAnios = anios?.filter(item => anio?.includes(item.year)).sort((a, b) => a.year - b.year)
     const [aniosSelected, setAniosSelected] = useState(selectedAnios);
+    const [title, setTitle] = useState('Gráfico de Ventas');
 
     useEffect(() => {
         const orderedData = UserData?.sort((a, b) => a.anio - b.anio);
@@ -63,16 +64,18 @@ export default function VentasAnual({empresa, anio}){
             ]
         })
     }, [UserData, empresa, anio]);
-    let title;
-    if(anio.length === 1){
-        title = 'Gráfico de Ventas año ' + anio[0];
-    }
-    else if(anio.length > 1){
-        title = 'Gráfico de Ventas años ' + anio[0] + ' a ' + anio[anio.length-1];
-    }
-    else{
-        title = 'Gráfico de Ventas';
-    }
+
+    useEffect(() => {
+        if(aniosSelected.length === 1){
+            setTitle('Gráfico de Ventas año ' + aniosSelected[0].title );
+        }
+        else if(aniosSelected.length > 1){
+            setTitle('Gráfico de Ventas año ' + aniosSelected.map(item => item.title).join(', '));
+        }
+        else{
+           setTitle('Gráfico de Ventas');
+        }
+    }, [aniosSelected]);
 
     return grpconfig ? 
         <>
