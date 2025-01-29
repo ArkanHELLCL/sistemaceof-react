@@ -27,7 +27,12 @@ function StackedChart({ chartData, title }) {
                         grid:{
                             display: false
                         },
-                        stacked: true
+                        stacked: true,
+                        ticks: {
+                            callback: function(value, index, values) {
+                                return '$ ' + value;
+                            }
+                        }
                     }
                 },
                 maintainAspectRatio: false

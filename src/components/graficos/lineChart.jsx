@@ -22,6 +22,11 @@ function LineChart({ chartData, title }) {
                       y: {
                           grid:{
                               display: false
+                          },
+                          ticks: {
+                              callback: function(value, index, values) {
+                                  return '$ ' + value;
+                              }
                           }
                       }
                   },
