@@ -7,6 +7,8 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import BusinessIcon from '@mui/icons-material/Business';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
+import PublishIcon from '@mui/icons-material/Publish';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
@@ -59,7 +61,7 @@ const CustomTreeItem = forwardRef(function CustomTreeItem(props, ref) {
           </TreeItem2IconContainer>
           <TreeItem2Checkbox {...getCheckboxProps()} />
           <Box sx={{ flexGrow: 1, display: 'flex', gap: 1 }}>{
-            itemId === '1' ? <DashboardIcon /> : itemId === '2' ? <AddchartIcon /> : itemId === '5' ? <StorageIcon /> : itemId === '8' ? <ContactSupportIcon /> : itemId === '3' ? <CloudUploadIcon /> : itemId === '4' ? <SummarizeIcon /> : itemId === '6' ? <BusinessIcon /> : itemId === '7' ? <PeopleAltIcon /> : null}
+            itemId === '1' ? <DashboardIcon /> : itemId === '2' ? <AddchartIcon /> : itemId === '5' ? <StorageIcon /> : itemId === '8' ? <ContactSupportIcon /> : itemId === '3' ? <CloudUploadIcon /> : itemId === '4' ? <SummarizeIcon /> : itemId === '6' ? <BusinessIcon /> : itemId === '7' ? <PeopleAltIcon /> : itemId === '9' ? <PublishIcon /> : itemId === '10' ? <UploadFileIcon /> : null}
             <TreeItem2Label {...getLabelProps()} className={` ${(itemId === '1' || itemId === '2' || itemId === '5' || itemId === '8') ? ' !text-lg !font-bold' : '' }  !truncate`} onClick={()=>onClickHandle(itemId, label, setTitle)} />
           </Box>
         </CustomTreeItemContent>
@@ -78,7 +80,10 @@ export default function Menu({setTitle, user}) {
                         <CustomTreeItem itemId="1" label="Dashboard" setTitle={setTitle}>
                         </CustomTreeItem>
                         <CustomTreeItem itemId="2" label="Datos" >
-                            <CustomTreeItem itemId="3" label="Carga" setTitle={setTitle} />
+                            <CustomTreeItem itemId="3" label="Carga" setTitle={setTitle}>
+                              <CustomTreeItem itemId="9" label="Empresa" setTitle={setTitle} />
+                              <CustomTreeItem itemId="10" label="Informes" setTitle={setTitle} />
+                            </CustomTreeItem>
                             <CustomTreeItem itemId="4" label="Informe de errores" setTitle={setTitle} />          
                         </CustomTreeItem>
                         <CustomTreeItem itemId="5" label="Mantenedores" >

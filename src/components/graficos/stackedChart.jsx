@@ -27,10 +27,12 @@ function StackedChart({ chartData, title }) {
                         grid:{
                             display: false
                         },
-                        stacked: true,
+                        stacked: true,   
+                        beginAtZero: true,                       
                         ticks: {
                             callback: function(value, index, values) {
-                                return '$ ' + value;
+                                //return '$ ' + value;
+                                return new Intl.NumberFormat('en-ES', { style: 'currency', currency: 'USD', maximumFractionDigits:0 }).format(value);
                             }
                         }
                     }

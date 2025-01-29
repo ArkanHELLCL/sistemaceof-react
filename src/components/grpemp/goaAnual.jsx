@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
-import { UserData } from '../../../mock/data5.js';
+import { UserData } from '../../../mock/data6.js';
 import MultipleChart from '../graficos/mutipleChart.jsx';
 
 const anios = [
@@ -14,7 +14,7 @@ const anios = [
     { "label": "2025", "year": 2025 }
 ]
 
-export default function RemuneracionesAnual({anio}){
+export default function GoaAnual({anio}){
     const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico
     const selectedAnios = anios?.filter(item => item.year === anio[0]).sort((a, b) => a.year - b.year)
     const [aniosSelected, setAniosSelected] = useState(selectedAnios);
@@ -105,10 +105,10 @@ export default function RemuneracionesAnual({anio}){
 
     useEffect(() => {
         if(aniosSelected.length === 1){
-            setTitle('Gráfico de Remuneraciones ' + ' año ' + aniosSelected[0].label );
+            setTitle('Gráfico GOA ' + ' año ' + aniosSelected[0].label );
         }        
         else{
-           setTitle('Gráfico de Remuneraciones');
+           setTitle('Gráfico GOA');
         }
     }, [aniosSelected]);
 
@@ -116,7 +116,7 @@ export default function RemuneracionesAnual({anio}){
         <>
             <Grid container spacing={2} className='pb-4'>
                 <Grid item xs={12} className='pb-4'>
-                    <div className="flex justify-center rounded-xl bg-[#5d4889] text-white shadow-md py-4 align-middle">
+                    <div className="flex justify-center rounded-xl bg-[#06a7d7] text-white shadow-md py-4 align-middle">
                         <h2 className="text-2xl font-light text-center">{title}</h2>
                     </div>
                 </Grid>
