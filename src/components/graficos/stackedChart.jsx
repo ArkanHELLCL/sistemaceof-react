@@ -2,7 +2,7 @@
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
 
-function BarChart({ chartData, title }) {
+function StackedChart({ chartData, title }) {
     return chartData.datasets !== undefined ? <Bar 
             data={chartData} 
             options={{
@@ -10,6 +10,9 @@ function BarChart({ chartData, title }) {
                     title: {
                         display: false,
                         text: title,
+                    },
+                    tooltip: {
+                        mode: 'x'
                     }
                 },
                 responsive: true,
@@ -17,12 +20,14 @@ function BarChart({ chartData, title }) {
                     x: {
                         grid:{
                             display: false
-                        }  
+                        },
+                        stacked: true
                     },
                     y: {
                         grid:{
                             display: false
-                        }
+                        },
+                        stacked: true
                     }
                 },
                 maintainAspectRatio: false
@@ -31,4 +36,4 @@ function BarChart({ chartData, title }) {
 }
 
 
-export default BarChart;
+export default StackedChart;

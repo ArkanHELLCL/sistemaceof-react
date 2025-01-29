@@ -6,6 +6,8 @@ import Grid from '@mui/material/Grid';
 import { empresas as emps } from '../../mock/empresas.json';
 import { graficos } from '../../mock/graficos.json';
 import VentasAnual  from './grpemp/ventasAnual.jsx';
+import UtilidadMesAnual from './grpemp/utilidadMesAnual.jsx';
+import UtilidadMes from './grpemp/utilidadMes.jsx';
 
 export default function Main () {    
     const [empresas, setEmpresas] = useState([]);
@@ -67,18 +69,19 @@ export default function Main () {
             </div>
             <h2 className="text-2xl font-light pb-2 pt-4">Visualización del Dashboard </h2>
             <div className="pt-4 mt-4 space-y-2 font-medium border-t border-purple-300"></div>            
-            <Grid container spacing={2}>
-                <Grid item xs={6} className='h-[500px] pb-20'>                    
+            <Grid container spacing={4}>
+                <Grid item xs={6} className='h-[600px] pb-[100px]'>                    
                     <VentasAnual empresa={empresa} anio={[2024,2022]} />
                 </Grid>
-                <Grid item xs={6} className='h-[500px] pb-20'>
-                    <VentasAnual empresa={empresa} anio={[2024]} />
+                <Grid item xs={6} className='h-[600px] pb-[100px]'>                    
+                    <UtilidadMes empresa={empresa} anio={[2024]} mes={[11]} />
                 </Grid>
-                <Grid item xs={12} className='h-[500px] w-full pb-20'>
-                    <VentasAnual empresa={empresa} anio={[2023]} />
+                <Grid item xs={12} className='h-[700px] pb-[100px]'>
+                    <UtilidadMesAnual empresa={empresa} anio={[2024]} />
                 </Grid>
             </Grid>
-                            
+            <Grid container spacing={4} className='h-[300px]'>
+            </Grid>             
         </section>
     );
 }
