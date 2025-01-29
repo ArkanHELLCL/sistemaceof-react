@@ -124,6 +124,7 @@ export default function UtilidadMesAnual({empresa, anio}){
                 <Grid item xs={12}> 
                     <Autocomplete
                         disablePortal
+                        disableClearable={true}
                         id="utilidad-anios"
                         value={aniosSelected[0].label}
                         options={anios}

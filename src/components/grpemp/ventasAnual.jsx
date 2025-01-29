@@ -102,6 +102,7 @@ export default function VentasAnual({empresa, anio}){
                 <Grid item xs={12}> 
                     <Autocomplete
                         multiple
+                        disableClearable={true}
                         id="anios-ventas"
                         value={aniosSelected}
                         onChange={(event, newValue) => {

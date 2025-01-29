@@ -8,6 +8,7 @@ import { graficos } from '../../mock/graficos.json';
 import VentasAnual  from './grpemp/ventasAnual.jsx';
 import UtilidadMesAnual from './grpemp/utilidadMesAnual.jsx';
 import UtilidadMes from './grpemp/utilidadMes.jsx';
+import UtilidadYTD from './grpemp/utilidadYTD.jsx';
 
 export default function Main () {    
     const [empresas, setEmpresas] = useState([]);
@@ -29,6 +30,7 @@ export default function Main () {
             <div className='flex align-bottom gap-6 pb-4'>
                 <Autocomplete
                     disablePortal
+                    disableClearable={true}
                     id="empresas"
                     value={empresa}
                     options={empresas}
@@ -37,6 +39,7 @@ export default function Main () {
                 />
                 <Autocomplete
                     multiple
+                    disableClearable={true}
                     id="graficos"
                     value={value}
                     onChange={(event, newValue) => {
@@ -76,11 +79,11 @@ export default function Main () {
                 <Grid item xs={6}>                    
                     <UtilidadMes empresa={empresa} anio={[2024]} mes={[11]} />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={8}>
                     <UtilidadMesAnual empresa={empresa} anio={[2024]} />
                 </Grid>
-                <Grid item xs={6}>                    
-                    <UtilidadMes empresa={empresa} anio={[2024]} mes={[11]} />
+                <Grid item xs={4}>                    
+                    <UtilidadYTD empresa={empresa} anio={[2024]} mes={[11]}/>
                 </Grid>
             </Grid>                    
         </section>
