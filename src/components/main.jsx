@@ -95,7 +95,7 @@ export default function Main () {
                     <GoaAnual empresa={empresa} anio={[2024]}/>
                 </Grid>
                 <Grid item xs={12}>                    
-                    <PanelFinancieroAnual empresa={empresa} anio={[2024]}/>
+                    <PanelFinancieroAnual empresa={empresa} anio={[2024]} mes={[11]}/>
                 </Grid>
             </Grid>                    
         </section>

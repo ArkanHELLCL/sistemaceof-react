@@ -10,7 +10,7 @@ function LineChart({ chartData, title }) {
                       title: {
                           display: false,
                           text: title,
-                      }
+                      },
                   },
                   responsive: true,
                   scales:{

@@ -1,7 +1,26 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
+import PanelFinancieroTable from '../graficos/panelfinancieroTable';
+import { UserData } from '../../../mock/data7.js';
+
+const meses = [
+    { "label": "Enero", "month": 1 },
+    { "label": "Febrero", "month": 2 },
+    { "label": "Marzo", "month": 3 },
+    { "label": "Abril", "month": 4 },
+    { "label": "Mayo", "month": 5 },
+    { "label": "Junio", "month": 6 },
+    { "label": "Julio", "month": 7 },
+    { "label": "Agosto", "month": 8 },
+    { "label": "Septiembre", "month": 9 },
+    { "label": "Octubre", "month": 10 },
+    { "label": "Noviembre", "month": 11 },
+    { "label": "Diciembre", "month": 12 }
+]
 
 const anios = [
     { "label": "2022", "year": 2022 },
@@ -10,19 +29,34 @@ const anios = [
     { "label": "2025", "year": 2025 }
 ]
 
-export default function PanelFinancieroAnual({anio}){
+export default function PanelFinancieroAnual({anio, mes}){
     const selectedAnios = anios?.filter(item => item.year === anio[0]).sort((a, b) => a.year - b.year)
+    const selectdMes = meses?.filter(item => item.month === mes[0]).sort((a, b) => a.month - b.month)
     const [aniosSelected, setAniosSelected] = useState(selectedAnios);
+    const [mesSelected, setMesSelected] = useState(selectdMes);
     const [title, setTitle] = useState('Panel Financiero');
+    const [resultData, setResultData] = useState([]);
+
+    useEffect(() => {
+        const filteredArray = UserData?.filter(item => item.anio === aniosSelected[0].year)[0].data.filter(item => item.month === mesSelected[0].month)[0].rows;
+        setResultData(filteredArray);
+        
+    }, [mesSelected, aniosSelected]);
+    
+    useEffect(() => {
+        const filteredArray = UserData?.filter(item => item.anio === anio[0])[0].data.filter(item => item.month === mes[0])[0].rows;
+        setResultData(filteredArray);
+        
+    }, [UserData, anio, mes]);
 
     useEffect(() => {
         if(aniosSelected.length === 1){
-            setTitle('Panel Financiero ' + ' año ' + aniosSelected[0].label );
+            setTitle('Panel Financiero ' + ' mes ' + mesSelected[0].label + ' año ' + aniosSelected[0].label  );
         }        
         else{
            setTitle('Panel Financiero');
         }
-    }, [aniosSelected]);
+    }, [aniosSelected, mesSelected]);
 
     return (
         <>
@@ -48,199 +82,26 @@ export default function PanelFinancieroAnual({anio}){
 
                         renderInput={(params) => <TextField {...params} label="Año" variant="standard"/>}
                     />
-                </Grid>                
-                <Grid item xs={12} sx={{height: '400px'}}> 
-                    <table id="panelfinanciero">
-                        <thead>
-                            <tr>
-                                <th rowSpan="2">Panel de Finanzas</th>
-                                <th colSpan="5">RESULTADO DE NOVIEMBRE</th>
-                                <th colSpan="3">YTD_NOV</th>
-                            </tr>
-                            <tr>
-                                
-                                <th rowSpan="2">Real 2024</th>
-                                <th rowSpan="2">Mes Ant. OCTUBRE</th>
-                                <th rowSpan="2">Crec. Mes Ant.</th>
-                                <th rowSpan="2">Real 2023</th>
-                                <th rowSpan="2">Crec. Año Ant.</th>
-                                <th colSpan="3">Acumulado de Enero a Noviembre</th>
-                            </tr>
-                            <tr>
-                                <th>(Pesos)</th>
-                                <th>Real 2024</th>
-                                <th> Año 2023</th>
-                                <th>Crec.</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Costos de Explotación</td>
-                                <td>0</td>
-                                <td>-250000</td>
-                                <td>100%</td>
-                                <td>0</td>
-                                <td>0%</td>
-                                <td>-295440</td>
-                                <td>0</td>
-                                <td>0%</td>
-                            </tr>
-                            <tr>
-                                <td>Margen de Explotación</td>
-                                <td>8996759</td>
-                                <td>2750000</td>
-                                <td>227%</td>
-                                <td>0</td>
-                                <td>0%</td>
-                                <td>41450319</td>
-                                <td>0</td>
-                                <td>0%</td>
-                            </tr>
-                            <tr>
-                                <td>% Margen Explotación</td>
-                                <td>100%</td>
-                                <td>92%</td>
-                                <td>9%</td>
-                                <td>0%</td>
-                                <td>0%</td>
-                                <td>99%</td>
-                                <td>0%</td>
-                                <td>0%</td>
-                            </tr>
-                            <tr>
-                                <td>Gastos Remuneraciones</td>
-                                <td>-7416688</td>
-                                <td>-655188</td>
-                                <td>1032%</td>
-                                <td>0%</td>
-                                <td>0%</td>
-                                <td>-20154783</td>
-                                <td>0%</td>
-                                <td>0%</td>
-                            </tr>
-                            <tr>
-                                <td>Gastos Mantención</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0%</td>
-                                <td>0</td>
-                                <td>0%</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0%</td>
-                            </tr>
-                            <tr>
-                                <td>Otros Gastos</td>
-                                <td>-1760335</td>
-                                <td>-10389053</td>
-                                <td>83%</td>
-                                <td>0</td>
-                                <td>0%</td>
-                                <td>-16778100</td>
-                                <td>0</td>
-                                <td>0%</td>
-                            </tr>
-                            <tr>
-                                <td>Gastos de Adm. y Ventas</td>
-                                <td>-9177023</td>
-                                <td>-11044241</td>
-                                <td>17%</td>
-                                <td>0</td>
-                                <td>0%</td>
-                                <td>-36932883</td>
-                                <td>0</td>
-                                <td>0%</td>
-                            </tr>
-                            <tr>
-                                <td>Resultado Operacional</td>
-                                <td>-180264</td>
-                                <td>-8294241</td>
-                                <td>98%</td>
-                                <td>0</td>
-                                <td>0%</td>
-                                <td>4517436</td>
-                                <td>0</td>
-                                <td>0%</td>
-                            </tr>
-                            <tr>
-                                <td>% ROP</td>
-                                <td>-2%</td>
-                                <td>-276%</td>
-                                <td>99%</td>
-                                <td>0%</td>
-                                <td>0%</td>
-                                <td>11%</td>
-                                <td>0%</td>
-                                <td>0%</td>
-                            </tr>
-                            <tr>
-                                <td>Ingresos No Operacionales</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0%</td>
-                                <td>0</td>
-                                <td>0%</td>
-                                <td>-350000</td>
-                                <td>0</td>
-                                <td>0%</td>
-                            </tr>
-                            <tr>
-                                <td>Utilidad</td>
-                                <td>-180264</td>
-                                <td>-8294241</td>
-                                <td>98%</td>
-                                <td>0</td>
-                                <td>0%</td>
-                                <td>4167436</td>
-                                <td>0,0%</td>
-                                <td>0,0%</td>
-                            </tr>
-                            <tr>
-                                <td>% Utilidad</td>
-                                <td>-2%</td>
-                                <td>-276,5%</td>
-                                <td>99,3%</td>
-                                <td>0,0%</td>
-                                <td>0,0%</td>
-                                <td>10,0%</td>
-                                <td>0,0%</td>
-                                <td>0,0%</td>
-                            </tr>
-                            <tr>
-                                <td>Ratio Costos Expl.</td>
-                                <td>0%</td>
-                                <td>8%</td>
-                                <td>-100%</td>
-                                <td>0%</td>
-                                <td>0%</td>
-                                <td>1%</td>
-                                <td>0%</td>
-                                <td>0%</td>
-                            </tr>
-                            <tr>
-                                <td>Ratio Mano de Obra</td>
-                                <td>82%</td>
-                                <td>22%</td>
-                                <td>277%</td>
-                                <td>0%</td>
-                                <td>0%</td>
-                                <td>48%</td>
-                                <td>0%</td>
-                                <td>0%</td>
-                            </tr>
-                            <tr>
-                                <td>Ratio Gastos Adm y Vta.</td>
-                                <td>102%</td>
-                                <td>368%</td>
-                                <td>-72%</td>
-                                <td>0%</td>
-                                <td>0%</td>
-                                <td>88%</td>
-                                <td>0%</td>
-                                <td>0%</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                </Grid>
+                <Grid item xs={3}> 
+                    <Autocomplete
+                        disablePortal
+                        disableClearable={true}
+                        id="utilidad-meses"
+                        value={mesSelected[0].label}
+                        options={meses}
+                        sx={{ width: "100%"}}
+                        onChange={(event, newValue) => {
+                            setMesSelected([
+                                newValue,
+                            ]);
+                        }}
+
+                        renderInput={(params) => <TextField {...params} label="Mes" variant="standard"/>}
+                    />
+                </Grid>            
+                <Grid item xs={12}>                  
+                    <PanelFinancieroTable anio={aniosSelected[0].year} mes={mesSelected[0].label} anioant={aniosSelected[0].year-1} mesant={meses[mesSelected[0].month-2].label} rangomes={'Enero a Noviembre'} data={resultData} />
                 </Grid>
             </Grid>            
         </>

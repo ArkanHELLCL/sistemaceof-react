@@ -64,7 +64,6 @@ export default function UtilidadMesAnual({empresa, anio}){
                 return result
             });
             const labels = filteredArray.flatMap(item => item.data).map(item => item.data.map(item => item.month))[0]
-            console.log(labels,result.map(item => item.datasets))
             setGrpconfig({
                 labels:labels,
                 datasets:result.map(item => item.datasets)
