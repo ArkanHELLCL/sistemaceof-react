@@ -1,11 +1,12 @@
 {
     "graficos": [
-        { "title": "Panel Financiero", "year": 1994 },
-        { "title": "Cubo", "year": 1972 },
-        { "title": "Ventas", "year": 1974 },
-        { "title": "Utilidad Mes", "year": 2008 },
-        { "title": "Utilidad YTD", "year": 1957 },
-        { "title": "Remunearaciones", "year": 1993 },
-        { "title": "GOA", "year": 1994 }
+        { "title": "Panel Financiero", "year": 2024 },
+        { "title": "Cubo", "year": 2024 },
+        { "title": "Ventas", "year": 2024 },
+        { "title": "Utilidad Mes", "year": 2024, "month" : 11 },
+        { "title": "Utilidad Mes Anual", "year": 2024 },
+        { "title": "Utilidad YTD", "year": 2024 },
+        { "title": "Remunearaciones", "year": 2024 },
+        { "title": "GOA", "year": 2024 }
     ]
 }

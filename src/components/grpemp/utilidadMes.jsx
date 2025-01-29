@@ -164,7 +164,10 @@ export default function UtilidadMes({anio, mes}){
                         renderInput={(params) => <TextField {...params} label="Mes" variant="standard"/>}
                     />
                 </Grid>
+                <Grid item xs={12} sx={{height: '400px'}}> 
+                    <BarChart chartData={grpconfig} title={title}/> 
+                </Grid>
             </Grid>
-            <BarChart chartData={grpconfig} title={title}/> 
+            
         </> : null
 }

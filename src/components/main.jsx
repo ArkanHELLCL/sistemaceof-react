@@ -70,18 +70,19 @@ export default function Main () {
             <h2 className="text-2xl font-light pb-2 pt-4">Visualización del Dashboard </h2>
             <div className="pt-4 mt-4 space-y-2 font-medium border-t border-purple-300"></div>            
             <Grid container spacing={4}>
-                <Grid item xs={6} className='h-[600px] pb-[100px]'>                    
+                <Grid item xs={6}>                    
                     <VentasAnual empresa={empresa} anio={[2024,2022]} />
                 </Grid>
-                <Grid item xs={6} className='h-[600px] pb-[100px]'>                    
+                <Grid item xs={6}>                    
                     <UtilidadMes empresa={empresa} anio={[2024]} mes={[11]} />
                 </Grid>
-                <Grid item xs={12} className='h-[700px] pb-[100px]'>
+                <Grid item xs={12}>
                     <UtilidadMesAnual empresa={empresa} anio={[2024]} />
                 </Grid>
-            </Grid>
-            <Grid container spacing={4} className='h-[300px]'>
-            </Grid>             
+                <Grid item xs={6}>                    
+                    <UtilidadMes empresa={empresa} anio={[2024]} mes={[11]} />
+                </Grid>
+            </Grid>                    
         </section>
     );
 }

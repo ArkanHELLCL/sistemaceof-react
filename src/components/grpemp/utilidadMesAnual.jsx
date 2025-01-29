@@ -115,7 +115,7 @@ export default function UtilidadMesAnual({empresa, anio}){
 
     return grpconfig ? 
         <>
-            <Grid container spacing={2} className='pb-4 pt-20'>
+            <Grid container spacing={2} className='pb-4'>
                 <Grid item xs={12} className='pb-4'>
                     <div className="flex justify-center rounded-xl bg-[#06a7d7] text-white shadow-md py-4 align-middle">
                         <h2 className="text-2xl font-light text-center">{title}</h2>
@@ -136,7 +136,9 @@ export default function UtilidadMesAnual({empresa, anio}){
                         renderInput={(params) => <TextField {...params} label="Año" variant="standard"/>}
                     />
                 </Grid>
-            </Grid>
-            <StackedChart chartData={grpconfig} title={title}/> 
+                <Grid item xs={12} sx={{height: '400px'}}>
+                    <StackedChart chartData={grpconfig} title={title} /> 
+                </Grid>
+            </Grid>            
         </> : null
 }

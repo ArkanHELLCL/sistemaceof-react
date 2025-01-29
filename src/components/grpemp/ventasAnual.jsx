@@ -37,27 +37,15 @@ export default function VentasAnual({empresa, anio}){
                 {
                     label: "Ventas Anuales",
                     data: result?.map(data => data.venta),
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(255, 159, 64, 0.2)',
-                        'rgba(255, 205, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(201, 203, 207, 0.2)',
-                        'rgba(233, 180, 257, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgb(255, 99, 132)',
-                        'rgb(255, 159, 64)',
-                        'rgb(255, 205, 86)',
-                        'rgb(75, 192, 192)',
-                        'rgb(54, 162, 235)',
-                        'rgb(153, 102, 255)',
-                        'rgb(201, 203, 207)',
-                        'rgb(233, 180, 257)'
-                    ],
-                    borderWidth: 1
+                    borderColor: '#8e7cb9',
+                    backgroundColor: 'rgba(238, 237, 248, 0.8)',
+                    fill: {
+                        target: 'origin',
+                        above: 'rgba(238, 237, 248, 0.5)',   // Area will be red above the origin
+                        below: 'rgba(238, 237, 248, 0.5)'    // And blue below the origin
+                    },
+                    borderWidth: 1,
+                    tension: 0.5
                 }
                 ]
             })
@@ -75,29 +63,17 @@ export default function VentasAnual({empresa, anio}){
             labels: result.map(data => data.month),
             datasets: [
               {
-                label: "Ventas Anuales",
+                label: "Ventas Mensuales",
                 data: result?.map(data => data.venta),
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                    'rgba(255, 205, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(201, 203, 207, 0.2)',
-                    'rgba(233, 180, 257, 0.2)'
-                ],
-                borderColor: [
-                    'rgb(255, 99, 132)',
-                    'rgb(255, 159, 64)',
-                    'rgb(255, 205, 86)',
-                    'rgb(75, 192, 192)',
-                    'rgb(54, 162, 235)',
-                    'rgb(153, 102, 255)',
-                    'rgb(201, 203, 207)',
-                    'rgb(233, 180, 257)'
-                ],
-                borderWidth: 1
+                borderColor: '#8e7cb9',
+                backgroundColor: 'rgba(238, 237, 248, 0.8)',
+                fill: {
+                    target: 'origin',
+                    above: 'rgba(238, 237, 248, 0.5)',   // Area will be red above the origin
+                    below: 'rgba(238, 237, 248, 0.5)'    // And blue below the origin
+                },
+                borderWidth: 1,
+                tension: 0.5
               }
             ]
         })
@@ -105,10 +81,10 @@ export default function VentasAnual({empresa, anio}){
 
     useEffect(() => {
         if(aniosSelected.length === 1){
-            setTitle('Gráfico de Ventas año ' + aniosSelected[0].title );
+            setTitle('Gráfico de Ventas Mensuales año ' + aniosSelected[0].title );
         }
         else if(aniosSelected.length > 1){
-            setTitle('Gráfico de Ventas año ' + aniosSelected.map(item => item.title).join(', '));
+            setTitle('Gráfico de Ventas Mensuales años ' + aniosSelected.map(item => item.title).join(', '));
         }
         else{
            setTitle('Gráfico de Ventas');
@@ -154,7 +130,9 @@ export default function VentasAnual({empresa, anio}){
                         )}
                     />
                 </Grid>
+                <Grid item xs={12} sx={{height: '400px'}}>
+                    <LineChart chartData={grpconfig} title={title}/>
+                </Grid>
             </Grid>
-            <LineChart chartData={grpconfig} title={title}/> 
         </> : null
 }
