@@ -12,6 +12,7 @@ import UtilidadYTD from './grpemp/utilidadYTD.jsx';
 import RemuneracionesAnual from './grpemp/remuneracionesAnual.jsx';
 import GoaAnual from './grpemp/goaAnual.jsx';
 import PanelFinancieroAnual from './grpemp/panelfinancieroAnual.jsx';
+import CuboAnual from './grpemp/cuboAnual.jsx';
 
 export default function Main () {    
     const [empresas, setEmpresas] = useState([]);
@@ -96,6 +97,9 @@ export default function Main () {
                 </Grid>
                 <Grid item xs={12}>                    
                     <PanelFinancieroAnual empresa={empresa} anio={[2024]} mes={[11]}/>
+                </Grid>
+                <Grid item lg={12} xs={12}>
+                    <CuboAnual empresa={empresa} anio={[2024]} />
                 </Grid>
             </Grid>                    
         </section>
