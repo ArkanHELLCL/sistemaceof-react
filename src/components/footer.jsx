@@ -11,7 +11,7 @@ export default function Footer({user}) {
           <a href="#" className="text-gray-300 no-underline text-lg">Salir</a>
         </div>
       </div>
-      <h2 className="opacity-30">{user?.nombre}</h2>      
+      <h2 className="opacity-30">{user?.USR_Nombre + ' ' + user?.USR_Apellido}</h2>      
     </footer>
   );
 }

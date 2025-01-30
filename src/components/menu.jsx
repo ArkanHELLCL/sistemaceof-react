@@ -73,7 +73,7 @@ const CustomTreeItem = forwardRef(function CustomTreeItem(props, ref) {
 
 export default function Menu({setTitle, user}) {
     return (
-        user?.idperfil === 1 ?
+        user?.PER_Id === 1 ?
             <>
                 <Box sx={{ minHeight: 200, minWidth: 250, maxHeight: 600, overflowY: 'auto' }} >
                     <SimpleTreeView defaultExpandedItems={['2', '5']}>
