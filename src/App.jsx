@@ -4,6 +4,7 @@ import Header from './components/header.jsx'
 import Sidebar from './components/sidebar.jsx'
 import Footer from './components/footer.jsx'
 import Main from './components/main.jsx';
+import Papa from 'papaparse';
 
 function App() {
   const [title, setTitle] = useState('Dashboard');
@@ -20,6 +21,17 @@ function App() {
   }, []);  
 
   //window.location.href = '../'
+
+  useEffect(() => {
+    const result = Papa.parse('https://ceofconsultores.com/system/home/uploads/76201608/data/base.csv', { 
+      worker: true, 
+      download: true,
+      complete: function(results) {
+        console.log(results);
+      }
+    });
+    
+}, []);
 
   return (
     user && user.USR_Id ?
