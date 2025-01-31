@@ -9,6 +9,7 @@ import Papa from 'papaparse';
 function App() {
   const [title, setTitle] = useState('Dashboard');
   const [user, setUser] = useState();
+  const [data, setData] = useState();
 
   useEffect(() => {
     fetch('https://ceofconsultores.com/system/home/getUsuario.php')
@@ -23,11 +24,12 @@ function App() {
   //window.location.href = '../'
 
   useEffect(() => {
-    const result = Papa.parse('https://ceofconsultores.com/system/home/uploads/76201608/data/base.csv', { 
+    Papa.parse('https://ceofconsultores.com/system/home/uploads/76201608/data/base.csv', { 
       worker: true, 
       download: true,
       complete: function(results) {
-        console.log(results);
+        //console.log(results);
+        setData(results);
       }
     });
     
