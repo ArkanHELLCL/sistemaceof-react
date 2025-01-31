@@ -15,11 +15,26 @@ const anios =[
     { "title": "2025", "year": 2025 }
 ]
 
-export default function VentasAnual({empresa, anio}){
+const meses = [
+    { "title": "Enero", "month": 1 },
+    { "title": "Febrero", "month": 2 },
+    { "title": "Marzo", "month": 3 },
+    { "title": "Abril", "month": 4 },
+    { "title": "Mayo", "month": 5 },
+    { "title": "Junio", "month": 6 },
+    { "title": "Julio", "month": 7 },
+    { "title": "Agosto", "month": 8 },
+    { "title": "Septiembre", "month":  9},
+    { "title": "Octubre", "month": 10 },
+    { "title": "Noviembre", "month": 11 },
+    { "title": "Diciembre", "month": 12 }        
+]
+
+export default function VentasAnual({empresa, ano, data}){
     const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico
     //const fixedOptions = [graficos[1]];
     const fixedOptions = [];
-    const selectedAnios = anios?.filter(item => anio?.includes(item.year)).sort((a, b) => a.year - b.year)
+    const selectedAnios = anios?.filter(item => ano?.includes(item.year)).sort((a, b) => a.year - b.year)
     const [aniosSelected, setAniosSelected] = useState(selectedAnios);
     const [title, setTitle] = useState('Gráfico de Ventas');
     const [orderedData, setOrderedData] = useState([]);     //Todos los datos ordenados por año
@@ -53,10 +68,10 @@ export default function VentasAnual({empresa, anio}){
 
     }, [aniosSelected]);
 
-    useEffect(() => {
+    useEffect(() => { 
         const OrderedData = UserData?.sort((a, b) => a.anio - b.anio);
         setOrderedData(OrderedData);
-        const filteredArray = orderedData?.filter(item => anio?.includes(item.anio));
+        const filteredArray = orderedData?.filter(item => ano?.includes(item.anio));
         const result = filteredArray.flatMap(item => item.data);
         setResultData(result);
         setGrpconfig({
@@ -77,7 +92,7 @@ export default function VentasAnual({empresa, anio}){
               }
             ]
         })
-    }, [UserData, empresa, anio]);
+    }, [UserData, empresa, ano]);
 
     useEffect(() => {
         if(aniosSelected.length === 1){

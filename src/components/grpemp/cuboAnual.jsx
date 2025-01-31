@@ -15,7 +15,7 @@ const anios = [
     { "label": "2025", "year": 2025 }
 ]
 
-export default function CuboAnual({anio}){
+export default function CuboAnual({anio, data}){
     const selectedAnios = anios?.filter(item => item.year === anio[0]).sort((a, b) => a.year - b.year)
     const [aniosSelected, setAniosSelected] = useState(selectedAnios);
     const [title, setTitle] = useState('Gráfico de Ventas');

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 import Chip from '@mui/material/Chip';
 import TextField from '@mui/material/TextField';
@@ -14,10 +15,9 @@ import GoaAnual from './grpemp/goaAnual.jsx';
 import PanelFinancieroAnual from './grpemp/panelfinancieroAnual.jsx';
 import CuboAnual from './grpemp/cuboAnual.jsx';
 
-export default function Main () {    
+export default function Main ({data}) {    
     const [empresas, setEmpresas] = useState([]);
     const [empresa, setEmpresa] = useState('');
-    //const fixedOptions = [graficos[1]];
     const fixedOptions = [];
     const [value, setValue] = useState([...fixedOptions, graficos[6], graficos[2]]);
 
@@ -78,7 +78,7 @@ export default function Main () {
             <div className="pt-4 mt-4 space-y-2 font-medium border-t border-purple-300"></div>            
             <Grid container spacing={4}>
                 <Grid item xs={6}>                    
-                    <VentasAnual empresa={empresa} anio={[2024,2022]} />
+                    <VentasAnual empresa={empresa} ano={[2024]} data={data}/>
                 </Grid>
                 <Grid item xs={6}>                    
                     <UtilidadMes empresa={empresa} anio={[2024]} mes={[11]} />
@@ -99,7 +99,7 @@ export default function Main () {
                     <PanelFinancieroAnual empresa={empresa} anio={[2024]} mes={[11]}/>
                 </Grid>
                 <Grid item lg={12} xs={12}>
-                    <CuboAnual empresa={empresa} anio={[2024]} />
+                    <CuboAnual empresa={empresa} anio={[2024]} data={data} />
                 </Grid>
             </Grid>                    
         </section>
