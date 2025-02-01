@@ -15,26 +15,13 @@ const anios =[
     { "title": "2025", "year": 2025 }
 ]
 
-const meses = [
-    { "title": "Enero", "month": 1 },
-    { "title": "Febrero", "month": 2 },
-    { "title": "Marzo", "month": 3 },
-    { "title": "Abril", "month": 4 },
-    { "title": "Mayo", "month": 5 },
-    { "title": "Junio", "month": 6 },
-    { "title": "Julio", "month": 7 },
-    { "title": "Agosto", "month": 8 },
-    { "title": "Septiembre", "month":  9},
-    { "title": "Octubre", "month": 10 },
-    { "title": "Noviembre", "month": 11 },
-    { "title": "Diciembre", "month": 12 }        
-]
-
-export default function VentasAnual({empresa, ano, data}){
+export default function VentasAnual({empresa, anio, data}){
+    console.log(anio,"anio")
     const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico
     //const fixedOptions = [graficos[1]];
     const fixedOptions = [];
-    const selectedAnios = anios?.filter(item => ano?.includes(item.year)).sort((a, b) => a.year - b.year)
+    const selectedAnios = anios?.filter(item => anio?.includes(item.year)).sort((a, b) => a.year - b.year)
+    console.log(selectedAnios, "selectedAnios")
     const [aniosSelected, setAniosSelected] = useState(selectedAnios);
     const [title, setTitle] = useState('Gráfico de Ventas');
     const [orderedData, setOrderedData] = useState([]);     //Todos los datos ordenados por año
@@ -69,30 +56,32 @@ export default function VentasAnual({empresa, ano, data}){
     }, [aniosSelected]);
 
     useEffect(() => { 
-        const OrderedData = UserData?.sort((a, b) => a.anio - b.anio);
-        setOrderedData(OrderedData);
-        const filteredArray = orderedData?.filter(item => ano?.includes(item.anio));
-        const result = filteredArray.flatMap(item => item.data);
-        setResultData(result);
-        setGrpconfig({
-            labels: result.map(data => data.month),
-            datasets: [
-              {
-                label: "Ventas Mensuales",
-                data: result?.map(data => data.venta),
-                borderColor: '#8e7cb9',
-                backgroundColor: 'rgba(238, 237, 248, 0.8)',
-                fill: {
-                    target: 'origin',
-                    above: 'rgba(238, 237, 248, 0.5)',   // Area will be red above the origin
-                    below: 'rgba(238, 237, 248, 0.5)'    // And blue below the origin
-                },
-                borderWidth: 1,
-                tension: 0.5
-              }
-            ]
-        })
-    }, [UserData, empresa, ano]);
+        if(data && anio.length === 1){
+            const OrderedData = UserData?.sort((a, b) => a.anio - b.anio);
+            setOrderedData(OrderedData);
+            const filteredArray = orderedData?.filter(item => anio?.includes(item.anio));
+            const result = filteredArray.flatMap(item => item.data);
+            setResultData(result);
+            setGrpconfig({
+                labels: result.map(data => data.month),
+                datasets: [
+                {
+                    label: "Ventas Mensuales",
+                    data: result?.map(data => data.venta),
+                    borderColor: '#8e7cb9',
+                    backgroundColor: 'rgba(238, 237, 248, 0.8)',
+                    fill: {
+                        target: 'origin',
+                        above: 'rgba(238, 237, 248, 0.5)',   // Area will be red above the origin
+                        below: 'rgba(238, 237, 248, 0.5)'    // And blue below the origin
+                    },
+                    borderWidth: 1,
+                    tension: 0.5
+                }
+                ]
+            })
+        }
+    }, [UserData, empresa, anio]);
 
     useEffect(() => {
         if(aniosSelected.length === 1){

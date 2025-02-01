@@ -7,24 +7,15 @@ import Grid from '@mui/material/Grid';
 import { UserData } from '../../../mock/data4.js';
 import DoughnutChart from '../graficos/doughnutChart.jsx';
 
-const anios = [
-    { "label": "2022", "year": 2022 },
-    { "label": "2023", "year": 2023 },
-    { "label": "2024", "year": 2024 },
-    { "label": "2025", "year": 2025 }
-]
-
 export default function UtilidadYTD({anio, mes}){
     const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico
-    const selectedAnios = anios?.filter(item => item.year === anio[0]).sort((a, b) => a.year - b.year)
-    const [aniosSelected, setAniosSelected] = useState(selectedAnios);
     const [title, setTitle] = useState('Gráfico de Ventas');
     const [orderedData, setOrderedData] = useState();     //Todos los datos ordenados por año
     const [resultData, setResultData] = useState();       //Datos filtrados por año(s) seleccionado(s)
 
     useEffect(() => {
         if(orderedData){
-            const filteredArray = orderedData?.filter(item => item.anio === aniosSelected[0].year)[0].data;
+            const filteredArray = orderedData?.filter(item => item.anio === anio[0])[0].data;
             setResultData(filteredArray);
             setGrpconfig({
                 labels: filteredArray.map(item => item.cuenta),
@@ -58,7 +49,7 @@ export default function UtilidadYTD({anio, mes}){
             })
         }
 
-    }, [aniosSelected]);
+    }, [anio]);
 
     useEffect(() => {
         const OrderedData = UserData?.sort((a, b) => a.anio - b.anio);
@@ -99,13 +90,13 @@ export default function UtilidadYTD({anio, mes}){
     }, [UserData, anio, mes]);
 
     useEffect(() => {
-        if(aniosSelected.length === 1){
-            setTitle('Gráfico de Utilidades YTD ' + ' año ' + aniosSelected[0].label );
+        if(anio.length === 1){
+            setTitle('Gráfico de Utilidades YTD ' + ' año ' + anio[0] );
         }        
         else{
            setTitle('Gráfico de Utilidades YTD');
         }
-    }, [aniosSelected]);
+    }, [anio]);
 
     return grpconfig ? 
         <>
@@ -114,24 +105,7 @@ export default function UtilidadYTD({anio, mes}){
                     <div className="flex justify-center rounded-xl bg-[#4cbab5] text-white shadow-md py-4 align-middle">
                         <h2 className="text-2xl font-light text-center">{title}</h2>
                     </div>
-                </Grid>
-                <Grid item xs={6}> 
-                    <Autocomplete
-                        disablePortal
-                        disableClearable={true}
-                        id="utilidad-anios"
-                        value={aniosSelected[0].label}
-                        options={anios}
-                        sx={{ width: "100%"}}
-                        onChange={(event, newValue) => {
-                            setAniosSelected([
-                                newValue,
-                            ]);
-                        }}
-
-                        renderInput={(params) => <TextField {...params} label="Año" variant="standard"/>}
-                    />
-                </Grid>                
+                </Grid>                            
                 <Grid item xs={12} sx={{height: '400px'}}> 
                     <DoughnutChart chartData={grpconfig} title={title}/> 
                 </Grid>

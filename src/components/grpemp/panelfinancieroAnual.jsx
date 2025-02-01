@@ -22,26 +22,17 @@ const meses = [
     { "label": "Diciembre", "month": 12 }
 ]
 
-const anios = [
-    { "label": "2022", "year": 2022 },
-    { "label": "2023", "year": 2023 },
-    { "label": "2024", "year": 2024 },
-    { "label": "2025", "year": 2025 }
-]
-
 export default function PanelFinancieroAnual({anio, mes}){
-    const selectedAnios = anios?.filter(item => item.year === anio[0]).sort((a, b) => a.year - b.year)
     const selectdMes = meses?.filter(item => item.month === mes[0]).sort((a, b) => a.month - b.month)
-    const [aniosSelected, setAniosSelected] = useState(selectedAnios);
     const [mesSelected, setMesSelected] = useState(selectdMes);
     const [title, setTitle] = useState('Panel Financiero');
     const [resultData, setResultData] = useState([]);
 
     useEffect(() => {
-        const filteredArray = UserData?.filter(item => item.anio === aniosSelected[0].year)[0].data.filter(item => item.month === mesSelected[0].month)[0].rows;
+        const filteredArray = UserData?.filter(item => item.anio === anio[0])[0].data.filter(item => item.month === mesSelected[0].month)[0].rows;
         setResultData(filteredArray);
         
-    }, [mesSelected, aniosSelected]);
+    }, [mesSelected, anio]);
     
     useEffect(() => {
         const filteredArray = UserData?.filter(item => item.anio === anio[0])[0].data.filter(item => item.month === mes[0])[0].rows;
@@ -50,13 +41,13 @@ export default function PanelFinancieroAnual({anio, mes}){
     }, [UserData, anio, mes]);
 
     useEffect(() => {
-        if(aniosSelected.length === 1){
-            setTitle('Panel Financiero ' + ' mes ' + mesSelected[0].label + ' año ' + aniosSelected[0].label  );
+        if(anio.length === 1){
+            setTitle('Panel Financiero ' + ' mes ' + mesSelected[0].label + ' año ' + anio[0]  );
         }        
         else{
            setTitle('Panel Financiero');
         }
-    }, [aniosSelected, mesSelected]);
+    }, [anio, mesSelected]);
 
     return (
         <>
@@ -65,23 +56,6 @@ export default function PanelFinancieroAnual({anio, mes}){
                     <div className="flex justify-center rounded-xl bg-[#4cbab5] text-white shadow-md py-4 align-middle">
                         <h2 className="text-2xl font-light text-center">{title}</h2>
                     </div>
-                </Grid>
-                <Grid item xs={3}> 
-                    <Autocomplete
-                        disablePortal
-                        disableClearable={true}
-                        id="utilidad-anios"
-                        value={aniosSelected[0].label}
-                        options={anios}
-                        sx={{ width: "100%"}}
-                        onChange={(event, newValue) => {
-                            setAniosSelected([
-                                newValue,
-                            ]);
-                        }}
-
-                        renderInput={(params) => <TextField {...params} label="Año" variant="standard"/>}
-                    />
                 </Grid>
                 <Grid item xs={3}> 
                     <Autocomplete
@@ -101,7 +75,7 @@ export default function PanelFinancieroAnual({anio, mes}){
                     />
                 </Grid>            
                 <Grid item xs={12}>                  
-                    <PanelFinancieroTable anio={aniosSelected[0].year} mes={mesSelected[0].label} anioant={aniosSelected[0].year-1} mesant={meses[mesSelected[0].month-2].label} rangomes={'Enero a Noviembre'} data={resultData} />
+                    <PanelFinancieroTable anio={anio[0]} mes={mesSelected[0].label} anioant={anio[0]-1} mesant={meses[mesSelected[0].month-2].label} rangomes={'Enero a Noviembre'} data={resultData} />
                 </Grid>
             </Grid>            
         </>

@@ -22,26 +22,20 @@ const meses = [
     { "label": "Diciembre", "month": 12 }
 ]
 
-const anios = [
-    { "label": "2022", "year": 2022 },
-    { "label": "2023", "year": 2023 },
-    { "label": "2024", "year": 2024 },
-    { "label": "2025", "year": 2025 }
-]
-
 export default function UtilidadMes({anio, mes}){
     const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico
-    const selectedAnios = anios?.filter(item => item.year === anio[0]).sort((a, b) => a.year - b.year)
     const selectdMes = meses?.filter(item => item.month === mes[0]).sort((a, b) => a.month - b.month)
-    const [aniosSelected, setAniosSelected] = useState(selectedAnios);
     const [mesSelected, setMesSelected] = useState(selectdMes);
     const [title, setTitle] = useState('Gráfico de Ventas');
     const [orderedData, setOrderedData] = useState();     //Todos los datos ordenados por año
     const [resultData, setResultData] = useState();       //Datos filtrados por año(s) seleccionado(s)
 
+    console.log('anio', anio);
+
     useEffect(() => {
         if(orderedData){
-            const filteredArray = orderedData?.filter(item => item.anio === aniosSelected[0].year)[0].meses.filter(item => item.id === mesSelected[0].month)[0].data;
+            const filteredArray = orderedData?.filter(item => item.anio === anio[0])[0].meses.filter(item => item.id === mesSelected[0].month)[0].data;
+            console.log('filteredArray', filteredArray);
             setResultData(filteredArray);
             setGrpconfig({
                 labels: filteredArray.map(item => item.cuenta),
@@ -75,7 +69,7 @@ export default function UtilidadMes({anio, mes}){
             })
         }
 
-    }, [aniosSelected, mesSelected]);
+    }, [anio, mesSelected]);
 
     useEffect(() => {
         const OrderedData = UserData?.sort((a, b) => a.anio - b.anio);
@@ -116,13 +110,13 @@ export default function UtilidadMes({anio, mes}){
     }, [UserData, anio, mes]);
 
     useEffect(() => {
-        if(aniosSelected.length === 1){
-            setTitle('Gráfico de Utilidades Mes ' + mesSelected[0].label + ' año ' + aniosSelected[0].label );
+        if(anio.length === 1){
+            setTitle('Gráfico de Utilidades Mes ' + mesSelected[0].label + ' año ' + anio[0] );
         }        
         else{
            setTitle('Gráfico de Utilidades Mes');
         }
-    }, [aniosSelected, mesSelected]);
+    }, [anio, mesSelected]);
 
     return grpconfig ? 
         <>
@@ -131,24 +125,7 @@ export default function UtilidadMes({anio, mes}){
                     <div className="flex justify-center rounded-xl bg-[#5d4889] text-white shadow-md py-4 align-middle">
                         <h2 className="text-2xl font-light text-center">{title}</h2>
                     </div>
-                </Grid>
-                <Grid item xs={6}> 
-                    <Autocomplete
-                        disablePortal
-                        disableClearable={true}
-                        id="utilidad-anios"
-                        value={aniosSelected[0].label}
-                        options={anios}
-                        sx={{ width: "100%"}}
-                        onChange={(event, newValue) => {
-                            setAniosSelected([
-                                newValue,
-                            ]);
-                        }}
-
-                        renderInput={(params) => <TextField {...params} label="Año" variant="standard"/>}
-                    />
-                </Grid>
+                </Grid>                
                 <Grid item xs={6}> 
                     <Autocomplete
                         disablePortal

@@ -14,6 +14,7 @@ function App() {
   const [user, setUser] = useState();
   const [data, setData] = useState();
   const [dataFormatted, setDataFormatted] = useState();
+  const [headers, setHeaders] = useState([]);
 
   useEffect(() => {
     fetch('https://ceofconsultores.com/system/home/getUsuario.php')
@@ -32,93 +33,32 @@ function App() {
       worker: true, 
       download: true,
       complete: function(results) {
-        setData(results);
+        //setData(results);
       }
     });
-    setData(Cubo);
-}, []);
-
-
-// Función para agrupar los datos por mes
-function agruparPorMeses(data) {
-  const grupos = {};
-  data.forEach(item => {
-      const cuenta = item[0] + '/' + item[1] + '/' + item[2] + '/' + item[3]; //CUENTA
-      /*const resultado = item[0]; //RESULTADO
-      const nivel1 = item[1];    //NIVEL 1
-      const nivel2 = item[2];    //NIVEL 2
-      const cuenta = item[3];    //CUENTA*/
-      const valor = item[6];  //REAL 2024
-      const mes = item[8];    //N_MES
-
-      if (!grupos[cuenta]) {
-          grupos[cuenta] = {};
-      }
-      grupos[cuenta][mes] = valor;
-  });
-  return grupos;
-}
-
-// Función para crear la tabla
-function crearTabla(data) {
-  console.log(data),'data';
-  const grupos = agruparPorMeses(data);
-  console.log(grupos,'grupos');
-  const meses = Array.from({ length: 12 }, (_, i) => i + 1); // Meses del 1 al 5
-  let html ='<table width="100%" border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">';
-
-  // Crear la cabecera de la tabla
-  html += '<thead>';
-  html += '<tr>';
-  const headers = ['Resultado','Nivel 1','Nivel 2','Cuenta', ...meses.map(mes => `Mes ${mes}`)];
-  headers.forEach(headerText => {
-      html += `<th>${headerText}</th>`;
-  });
-
-  // Crear el cuerpo de la tabla
-  html += '<tbody>';
-  
-  Object.keys(grupos).forEach(cuenta => {
-      html += '<tr>';
-      html += `<td>${cuenta.split("/")[0]}</td>`;      
-      html += `<td>${cuenta.split("/")[1]}</td>`;
-      html += `<td>${cuenta.split("/")[2]}</td>`;
-      html += `<td>${cuenta.split("/")[3]}</td>`;
-      meses.forEach(mes => {
-          html += '<td>';
-          html += grupos[cuenta][mes] || 0;
-          html += '</td>';
-      });
-      html += '</tr>';
-  });
-
-  document.body.innerHTML = html;
-}
+    setData(Cubo);    
+  }, [Cubo]);
 
 
 useEffect(() => {
-  const headers = data?.data[0];
+  const Headers = data?.data[0];
   const rows = data?.data.slice(1);
-  //console.log(ano,"ano");
-
-  //console.log(headers,"headers");
-  //console.log(rows,"rows");
+  setHeaders(Headers);
 
   const formattedData = rows?.map(row => {
       const obj = {};
-      headers.forEach((header, index) => {
+      Headers.forEach((header, index) => {
           obj[header] = row[index];
       });
       return obj;
-  });
+  },[data]);
   
-  //console.log(formattedData,"formattedData");
   const anioFiltrado = "2024"; // Año que queremos filtrar
-  const datosFiltrados = formattedData?.filter(item => item["ANO"] === anioFiltrado);
+  //const datosFiltrados = formattedData?.filter(item => item["ANO"] === anioFiltrado);
 
 
-  //const grouped = formattedData?.reduce((acc, item) => {
-  const grouped = datosFiltrados?.reduce((acc, item) => {    
+  const grouped = formattedData?.reduce((acc, item) => {
+  //const grouped = datosFiltrados?.reduce((acc, item) => {    
       const anio = item["ANO"];
       const resultado = item["RESULTADO"];
       const nivel1 = item["NIVEL 1"];
@@ -132,17 +72,13 @@ useEffect(() => {
       if (!acc[anio].data[resultado]) acc[anio].data[resultado] = { total: 0, data: {} };
       if (!acc[anio].data[resultado].data[nivel1]) acc[anio].data[resultado].data[nivel1] = { total: 0, data: {} };
       if (!acc[anio].data[resultado].data[nivel1].data[nivel2]) acc[anio].data[resultado].data[nivel1].data[nivel2] = { total: 0, data: {} };
-      if (!acc[anio].data[resultado].data[nivel1].data[nivel2].data[cuenta]) acc[anio].data[resultado].data[nivel1].data[nivel2].data[cuenta] = { total: 0, data: {} };
-      //if (!acc[anio][resultado][nivel1][nivel2][cuenta][mes]) acc[anio][resultado][nivel1][nivel2][cuenta][mes] = 0;
-  
-      // Sumar los montos
+      if (!acc[anio].data[resultado].data[nivel1].data[nivel2].data[cuenta]) acc[anio].data[resultado].data[nivel1].data[nivel2].data[cuenta] = { total: 0, data: {} };  
       
-      //acc[anio][resultado][nivel1][nivel2][cuenta][mes] += monto;        
       // Sumar los montos y acumular
-      acc[anio].data[resultado].total += monto;
+      /*acc[anio].data[resultado].total += monto;
       acc[anio].data[resultado].data[nivel1].total += monto;
       acc[anio].data[resultado].data[nivel1].data[nivel2].total += monto;
-      acc[anio].data[resultado].data[nivel1].data[nivel2].data[cuenta].total += monto;
+      acc[anio].data[resultado].data[nivel1].data[nivel2].data[cuenta].total += monto;*/
 
       // Agregar el monto por mes
       if (!acc[anio].data[resultado].data[nivel1].data[nivel2].data[cuenta].data[mes]) {
@@ -152,7 +88,6 @@ useEffect(() => {
       return acc;
   }, {});
 
-  //console.log(grouped,"grouped");
   if(grouped){
       const resultpivot = {
           data: Object.keys(grouped).map(anio => ({
@@ -179,47 +114,22 @@ useEffect(() => {
               }))
           }))
       };
-      console.log(resultpivot,"resultpivot");   //ok el resultado para el año 2024
 
       // Convertir a JSON
       //const jsonResult = JSON.stringify(resultpivot, null, 4);
-      setDataFormatted(resultpivot);
-      /*console.log(resultpivot);
-
-      const { data : xx} = resultpivot//?.filter(item => item.anio === 2024);      
-      const yy = xx.filter(item => item.anio === 2024)[0].data.map(item => item.data)[0].map(item => item.data.map(item => item.data.map(item => item.data)))//.map(item => item.data);
-  
-      console.log(yy);*/
-
-      //console.log(headers,"headers");
-      //console.log(rows,"rows");
-
-      if (data) {
-        const indexN_MES = headers.indexOf('N_MES');
-        const indexReal2024 = headers.indexOf('REAL-2024');
-        console.log(indexN_MES, 'indexN_MES');
-        console.log(indexReal2024, 'indexReal2024');
-  
-        const filteredRows = rows.filter(item => item.includes('2024'));
-        console.log(filteredRows, 'filteredRows');
-          
-        crearTabla(filteredRows);
-      }
+      setDataFormatted(resultpivot);     
     }
 }, [data]);
 
   return (
-    //user && user.USR_Id && data ?
+    //user && user.USR_Id && data && headers ?
+    dataFormatted && headers &&
       <main className="dashtemplate">
         <Header title={title}/>
         <Sidebar setTitle={setTitle} user={user}/>
         <Footer user={user}/>
-        <Main data={dataFormatted}/>
-      </main>  
-      /*: 
-       <div className="flex justify-center items-center h-screen">
-          <div className="text-2xl font-light">Cargando...</div>
-        </div>        */
+        <Main data={dataFormatted} headers={headers}/>
+      </main>        
   );
 }
 
