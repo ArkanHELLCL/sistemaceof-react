@@ -16,7 +16,6 @@ const anios =[
 ]
 
 export default function VentasAnual({empresa, anio, data}){
-    console.log(anio,"anio")
     const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico
     //const fixedOptions = [graficos[1]];
     const fixedOptions = [];
@@ -26,6 +25,9 @@ export default function VentasAnual({empresa, anio, data}){
     const [title, setTitle] = useState('Gráfico de Ventas');
     const [orderedData, setOrderedData] = useState([]);     //Todos los datos ordenados por año
     const [resultData, setResultData] = useState([]);       //Datos filtrados por año(s) seleccionado(s)
+
+    console.log(anio,"anio", selectedAnios)
+
 
     useEffect(() => {
         const yearArray = aniosSelected.map(item => item.year);
@@ -57,6 +59,10 @@ export default function VentasAnual({empresa, anio, data}){
 
     useEffect(() => { 
         if(data && anio.length === 1){
+            //const selectedAnios = anios?.filter(item => anio?.includes(item.year)).sort((a, b) => a.year - b.year)
+            /*setAniosSelected([
+                ...selectedAnios
+                ]);*/
             const OrderedData = UserData?.sort((a, b) => a.anio - b.anio);
             setOrderedData(OrderedData);
             const filteredArray = orderedData?.filter(item => anio?.includes(item.anio));
@@ -84,16 +90,17 @@ export default function VentasAnual({empresa, anio, data}){
     }, [UserData, empresa, anio]);
 
     useEffect(() => {
+        console.log(aniosSelected, "aniosSelected title")
         if(aniosSelected.length === 1){
             setTitle('Gráfico de Ventas Mensuales año ' + aniosSelected[0].title );
         }
-        else if(aniosSelected.length > 1){
+        else if(aniosSelected.length > 1){  
             setTitle('Gráfico de Ventas Mensuales años ' + aniosSelected.map(item => item.title).join(', '));
         }
         else{
            setTitle('Gráfico de Ventas');
         }
-    }, [aniosSelected]);
+    }, [aniosSelected,anio]);
 
     return grpconfig ? 
         <>

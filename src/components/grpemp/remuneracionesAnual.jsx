@@ -96,7 +96,7 @@ export default function RemuneracionesAnual({anio}){
 
     useEffect(() => {
         if(anio.length === 1){
-            setTitle('Gráfico de Remuneraciones ' + ' año ' + anio[0].label );
+            setTitle('Gráfico de Remuneraciones ' + ' año ' + anio[0] );
         }        
         else{
            setTitle('Gráfico de Remuneraciones');

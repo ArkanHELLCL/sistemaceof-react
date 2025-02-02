@@ -23,6 +23,9 @@ function App() {
         const { data } = user;
         setUser(data[0])
       })
+      .finally(() => {
+        //console.log('finally');
+      })
       .catch(error => console.error(error));
   }, []);  
 
@@ -34,7 +37,7 @@ function App() {
       download: true,
       complete: function(results) {
         //setData(results);
-      }
+      },
     });
     setData(Cubo);    
   }, [Cubo]);
@@ -53,7 +56,7 @@ useEffect(() => {
       return obj;
   },[data]);
   
-  const anioFiltrado = "2024"; // Año que queremos filtrar
+  //const anioFiltrado = "2024"; // Año que queremos filtrar
   //const datosFiltrados = formattedData?.filter(item => item["ANO"] === anioFiltrado);
 
 
@@ -128,7 +131,7 @@ useEffect(() => {
         <Header title={title}/>
         <Sidebar setTitle={setTitle} user={user}/>
         <Footer user={user}/>
-        <Main data={dataFormatted} headers={headers}/>
+        <Main data={dataFormatted} />
       </main>        
   );
 }

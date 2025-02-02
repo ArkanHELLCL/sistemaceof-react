@@ -1,87 +1,438 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useMemo, useEffect, useState } from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import { UserData } from '../../../mock/data8.js';
+//const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 
-
-export default function CuboAnual({anio, data, headers}){
+export default function CuboAnual({anio, data, sumaNiveles}){
     const [title, setTitle] = useState('Gráfico de Ventas');
-    const [resultData, setResultData] = useState();       //Datos filtrados por año(s) seleccionado(s)
+    //const [resultData, setResultData] = useState();       //Datos filtrados por año(s) seleccionado(s)
 
-    console.log('data', data);
+    console.log(sumaNiveles, 'sumaNiveles');
+    const xx = sumaNiveles//[0]?.['resultado']['1. OPERACIONAL']['months']
+
+    console.log('xx', xx);
+
+    console.log('dataCubo123456', data, anio);
     const dataCubo = useMemo(() => {
       return data.map((item,idx) => ({        
         id: idx,
         'cuenta': item['Resultado'],
-        'enero': 0,
-        'febrero': 0,
-        'marzo': 0,
-        'abril': 0,
-        'mayo': 0,
-        'junio': 0,
-        'julio': 0,
-        'agosto': 0,
-        'septiembre': 0,
-        'octubre': 0,
-        'noviembre': 0,
-        'diciembre': 0,
+        'enero' : sumaNiveles[0]?.['resultado'][item['Resultado'].toUpperCase()]['months'][0].toLocaleString?.('en-ES', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).replaceAll(',', '.'),
+        'febrero': sumaNiveles[0]?.['resultado'][item['Resultado'].toUpperCase()]['months'][1].toLocaleString?.('en-ES', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).replaceAll(',', '.'),
+        'marzo': sumaNiveles[0]?.['resultado'][item['Resultado'].toUpperCase()]['months'][2].toLocaleString?.('en-ES', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).replaceAll(',', '.'),
+        'abril': sumaNiveles[0]?.['resultado'][item['Resultado'].toUpperCase()]['months'][3].toLocaleString?.('en-ES', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).replaceAll(',', '.'),
+        'mayo': sumaNiveles[0]?.['resultado'][item['Resultado'].toUpperCase()]['months'][4].toLocaleString?.('en-ES', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).replaceAll(',', '.'),
+        'junio': sumaNiveles[0]?.['resultado'][item['Resultado'].toUpperCase()]['months'][5].toLocaleString?.('en-ES', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).replaceAll(',', '.'),
+        'julio': sumaNiveles[0]?.['resultado'][item['Resultado'].toUpperCase()]['months'][6].toLocaleString?.('en-ES', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).replaceAll(',', '.'),
+        'agosto': sumaNiveles[0]?.['resultado'][item['Resultado'].toUpperCase()]['months'][7].toLocaleString?.('en-ES', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).replaceAll(',', '.'),
+        'septiembre': sumaNiveles[0]?.['resultado'][item['Resultado'].toUpperCase()]['months'][8].toLocaleString?.('en-ES', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).replaceAll(',', '.'),
+        'octubre': sumaNiveles[0]?.['resultado'][item['Resultado'].toUpperCase()]['months'][9].toLocaleString?.('en-ES', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).replaceAll(',', '.'),
+        'noviembre': sumaNiveles[0]?.['resultado'][item['Resultado'].toUpperCase()]['months'][10].toLocaleString?.('en-ES', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).replaceAll(',', '.'),
+        'diciembre': sumaNiveles[0]?.['resultado'][item['Resultado'].toUpperCase()]['months'][11].toLocaleString?.('en-ES', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).replaceAll(',', '.'),
+        'totalesanual': sumaNiveles[0]?.['resultado'][item['Resultado'].toUpperCase()]['months'][12].toLocaleString?.('en-ES', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).replaceAll(',', '.'),
         subRows: item.data.map((n1item) => ({
           'cuenta': n1item['Nivel 1'],
-          'enero': 0,
-          'febrero': 0,
-          'marzo': 0,
-          'abril': 0,
-          'mayo': 0,
-          'junio': 0,
-          'julio': 0,
-          'agosto': 0,
-          'septiembre': 0,
-          'octubre': 0,
-          'noviembre': 0,
-          'diciembre': 0,
+          'enero': sumaNiveles[0]?.['nivel1'][n1item['Nivel 1'].toUpperCase()]['months'][0].toLocaleString?.('en-ES', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          }).replaceAll(',', '.'),
+          'febrero': sumaNiveles[0]?.['nivel1'][n1item['Nivel 1'].toUpperCase()]['months'][1].toLocaleString?.('en-ES', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          }).replaceAll(',', '.'),
+          'marzo': sumaNiveles[0]?.['nivel1'][n1item['Nivel 1'].toUpperCase()]['months'][2].toLocaleString?.('en-ES', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          }).replaceAll(',', '.'),
+          'abril': sumaNiveles[0]?.['nivel1'][n1item['Nivel 1'].toUpperCase()]['months'][3].toLocaleString?.('en-ES', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          }).replaceAll(',', '.'),
+          'mayo': sumaNiveles[0]?.['nivel1'][n1item['Nivel 1'].toUpperCase()]['months'][4].toLocaleString?.('en-ES', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          }).replaceAll(',', '.'),
+          'junio': sumaNiveles[0]?.['nivel1'][n1item['Nivel 1'].toUpperCase()]['months'][5].toLocaleString?.('en-ES', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          }).replaceAll(',', '.'),
+          'julio': sumaNiveles[0]?.['nivel1'][n1item['Nivel 1'].toUpperCase()]['months'][6].toLocaleString?.('en-ES', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          }).replaceAll(',', '.'),
+          'agosto': sumaNiveles[0]?.['nivel1'][n1item['Nivel 1'].toUpperCase()]['months'][7].toLocaleString?.('en-ES', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          }).replaceAll(',', '.'),
+          'septiembre': sumaNiveles[0]?.['nivel1'][n1item['Nivel 1'].toUpperCase()]['months'][8].toLocaleString?.('en-ES', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          }).replaceAll(',', '.'),
+          'octubre': sumaNiveles[0]?.['nivel1'][n1item['Nivel 1'].toUpperCase()]['months'][9].toLocaleString?.('en-ES', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          }).replaceAll(',', '.'),
+          'noviembre': sumaNiveles[0]?.['nivel1'][n1item['Nivel 1'].toUpperCase()]['months'][10].toLocaleString?.('en-ES', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          }).replaceAll(',', '.'),
+          'diciembre': sumaNiveles[0]?.['nivel1'][n1item['Nivel 1'].toUpperCase()]['months'][11].toLocaleString?.('en-ES', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          }).replaceAll(',', '.'),
+          'totalesanual': sumaNiveles[0]?.['nivel1'][n1item['Nivel 1'].toUpperCase()]['months'][12].toLocaleString?.('en-ES', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          }).replaceAll(',', '.'),          
           subRows: n1item.data.map((n2item) => ({
             'cuenta': n2item['Nivel 2'],
-            'enero': 0,
-            'febrero': 0,
-            'marzo': 0,
-            'abril': 0,
-            'mayo': 0,
-            'junio': 0,
-            'julio': 0,
-            'agosto': 0,
-            'septiembre': 0,
-            'octubre': 0,
-            'noviembre': 0,
-            'diciembre': 0,
-            subRows: n2item.data.map((cuentaitem) => ({
-              'cuenta': cuentaitem['Cuenta'],
-              'enero': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-1')[0]?.value,
-              'febrero': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-2')[0]?.value,
-              'marzo': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-3')[0]?.value,
-              'abril': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-4')[0]?.value,
-              'mayo': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-5')[0]?.value,
-              'junio': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-6')[0]?.value,
-              'julio': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-7')[0]?.value,
-              'agosto': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-8')[0]?.value,
-              'septiembre': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-9')[0]?.value,
-              'octubre': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-10')[0]?.value,
-              'noviembre': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-11')[0]?.value,
-              'diciembre': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-12')[0]?.value,
-            }))
+            'enero': sumaNiveles[0]?.['nivel2'][n2item['Nivel 2'].toUpperCase()]['months'][0].toLocaleString?.('en-ES', {
+              style: 'currency',
+              currency: 'USD',
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }).replaceAll(',', '.'),
+            'febrero': sumaNiveles[0]?.['nivel2'][n2item['Nivel 2'].toUpperCase()]['months'][1].toLocaleString?.('en-ES', {
+              style: 'currency',
+              currency: 'USD',
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }).replaceAll(',', '.'),
+            'marzo': sumaNiveles[0]?.['nivel2'][n2item['Nivel 2'].toUpperCase()]['months'][2].toLocaleString?.('en-ES', {
+              style: 'currency',
+              currency: 'USD',
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }).replaceAll(',', '.'),
+            'abril': sumaNiveles[0]?.['nivel2'][n2item['Nivel 2'].toUpperCase()]['months'][3].toLocaleString?.('en-ES', {
+              style: 'currency',
+              currency: 'USD',
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }).replaceAll(',', '.'),
+            'mayo': sumaNiveles[0]?.['nivel2'][n2item['Nivel 2'].toUpperCase()]['months'][4].toLocaleString?.('en-ES', {
+              style: 'currency',
+              currency: 'USD',
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }).replaceAll(',', '.'),
+            'junio': sumaNiveles[0]?.['nivel2'][n2item['Nivel 2'].toUpperCase()]['months'][5].toLocaleString?.('en-ES', {
+              style: 'currency',
+              currency: 'USD',
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }).replaceAll(',', '.'),
+            'julio': sumaNiveles[0]?.['nivel2'][n2item['Nivel 2'].toUpperCase()]['months'][6].toLocaleString?.('en-ES', {
+              style: 'currency',
+              currency: 'USD',
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }).replaceAll(',', '.'),
+            'agosto': sumaNiveles[0]?.['nivel2'][n2item['Nivel 2'].toUpperCase()]['months'][7].toLocaleString?.('en-ES', {
+              style: 'currency',
+              currency: 'USD',
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }).replaceAll(',', '.'),
+            'septiembre': sumaNiveles[0]?.['nivel2'][n2item['Nivel 2'].toUpperCase()]['months'][8].toLocaleString?.('en-ES', {
+              style: 'currency',
+              currency: 'USD',
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }).replaceAll(',', '.'),
+            'octubre': sumaNiveles[0]?.['nivel2'][n2item['Nivel 2'].toUpperCase()]['months'][9].toLocaleString?.('en-ES', {
+              style: 'currency',
+              currency: 'USD',
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }).replaceAll(',', '.'),
+            'noviembre': sumaNiveles[0]?.['nivel2'][n2item['Nivel 2'].toUpperCase()]['months'][10].toLocaleString?.('en-ES', {
+              style: 'currency',
+              currency: 'USD',
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }).replaceAll(',', '.'),
+            'diciembre': sumaNiveles[0]?.['nivel2'][n2item['Nivel 2'].toUpperCase()]['months'][11].toLocaleString?.('en-ES', {
+              style: 'currency',
+              currency: 'USD',
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }).replaceAll(',', '.'),
+            'totalesanual': sumaNiveles[0]?.['nivel2'][n2item['Nivel 2'].toUpperCase()]['months'][12].toLocaleString?.('en-ES', {
+              style: 'currency',
+              currency: 'USD',
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }).replaceAll(',', '.'),  
+            subRows: n2item.data.map((cuentaitem) => {
+              const cuentaRow = {
+                'cuenta': cuentaitem['Cuenta'],
+                'enero': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-1')[0]?.value.toLocaleString?.('en-ES', {
+                  style: 'currency',
+                  currency: 'USD',
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                }).replaceAll(',', '.'),
+                'febrero': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-2')[0]?.value.toLocaleString?.('en-ES', {
+                  style: 'currency',
+                  currency: 'USD',
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                }).replaceAll(',', '.'),
+                'marzo': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-3')[0]?.value.toLocaleString?.('en-ES', {
+                  style: 'currency',
+                  currency: 'USD',
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                }).replaceAll(',', '.'),
+                'abril': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-4')[0]?.value.toLocaleString?.('en-ES', {
+                  style: 'currency',
+                  currency: 'USD',
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                }).replaceAll(',', '.'),
+                'mayo': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-5')[0]?.value.toLocaleString?.('en-ES', {
+                  style: 'currency',
+                  currency: 'USD',
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                }).replaceAll(',', '.'),
+                'junio': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-6')[0]?.value.toLocaleString?.('en-ES', {
+                  style: 'currency',
+                  currency: 'USD',
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                }).replaceAll(',', '.'),
+                'julio': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-7')[0]?.value.toLocaleString?.('en-ES', {
+                  style: 'currency',
+                  currency: 'USD',
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                }).replaceAll(',', '.'),
+                'agosto': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-8')[0]?.value.toLocaleString?.('en-ES', {
+                  style: 'currency',
+                  currency: 'USD',
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                }).replaceAll(',', '.'),
+                'septiembre': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-9')[0]?.value.toLocaleString?.('en-ES', {
+                  style: 'currency',
+                  currency: 'USD',
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                }).replaceAll(',', '.'),
+                'octubre': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-10')[0]?.value.toLocaleString?.('en-ES', {
+                  style: 'currency',
+                  currency: 'USD',
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                }).replaceAll(',', '.'),
+                'noviembre': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-11')[0]?.value.toLocaleString?.('en-ES', {
+                  style: 'currency',
+                  currency: 'USD',
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                }).replaceAll(',', '.'),
+                'diciembre': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-12')[0]?.value.toLocaleString?.('en-ES', {
+                  style: 'currency',
+                  currency: 'USD',
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                }).replaceAll(',', '.')
+              }
+              cuentaRow['totalesanual'] = Object.values(cuentaRow).slice(1, 12).reduce((acc, val) => acc + parseInt(val.replaceAll("$","").replaceAll(".","")), 0).toLocaleString?.('en-ES', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
+              }).replaceAll(',', '.');
+              return cuentaRow;
+            })
           }))
         }))
-      }))
-
-
+      }))    
     }, [data]);
 
+    //Agregando los totales por mes (columnas)
+    dataCubo.push({
+      id: dataCubo.length,
+      'cuenta': 'Total Mes',
+      'enero': sumaNiveles[0]?.['total']['months'][0].toLocaleString?.('en-ES', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).replaceAll(',', '.'),
+      'febrero': sumaNiveles[0]?.['total']['months'][1].toLocaleString?.('en-ES', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).replaceAll(',', '.'),
+      'marzo': sumaNiveles[0]?.['total']['months'][2].toLocaleString?.('en-ES', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).replaceAll(',', '.'),
+      'abril': sumaNiveles[0]?.['total']['months'][3].toLocaleString?.('en-ES', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).replaceAll(',', '.'),
+      'mayo': sumaNiveles[0]?.['total']['months'][4].toLocaleString?.('en-ES', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).replaceAll(',', '.'),
+      'junio': sumaNiveles[0]?.['total']['months'][5].toLocaleString?.('en-ES', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).replaceAll(',', '.'),
+      'julio': sumaNiveles[0]?.['total']['months'][6].toLocaleString?.('en-ES', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).replaceAll(',', '.'),
+      'agosto': sumaNiveles[0]?.['total']['months'][7].toLocaleString?.('en-ES', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).replaceAll(',', '.'),
+      'septiembre': sumaNiveles[0]?.['total']['months'][8].toLocaleString?.('en-ES', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).replaceAll(',', '.'),
+      'octubre': sumaNiveles[0]?.['total']['months'][9].toLocaleString?.('en-ES', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).replaceAll(',', '.'),
+      'noviembre': sumaNiveles[0]?.['total']['months'][10].toLocaleString?.('en-ES', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).replaceAll(',', '.'),
+      'diciembre': sumaNiveles[0]?.['total']['months'][11].toLocaleString?.('en-ES', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).replaceAll(',', '.'),
+      'totalesanual': sumaNiveles[0]?.['total']['months'][12].toLocaleString?.('en-ES', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).replaceAll(',', '.'),      
+    })
+    
     const initialExpandedRootRows = useMemo(
       () =>
           dataCubo
@@ -96,55 +447,172 @@ export default function CuboAnual({anio, data, headers}){
         {
           accessorKey: 'cuenta',
           header: 'Cuenta',
+          size: 50, //small column
+          grow: false, //don't allow this column to grow (if layoutMode is grid)
+          muiTableHeadCellProps: {
+            //simple styling with the `sx` prop, works just like a style prop in this example
+            sx: {
+              fontWeight: '100',
+              fontSize: '12px',
+            },
+          },
         },
         {
           accessorKey: 'enero',
           header: 'Enero',
+          size: 50, //small column
+          muiTableHeadCellProps: {
+            //simple styling with the `sx` prop, works just like a style prop in this example
+            sx: {
+              fontWeight: '100',
+              fontSize: '12px',
+            },
+          },
         },
 
         {
           accessorKey: 'febrero',
           header: 'Febereo',
+          size: 50, //small column
+          muiTableHeadCellProps: {
+            //simple styling with the `sx` prop, works just like a style prop in this example
+            sx: {
+              fontWeight: '100',
+              fontSize: '12px',
+            },
+          },
         },
         {
           accessorKey: 'marzo',
-          header: 'MArzo',
+          header: 'Marzo',
+          size: 50, //small column
+          muiTableHeadCellProps: {
+            //simple styling with the `sx` prop, works just like a style prop in this example
+            sx: {
+              fontWeight: '100',
+              fontSize: '12px',
+            },
+          },
         },
         {
           accessorKey: 'abril',
           header: 'Abril',
+          size: 50, //small column
+          muiTableHeadCellProps: {
+            //simple styling with the `sx` prop, works just like a style prop in this example
+            sx: {
+              fontWeight: '100',
+              fontSize: '12px',
+            },
+          },
         },
         {
           accessorKey: 'mayo',
           header: 'Mayo',
+          size: 50, //small column
+          muiTableHeadCellProps: {
+            //simple styling with the `sx` prop, works just like a style prop in this example
+            sx: {
+              fontWeight: '100',
+              fontSize: '12px',
+            },
+          },
         },
         {
           accessorKey: 'junio',
           header: 'Junio',
+          size: 50, //small column
+          muiTableHeadCellProps: {
+            //simple styling with the `sx` prop, works just like a style prop in this example
+            sx: {
+              fontWeight: '100',
+              fontSize: '12px',
+            },
+          },
         },
         {
           accessorKey: 'julio',
           header: 'Julio',
+          size: 50, //small column
+          muiTableHeadCellProps: {
+            //simple styling with the `sx` prop, works just like a style prop in this example
+            sx: {
+              fontWeight: '100',
+              fontSize: '12px',
+            },
+          },
         },
         {
           accessorKey: 'agosto',
           header: 'Agosto',
+          size: 50, //small column
+          muiTableHeadCellProps: {
+            //simple styling with the `sx` prop, works just like a style prop in this example
+            sx: {
+              fontWeight: '100',
+              fontSize: '12px',
+            },
+          },
         },
         {
           accessorKey: 'septiembre',
           header: 'Septiembre',
+          size: 50, //small column
+          muiTableHeadCellProps: {
+            //simple styling with the `sx` prop, works just like a style prop in this example
+            sx: {
+              fontWeight: '100',
+              fontSize: '12px',
+            },
+          },
         },
         {
           accessorKey: 'octubre',
           header: 'Octubre',
+          size: 50, //small column
+          muiTableHeadCellProps: {
+            //simple styling with the `sx` prop, works just like a style prop in this example
+            sx: {
+              fontWeight: '100',
+              fontSize: '12px',
+            },
+          },
         },
         {
           accessorKey: 'noviembre',
           header: 'Noviembre',
+          size: 50, //small column
+          muiTableHeadCellProps: {
+            //simple styling with the `sx` prop, works just like a style prop in this example
+            sx: {
+              fontWeight: '100',
+              fontSize: '12px',
+            },
+          },
         },
         {
           accessorKey: 'diciembre',
           header: 'Diciembre',
+          size: 50, //small column
+          muiTableHeadCellProps: {
+            //simple styling with the `sx` prop, works just like a style prop in this example
+            sx: {
+              fontWeight: '100',
+              fontSize: '12px',
+            },
+          },
+        },
+        {
+          accessorKey: 'totalesanual',
+          header: 'Totales Anual',
+          size: 50, //small column
+          muiTableHeadCellProps: {
+            //simple styling with the `sx` prop, works just like a style prop in this example
+            sx: {
+              fontWeight: '100',
+              fontSize: '12px',
+            },
+          },
         },
       ],
       [],
@@ -167,10 +635,18 @@ export default function CuboAnual({anio, data, headers}){
       enableRowOrdering: false,
       enableSorting: false,
       enableColumnActions: false,
+      enablePagination: false,
       initialState: { 
           expanded: initialExpandedRootRows,
           density: 'compact'
       }, //only expand the root rows by default
+      muiTableHeadCellProps: {
+        //simple styling with the `sx` prop, works just like a style prop in this example
+        sx: {
+          fontWeight: '100',
+          fontSize: '12px',
+        },
+      },
 
     });
 
@@ -191,7 +667,7 @@ export default function CuboAnual({anio, data, headers}){
                   <h2 className="text-2xl font-light text-center">{title}</h2>
               </div>
           </Grid>                          
-          <Grid item xs={12} sx={{height: '400px'}}> 
+          <Grid item xs={12} sx={{height: '100%'}}> 
               <MaterialReactTable table={table} />
           </Grid>
       </Grid>
