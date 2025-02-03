@@ -9,8 +9,6 @@ import {
 
 export default function CuboAnual({anio, data, sumaNiveles}){
     const [title, setTitle] = useState('Gráfico de Ventas');
-
-    console.log('dataCubo123456', data, anio);
     const dataCubo = useMemo(() => {
       const dataC =  data.map((item,idx) => ({
         id: idx,
@@ -617,7 +615,6 @@ export default function CuboAnual({anio, data, sumaNiveles}){
       [],
       //end
     );
-    console.log(initialExpandedRootRows,"initialExpandedRootRows",dataCubo);
     const table = useMaterialReactTable({
       columns,
       //data:UserData,

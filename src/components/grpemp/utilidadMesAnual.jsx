@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
 import { UserData } from '../../../mock/data2.js';
 import StackedChart from '../graficos/stackedChart.jsx';
@@ -29,7 +27,7 @@ const bdcolor = [
     'rgb(233, 180, 257)'
 ]
 
-export default function UtilidadMesAnual({empresa, anio}){
+export default function UtilidadMesAnual({data, anio}){
     const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico
     const [title, setTitle] = useState('Gráfico de Ventas');
     const [orderedData, setOrderedData] = useState([]);     //Todos los datos ordenados por año
@@ -89,7 +87,7 @@ export default function UtilidadMesAnual({empresa, anio}){
             datasets:result.map(item => item.datasets)
         })
         
-    }, [UserData, empresa, anio]);
+    }, [data, anio]);
 
     useEffect(() => {
         if(anio.length === 1){

@@ -91,33 +91,21 @@ export default function Main ({data}) {
     ))
     const [anios, setAnios] = useState(Anios); 
     const [anioSelected, setAnioSelected] = useState([anios[anios.length - 1]]);
-    console.log([anios[anios.length - 1]])
-
-    //const anioFiltrado = 2024; // Año que queremos filtrar
     
-    console.log('dataPivotesAllYears', data);
     useEffect(() => {
         setEmpresas(emps);
         setEmpresa(emps[0].label);
-        console.log('data', data);
-        console.log('anioSelected123', anioSelected);
-        const DatosFiltrados = data.data?.filter(item => item.anio === anioSelected[0].year)[0].data;
-        console.log('datosFiltrados', DatosFiltrados);
-        
+        const DatosFiltrados = data.data?.filter(item => item.anio === anioSelected[0].year)[0].data;        
         const result = processData(data.data);
         setDatosFiltrados(DatosFiltrados);
         setSumaNiveles(result);
-        console.log(result, 'result');
         const resultFiltrado = result.filter(item => item.year === anioSelected[0].year);
         setSumaNivelesFiltrado(resultFiltrado);
-        console.log('resultFiltrado', resultFiltrado);
-       
+        console.log('result', resultFiltrado, anioSelected);
     }, [data, anios, anioSelected]);    
 
-    /* */
-    console.log('anioSelected[0]?.year', anioSelected);
     return ( 
-        datosFiltrados && sumaNiveles && anios && sumaNiveles &&
+        sumaNiveles && anios && sumaNivelesFitrado &&
             <section className="main bg-white w-full px-10 pt-4 pb-20">
                 <h2 className="text-2xl font-light">Personalización del Dashboard </h2>
                 <div className="pt-4 mt-4 space-y-2 font-medium border-t border-purple-300 pb-4"></div>
@@ -167,7 +155,7 @@ export default function Main ({data}) {
                 <h2 className="text-2xl font-light pb-2 pt-4">Visualización del Dashboard </h2>
                 <div className="pt-4 mt-4 space-y-2 font-medium border-t border-purple-300"></div>            
                 <Grid container spacing={4}>
-                <   Grid item xs={6}> 
+                <   Grid item xs={6}>
                         <Autocomplete
                             disablePortal
                             disableClearable={true}
@@ -176,7 +164,6 @@ export default function Main ({data}) {
                             options={anios}
                             sx={{ width: "100%"}}
                             onChange={(event, newValue) => {
-                                console.log('newValue', newValue);
                                 setAnioSelected([
                                     newValue,
                                 ]);
@@ -187,29 +174,29 @@ export default function Main ({data}) {
                     </Grid>  
                     <Grid item xs={6}> 
                     </Grid>                
-                    <Grid item xs={4}>                    
-                        <UtilidadMes empresa={empresa} anio={[anioSelected[0].year]} mes={[11]} data={datosFiltrados}/>
+                    <Grid item xs={12} xl={4}>                    
+                        <UtilidadMes anio={[anioSelected[0].year]} mes={[11]} data={sumaNivelesFitrado}/>
                     </Grid>
-                    <Grid item xs={8}>
-                        <VentasAnual empresa={empresa} anio={[anios[anios.length - 1].year]} data={sumaNiveles} anios={anios}/>
+                    <Grid item xs={12} xl={8}>
+                        <VentasAnual anio={[anios[anios.length - 1].year]} data={sumaNiveles} anios={anios}/>
                     </Grid>
-                    <Grid item xs={8}>
-                        <UtilidadMesAnual empresa={empresa} anio={[anioSelected[0].year]} data={datosFiltrados}/>
+                    <Grid item xs={12} xl={8}>
+                        <UtilidadMesAnual anio={[anioSelected[0].year]} data={sumaNivelesFitrado}/>
                     </Grid>
-                    <Grid item xs={4}>                    
-                        <UtilidadYTD empresa={empresa} anio={[anioSelected[0].year]} mes={[11]} data={datosFiltrados}/>
+                    <Grid item xs={12} xl={4}>                    
+                        <UtilidadYTD anio={[anioSelected[0].year]} mes={[11]} data={sumaNivelesFitrado}/>
                     </Grid>
-                    <Grid item xs={12}>                    
-                        <RemuneracionesAnual empresa={empresa} anio={[anioSelected[0].year]} data={datosFiltrados}/>
+                    <Grid item xs={12} xl={12}>                    
+                        <RemuneracionesAnual anio={[anioSelected[0].year]} data={sumaNivelesFitrado}/>
                     </Grid>
-                    <Grid item xs={12}>                    
-                        <GoaAnual empresa={empresa} anio={[anioSelected[0].year]} data={datosFiltrados}/>
+                    <Grid item xs={12} xl={12}>                    
+                        <GoaAnual anio={[anioSelected[0].year]} data={sumaNivelesFitrado}/>
                     </Grid>
-                    <Grid item xs={12}>                    
-                        <PanelFinancieroAnual empresa={empresa} anio={[anioSelected[0].year]} mes={[11]} data={datosFiltrados}/>
+                    <Grid item xs={12} xl={12}>                    
+                        <PanelFinancieroAnual anio={[anioSelected[0].year]} mes={[11]} data={sumaNivelesFitrado}/>
                     </Grid>
                     <Grid item lg={12} xs={12}>
-                        <CuboAnual empresa={empresa} anio={[anioSelected[0].year]} data={datosFiltrados} sumaNiveles={sumaNivelesFitrado} />
+                        <CuboAnual anio={[anioSelected[0].year]} data={datosFiltrados} sumaNiveles={sumaNivelesFitrado} />
                     </Grid>
                 </Grid>                    
             </section>

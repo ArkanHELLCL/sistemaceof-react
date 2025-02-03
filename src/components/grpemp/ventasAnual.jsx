@@ -5,24 +5,19 @@ import Chip from '@mui/material/Chip';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
-import { UserData } from '../../../mock/data.js';
 import LineChart from '../graficos/lineChart.jsx';
 
-
-export default function VentasAnual({empresa, anio, data, anios}){
+export default function VentasAnual({anio, data, anios}){
     const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico
     const fixedOptions = [];
     const selectedAnios = anios?.filter(item => anio?.includes(item.year)).sort((a, b) => a.year - b.year)
     const [aniosSelected, setAniosSelected] = useState(selectedAnios);
     const [title, setTitle] = useState('Gráfico de Ventas');
-    const [orderedData, setOrderedData] = useState([]);     //Todos los datos ordenados por año
-    const [resultData, setResultData] = useState([]);       //Datos filtrados por año(s) seleccionado(s)
+    //const [resultData, setResultData] = useState([]);       //Datos filtrados por año(s) seleccionado(s)
 
 
     useEffect(() => {
-        console.log(data, "dataVentas") 
         const yearArray = aniosSelected.map(item => item.year);
-        console.log(yearArray, "yearArrayVentas")
         const filteredArray = data?.filter(item => 
             yearArray?.includes(item.year)).map(item => {
                 const year = item.year;
@@ -37,21 +32,8 @@ export default function VentasAnual({empresa, anio, data, anios}){
                 )
             })
 
-
-        console.log(filteredArray, "filteredArrayVentas")
-        /*const result = filteredArray.map(item => item.slice(0,12).map((item,idx) => {
-            const mes = idx+1;
-            return {
-                month: anio[0] + '-' + mes,
-                venta: item
-            }
-        }
-        ))  
-        console.log(result, "resultventas")*/
         const result = filteredArray.flatMap(item => item);
-        //const result = []
-        console.log(result, "resultVentas")
-        setResultData(result);
+        //setResultData(result);
         if(result.length>0){
             setGrpconfig({
                 labels: result.map(data => data.month),
@@ -86,7 +68,6 @@ export default function VentasAnual({empresa, anio, data, anios}){
                 }
             }
             );
-            setResultData(result);
             setGrpconfig({
                 labels: result.map(data => data.month),
                 datasets: [
@@ -106,7 +87,7 @@ export default function VentasAnual({empresa, anio, data, anios}){
                 ]
             })
         }
-    }, [UserData, empresa, anio]);
+    }, [data, anio]);
 
     useEffect(() => {
         if(aniosSelected.length === 1){
