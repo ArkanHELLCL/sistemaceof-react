@@ -15,7 +15,52 @@ export default function GoaAnual({anio}){
 
     useEffect(() => {
         if(orderedData){
-            const filteredArray = orderedData.filter(item => item.anio === anio[0])[0].data;
+            const filteredArray = orderedData?.filter(item => item.anio === anio[0])[0]?.data;
+            if(filteredArray){
+                setResultData(filteredArray);
+                setGrpconfig({
+                    labels: filteredArray[0].data.map(item => item.month),
+                    datasets: [
+                    {
+                        label: filteredArray[0].label,
+                        data: filteredArray[0].data.map(item => item.valor),
+                        type: 'bar',
+                        backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                        borderColor: 'rgb(255, 159, 64)',
+                        borderWidth: 1,
+                        yAxisID: 'currency',
+                    },
+                    {
+                        label: filteredArray[1].label,
+                        data: filteredArray[1].data.map(item => item.valor),
+                        type: 'bar',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        borderWidth: 1,
+                        yAxisID: 'currency',
+                    },
+                    {
+                        label: filteredArray[2].label,
+                        data: filteredArray[2].data.map(item => item.valor),
+                        type: 'line',
+                        borderColor: '#8e7cb9',
+                        backgroundColor: 'rgba(238, 237, 248, 0.8)',
+                        borderWidth: 1,
+                        yAxisID: 'percentage',
+                        tension: 0.5
+                    }
+                    ]
+                })
+            }
+        }
+
+    }, [anio]);
+
+    useEffect(() => {
+        const OrderedData = UserData?.sort((a, b) => a.anio - b.anio);
+        setOrderedData(OrderedData);
+        const filteredArray = OrderedData.filter(item => item.anio === anio[0])[0]?.data;
+        if(filteredArray){
             setResultData(filteredArray);
             setGrpconfig({
                 labels: filteredArray[0].data.map(item => item.month),
@@ -50,48 +95,12 @@ export default function GoaAnual({anio}){
                 }
                 ]
             })
+        }else{
+            setGrpconfig({
+                labels: [],
+                datasets: []
+            })            
         }
-
-    }, [anio]);
-
-    useEffect(() => {
-        const OrderedData = UserData?.sort((a, b) => a.anio - b.anio);
-        setOrderedData(OrderedData);
-        const filteredArray = OrderedData.filter(item => item.anio === anio[0])[0].data;
-        setResultData(filteredArray);
-        setGrpconfig({
-            labels: filteredArray[0].data.map(item => item.month),
-            datasets: [
-              {
-                label: filteredArray[0].label,
-                data: filteredArray[0].data.map(item => item.valor),
-                type: 'bar',
-                backgroundColor: 'rgba(255, 159, 64, 0.2)',
-                borderColor: 'rgb(255, 159, 64)',
-                borderWidth: 1,
-                yAxisID: 'currency',
-              },
-              {
-                label: filteredArray[1].label,
-                data: filteredArray[1].data.map(item => item.valor),
-                type: 'bar',
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgb(255, 99, 132)',
-                borderWidth: 1,
-                yAxisID: 'currency',
-              },
-              {
-                label: filteredArray[2].label,
-                data: filteredArray[2].data.map(item => item.valor),
-                type: 'line',
-                borderColor: '#8e7cb9',
-                backgroundColor: 'rgba(238, 237, 248, 0.8)',
-                borderWidth: 1,
-                yAxisID: 'percentage',
-                tension: 0.5
-              }
-            ]
-        })
     }, [UserData, anio]);
 
     useEffect(() => {

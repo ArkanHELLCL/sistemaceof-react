@@ -22,7 +22,7 @@ const meses = [
     { "label": "Diciembre", "month": 12 }
 ]
 
-export default function UtilidadMes({anio, mes}){
+export default function UtilidadMes({data, anio, mes}){
     const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico
     const selectdMes = meses?.filter(item => item.month === mes[0]).sort((a, b) => a.month - b.month)
     const [mesSelected, setMesSelected] = useState(selectdMes);
@@ -34,11 +34,12 @@ export default function UtilidadMes({anio, mes}){
 
     useEffect(() => {
         if(orderedData){
-            const filteredArray = orderedData?.filter(item => item.anio === anio[0])[0].meses.filter(item => item.id === mesSelected[0].month)[0].data;
+            console.log('orderedData', orderedData);
+            const filteredArray = orderedData?.filter(item => item.anio === anio[0])[0]?.meses?.filter(item => item.id === mesSelected[0].month)[0].data;
             console.log('filteredArray', filteredArray);
             setResultData(filteredArray);
             setGrpconfig({
-                labels: filteredArray.map(item => item.cuenta),
+                labels: filteredArray?.map(item => item.cuenta),
                 datasets: [
                 {
                     label: "Gráfico de Utilidades por Mes",
@@ -72,13 +73,14 @@ export default function UtilidadMes({anio, mes}){
     }, [anio, mesSelected]);
 
     useEffect(() => {
+        console.log(data,"utilidaddata")
         const OrderedData = UserData?.sort((a, b) => a.anio - b.anio);
         setOrderedData(OrderedData);
-        const filteredArray = OrderedData.filter(item => item.anio === anio[0])[0].meses.filter(item => item.id === mes[0])[0].data;
+        const filteredArray = OrderedData.filter(item => item.anio === anio[0])[0]?.meses.filter(item => item.id === mes[0])[0].data;
         const result = null
         setResultData(result);
         setGrpconfig({
-            labels: filteredArray.map(item => item.cuenta),
+            labels: filteredArray?.map(item => item.cuenta),
             datasets: [
               {
                 label: "Gráfico de Utilidades por Mes",

@@ -8,31 +8,23 @@ import Grid from '@mui/material/Grid';
 import { UserData } from '../../../mock/data.js';
 import LineChart from '../graficos/lineChart.jsx';
 
-const anios =[
-    { "title": "2022", "year": 2022 },
-    { "title": "2023", "year": 2023 },
-    { "title": "2024", "year": 2024 },
-    { "title": "2025", "year": 2025 }
-]
 
-export default function VentasAnual({empresa, anio, data}){
+export default function VentasAnual({empresa, anio, data, anios}){
     const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico
-    //const fixedOptions = [graficos[1]];
     const fixedOptions = [];
     const selectedAnios = anios?.filter(item => anio?.includes(item.year)).sort((a, b) => a.year - b.year)
-    console.log(selectedAnios, "selectedAnios")
     const [aniosSelected, setAniosSelected] = useState(selectedAnios);
     const [title, setTitle] = useState('Gráfico de Ventas');
     const [orderedData, setOrderedData] = useState([]);     //Todos los datos ordenados por año
     const [resultData, setResultData] = useState([]);       //Datos filtrados por año(s) seleccionado(s)
-
-    console.log(anio,"anio", selectedAnios)
 
 
     useEffect(() => {
         const yearArray = aniosSelected.map(item => item.year);
         const filteredArray = orderedData?.filter(item => yearArray?.includes(item.anio));
         const result = filteredArray?.flatMap(item => item.data);
+        console.log(result, "resultventas")
+
         setResultData(result);
         if(result.length>0){
             setGrpconfig({
@@ -58,15 +50,19 @@ export default function VentasAnual({empresa, anio, data}){
     }, [aniosSelected]);
 
     useEffect(() => { 
-        if(data && anio.length === 1){
-            //const selectedAnios = anios?.filter(item => anio?.includes(item.year)).sort((a, b) => a.year - b.year)
-            /*setAniosSelected([
-                ...selectedAnios
-                ]);*/
-            const OrderedData = UserData?.sort((a, b) => a.anio - b.anio);
-            setOrderedData(OrderedData);
-            const filteredArray = orderedData?.filter(item => anio?.includes(item.anio));
-            const result = filteredArray.flatMap(item => item.data);
+        if(data.length>0 && anio.length === 1){            
+            console.log(data, "dataVenta", anio[0])  
+            const filteredArray = data?.filter(item => item.year === anio[0])[0]["nivel2"]['1.1.1. VENTAS NACIONALES'].months;
+            console.log(filteredArray, "filteredArrayVenta")
+            const result = filteredArray.slice(0,12).map((item,idx) => {
+                const mes = idx+1;
+                return {
+                    month: anio[0] + '-' + mes,
+                    venta: item
+                }
+            }
+            );
+            console.log(result, "resultventas")
             setResultData(result);
             setGrpconfig({
                 labels: result.map(data => data.month),
@@ -78,8 +74,8 @@ export default function VentasAnual({empresa, anio, data}){
                     backgroundColor: 'rgba(238, 237, 248, 0.8)',
                     fill: {
                         target: 'origin',
-                        above: 'rgba(238, 237, 248, 0.5)',   // Area will be red above the origin
-                        below: 'rgba(238, 237, 248, 0.5)'    // And blue below the origin
+                        above: 'rgba(238, 237, 248, 0.5)',
+                        below: 'rgba(238, 237, 248, 0.5)'
                     },
                     borderWidth: 1,
                     tension: 0.5
@@ -92,10 +88,10 @@ export default function VentasAnual({empresa, anio, data}){
     useEffect(() => {
         console.log(aniosSelected, "aniosSelected title")
         if(aniosSelected.length === 1){
-            setTitle('Gráfico de Ventas Mensuales año ' + aniosSelected[0].title );
+            setTitle('Gráfico de Ventas Mensuales año ' + aniosSelected[0].label );
         }
         else if(aniosSelected.length > 1){  
-            setTitle('Gráfico de Ventas Mensuales años ' + aniosSelected.map(item => item.title).join(', '));
+            setTitle('Gráfico de Ventas Mensuales años ' + aniosSelected.map(item => item.label).join(', '));
         }
         else{
            setTitle('Gráfico de Ventas');
@@ -122,14 +118,14 @@ export default function VentasAnual({empresa, anio, data}){
                             ]);
                         }}
                         options={anios}
-                        getOptionLabel={(option) => option.title}
+                        getOptionLabel={(option) => option.label}
                         renderTags={(tagValue, getTagProps) =>
                             tagValue.map((option, index) => {
                             const { key, ...tagProps } = getTagProps({ index });
                             return (
                                 <Chip
                                     key={key}
-                                    label={option.title}
+                                    label={option.label}
                                     {...tagProps}
                                     disabled={fixedOptions.includes(option)}
                                 />

@@ -6,20 +6,13 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-//const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 
 export default function CuboAnual({anio, data, sumaNiveles}){
     const [title, setTitle] = useState('Gráfico de Ventas');
-    //const [resultData, setResultData] = useState();       //Datos filtrados por año(s) seleccionado(s)
-
-    console.log(sumaNiveles, 'sumaNiveles');
-    const xx = sumaNiveles//[0]?.['resultado']['1. OPERACIONAL']['months']
-
-    console.log('xx', xx);
 
     console.log('dataCubo123456', data, anio);
     const dataCubo = useMemo(() => {
-      return data.map((item,idx) => ({        
+      const dataC =  data.map((item,idx) => ({
         id: idx,
         'cuenta': item['Resultado'],
         'enero' : sumaNiveles[0]?.['resultado'][item['Resultado'].toUpperCase()]['months'][0].toLocaleString?.('en-ES', {
@@ -346,101 +339,107 @@ export default function CuboAnual({anio, data, sumaNiveles}){
             })
           }))
         }))
-      }))    
-    }, [data]);
+      }))
+      //Agregando los totales por mes (columnas)
+      dataC.push({
+        id: dataC.length,
+        'cuenta': 'Total Mes',
+        'enero': sumaNiveles[0]?.['total']['months'][0].toLocaleString?.('en-ES', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).replaceAll(',', '.'),
+        'febrero': sumaNiveles[0]?.['total']['months'][1].toLocaleString?.('en-ES', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).replaceAll(',', '.'),
+        'marzo': sumaNiveles[0]?.['total']['months'][2].toLocaleString?.('en-ES', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).replaceAll(',', '.'),
+        'abril': sumaNiveles[0]?.['total']['months'][3].toLocaleString?.('en-ES', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).replaceAll(',', '.'),
+        'mayo': sumaNiveles[0]?.['total']['months'][4].toLocaleString?.('en-ES', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).replaceAll(',', '.'),
+        'junio': sumaNiveles[0]?.['total']['months'][5].toLocaleString?.('en-ES', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).replaceAll(',', '.'),
+        'julio': sumaNiveles[0]?.['total']['months'][6].toLocaleString?.('en-ES', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).replaceAll(',', '.'),
+        'agosto': sumaNiveles[0]?.['total']['months'][7].toLocaleString?.('en-ES', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).replaceAll(',', '.'),
+        'septiembre': sumaNiveles[0]?.['total']['months'][8].toLocaleString?.('en-ES', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).replaceAll(',', '.'),
+        'octubre': sumaNiveles[0]?.['total']['months'][9].toLocaleString?.('en-ES', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).replaceAll(',', '.'),
+        'noviembre': sumaNiveles[0]?.['total']['months'][10].toLocaleString?.('en-ES', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).replaceAll(',', '.'),
+        'diciembre': sumaNiveles[0]?.['total']['months'][11].toLocaleString?.('en-ES', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).replaceAll(',', '.'),
+        'totalesanual': sumaNiveles[0]?.['total']['months'][12].toLocaleString?.('en-ES', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).replaceAll(',', '.'),      
+      })
 
-    //Agregando los totales por mes (columnas)
-    dataCubo.push({
-      id: dataCubo.length,
-      'cuenta': 'Total Mes',
-      'enero': sumaNiveles[0]?.['total']['months'][0].toLocaleString?.('en-ES', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).replaceAll(',', '.'),
-      'febrero': sumaNiveles[0]?.['total']['months'][1].toLocaleString?.('en-ES', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).replaceAll(',', '.'),
-      'marzo': sumaNiveles[0]?.['total']['months'][2].toLocaleString?.('en-ES', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).replaceAll(',', '.'),
-      'abril': sumaNiveles[0]?.['total']['months'][3].toLocaleString?.('en-ES', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).replaceAll(',', '.'),
-      'mayo': sumaNiveles[0]?.['total']['months'][4].toLocaleString?.('en-ES', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).replaceAll(',', '.'),
-      'junio': sumaNiveles[0]?.['total']['months'][5].toLocaleString?.('en-ES', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).replaceAll(',', '.'),
-      'julio': sumaNiveles[0]?.['total']['months'][6].toLocaleString?.('en-ES', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).replaceAll(',', '.'),
-      'agosto': sumaNiveles[0]?.['total']['months'][7].toLocaleString?.('en-ES', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).replaceAll(',', '.'),
-      'septiembre': sumaNiveles[0]?.['total']['months'][8].toLocaleString?.('en-ES', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).replaceAll(',', '.'),
-      'octubre': sumaNiveles[0]?.['total']['months'][9].toLocaleString?.('en-ES', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).replaceAll(',', '.'),
-      'noviembre': sumaNiveles[0]?.['total']['months'][10].toLocaleString?.('en-ES', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).replaceAll(',', '.'),
-      'diciembre': sumaNiveles[0]?.['total']['months'][11].toLocaleString?.('en-ES', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).replaceAll(',', '.'),
-      'totalesanual': sumaNiveles[0]?.['total']['months'][12].toLocaleString?.('en-ES', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).replaceAll(',', '.'),      
-    })
+      return dataC;
+    }, [data]);
     
-    const initialExpandedRootRows = useMemo(
+    /*const initialExpandedRootRows = useMemo(
       () =>
           dataCubo
           .map((originalRow) => originalRow.id) //get all the root row ids, use recursion for additional levels
           .reduce((a, v) => ({ ...a, [v]: true }), {}), //convert to an object with all the ids as keys and `true` as values
       [],
-    );      
-    console.log(dataCubo, 'dataCubo');
+    );]*/
+
+    const initialExpandedRootRows = [
+      {0:true},
+      {1:true}
+    ]
+
     const columns = useMemo(
       //column definitions...
       () => [
@@ -618,7 +617,7 @@ export default function CuboAnual({anio, data, sumaNiveles}){
       [],
       //end
     );
-
+    console.log(initialExpandedRootRows,"initialExpandedRootRows",dataCubo);
     const table = useMaterialReactTable({
       columns,
       //data:UserData,

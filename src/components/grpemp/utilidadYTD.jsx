@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
 import { UserData } from '../../../mock/data4.js';
 import DoughnutChart from '../graficos/doughnutChart.jsx';
@@ -15,10 +13,53 @@ export default function UtilidadYTD({anio, mes}){
 
     useEffect(() => {
         if(orderedData){
-            const filteredArray = orderedData?.filter(item => item.anio === anio[0])[0].data;
-            setResultData(filteredArray);
+            const filteredArray = orderedData?.filter(item => item.anio === anio[0])[0]?.data;
+            if(filteredArray){
+                setResultData(filteredArray);
+                setGrpconfig({
+                    labels: filteredArray?.map(item => item.cuenta),
+                    datasets: [
+                    {
+                        label: "Gráfico de Utilidades YTD",
+                        data: filteredArray?.map(item => item.valor),
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(255, 205, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(201, 203, 207, 0.2)',
+                            'rgba(233, 180, 257, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(255, 159, 64)',
+                            'rgb(255, 205, 86)',
+                            'rgb(75, 192, 192)',
+                            'rgb(54, 162, 235)',
+                            'rgb(153, 102, 255)',
+                            'rgb(201, 203, 207)',
+                            'rgb(233, 180, 257)'
+                        ],
+                        borderWidth: 1
+                    }
+                    ]
+                })
+            }
+        }
+
+    }, [anio]);
+
+    useEffect(() => {
+        const OrderedData = UserData?.sort((a, b) => a.anio - b.anio);
+        setOrderedData(OrderedData);
+        const filteredArray = OrderedData?.filter(item => item.anio === anio[0])[0]?.data;
+        const result = null
+        if(filteredArray){
+            setResultData(result);
             setGrpconfig({
-                labels: filteredArray.map(item => item.cuenta),
+                labels: filteredArray?.map(item => item.cuenta),
                 datasets: [
                 {
                     label: "Gráfico de Utilidades YTD",
@@ -47,46 +88,12 @@ export default function UtilidadYTD({anio, mes}){
                 }
                 ]
             })
+        }else{
+            setGrpconfig({
+                labels: [],
+                datasets: []
+            })            
         }
-
-    }, [anio]);
-
-    useEffect(() => {
-        const OrderedData = UserData?.sort((a, b) => a.anio - b.anio);
-        setOrderedData(OrderedData);
-        const filteredArray = OrderedData.filter(item => item.anio === anio[0])[0].data;
-        const result = null
-        setResultData(result);
-        setGrpconfig({
-            labels: filteredArray.map(item => item.cuenta),
-            datasets: [
-              {
-                label: "Gráfico de Utilidades YTD",
-                data: filteredArray?.map(item => item.valor),
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                    'rgba(255, 205, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(201, 203, 207, 0.2)',
-                    'rgba(233, 180, 257, 0.2)'
-                ],
-                borderColor: [
-                    'rgb(255, 99, 132)',
-                    'rgb(255, 159, 64)',
-                    'rgb(255, 205, 86)',
-                    'rgb(75, 192, 192)',
-                    'rgb(54, 162, 235)',
-                    'rgb(153, 102, 255)',
-                    'rgb(201, 203, 207)',
-                    'rgb(233, 180, 257)'
-                ],
-                borderWidth: 1
-              }
-            ]
-        })
     }, [UserData, anio, mes]);
 
     useEffect(() => {

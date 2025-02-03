@@ -29,13 +29,13 @@ export default function PanelFinancieroAnual({anio, mes}){
     const [resultData, setResultData] = useState([]);
 
     useEffect(() => {
-        const filteredArray = UserData?.filter(item => item.anio === anio[0])[0].data.filter(item => item.month === mesSelected[0].month)[0].rows;
+        const filteredArray = UserData?.filter(item => item.anio === anio[0])[0]?.data.filter(item => item.month === mesSelected[0].month)[0].rows;
         setResultData(filteredArray);
         
     }, [mesSelected, anio]);
     
     useEffect(() => {
-        const filteredArray = UserData?.filter(item => item.anio === anio[0])[0].data.filter(item => item.month === mes[0])[0].rows;
+        const filteredArray = UserData?.filter(item => item.anio === anio[0])[0]?.data.filter(item => item.month === mes[0])[0].rows;
         setResultData(filteredArray);
         
     }, [UserData, anio, mes]);

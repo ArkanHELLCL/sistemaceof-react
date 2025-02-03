@@ -191,7 +191,7 @@ export default function Main ({data}) {
                         <UtilidadMes empresa={empresa} anio={[anioSelected[0].year]} mes={[11]} data={datosFiltrados}/>
                     </Grid>
                     <Grid item xs={8}>
-                        <VentasAnual empresa={empresa} anio={[anios[anios.length - 1].year]} data={data.data} anios={anios}/>
+                        <VentasAnual empresa={empresa} anio={[anios[anios.length - 1].year]} data={sumaNiveles} anios={anios}/>
                     </Grid>
                     <Grid item xs={8}>
                         <UtilidadMesAnual empresa={empresa} anio={[anioSelected[0].year]} data={datosFiltrados}/>
