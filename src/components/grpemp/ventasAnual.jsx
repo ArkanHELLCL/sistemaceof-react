@@ -20,11 +20,37 @@ export default function VentasAnual({empresa, anio, data, anios}){
 
 
     useEffect(() => {
+        console.log(data, "dataVentas") 
         const yearArray = aniosSelected.map(item => item.year);
-        const filteredArray = orderedData?.filter(item => yearArray?.includes(item.anio));
-        const result = filteredArray?.flatMap(item => item.data);
-        console.log(result, "resultventas")
+        console.log(yearArray, "yearArrayVentas")
+        const filteredArray = data?.filter(item => 
+            yearArray?.includes(item.year)).map(item => {
+                const year = item.year;
+                return (
+                    item["nivel2"]['1.1.1. VENTAS NACIONALES'].months.slice(0,12).map((item, idx) => {
+                        const mes = idx+1;
+                        return {
+                            month: year + '-' + mes,
+                            venta: item
+                        }
+                    })
+                )
+            })
 
+
+        console.log(filteredArray, "filteredArrayVentas")
+        /*const result = filteredArray.map(item => item.slice(0,12).map((item,idx) => {
+            const mes = idx+1;
+            return {
+                month: anio[0] + '-' + mes,
+                venta: item
+            }
+        }
+        ))  
+        console.log(result, "resultventas")*/
+        const result = filteredArray.flatMap(item => item);
+        //const result = []
+        console.log(result, "resultVentas")
         setResultData(result);
         if(result.length>0){
             setGrpconfig({
@@ -37,8 +63,8 @@ export default function VentasAnual({empresa, anio, data, anios}){
                     backgroundColor: 'rgba(238, 237, 248, 0.8)',
                     fill: {
                         target: 'origin',
-                        above: 'rgba(238, 237, 248, 0.5)',   // Area will be red above the origin
-                        below: 'rgba(238, 237, 248, 0.5)'    // And blue below the origin
+                        above: 'rgba(238, 237, 248, 0.5)',
+                        below: 'rgba(238, 237, 248, 0.5)'
                     },
                     borderWidth: 1,
                     tension: 0.5
@@ -51,9 +77,7 @@ export default function VentasAnual({empresa, anio, data, anios}){
 
     useEffect(() => { 
         if(data.length>0 && anio.length === 1){            
-            console.log(data, "dataVenta", anio[0])  
             const filteredArray = data?.filter(item => item.year === anio[0])[0]["nivel2"]['1.1.1. VENTAS NACIONALES'].months;
-            console.log(filteredArray, "filteredArrayVenta")
             const result = filteredArray.slice(0,12).map((item,idx) => {
                 const mes = idx+1;
                 return {
@@ -62,7 +86,6 @@ export default function VentasAnual({empresa, anio, data, anios}){
                 }
             }
             );
-            console.log(result, "resultventas")
             setResultData(result);
             setGrpconfig({
                 labels: result.map(data => data.month),
@@ -86,7 +109,6 @@ export default function VentasAnual({empresa, anio, data, anios}){
     }, [UserData, empresa, anio]);
 
     useEffect(() => {
-        console.log(aniosSelected, "aniosSelected title")
         if(aniosSelected.length === 1){
             setTitle('Gráfico de Ventas Mensuales año ' + aniosSelected[0].label );
         }
