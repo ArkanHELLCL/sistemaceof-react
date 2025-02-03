@@ -2,7 +2,6 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import { UserData } from '../../../mock/data2.js';
 import StackedChart from '../graficos/stackedChart.jsx';
 
 const bgcolor = [
@@ -30,13 +29,62 @@ const bdcolor = [
 export default function UtilidadMesAnual({data, anio}){
     const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico
     const [title, setTitle] = useState('Gráfico de Ventas');
-    const [orderedData, setOrderedData] = useState([]);     //Todos los datos ordenados por año
 
-    useEffect(() => {
-        const yearArray = anio.map(item => item.year);
-        const filteredArray = orderedData?.filter(item => yearArray?.includes(item.anio));
-        if(filteredArray){   
-            const result = filteredArray?.flatMap(item => item.data).map((item, index) => {
+    useEffect(() => {        
+        if(data?.length>0 && anio.length === 1){
+            const year = data[0].year
+            const col=[];
+            let valor = (data[0]["nivel1"]['1.1. INGRESO DE EXPLOTACION']?.months?.slice(0,12).map((item, idx)  => { 
+                const mes = year + '-' + parseInt(idx + 1)
+                return {"month" : mes, "valor" : item} }))
+            col.push({"label" : "Ingresos","data" : valor ? valor : []});
+
+            valor = (data[0]["nivel1"]['1.2. COSTOS DE EXPLOTACION']?.months?.slice(0,12).map((item, idx)  => { 
+                const mes = year + '-' + parseInt(idx + 1)
+                return {"month" : mes, "valor" : item} }))
+            col.push({"label" : "Costos de Explotación" , "data" : valor ? valor : []});
+
+            valor = (data[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0,12).map((item, idx)  => { 
+                const mes = year + '-' + parseInt(idx + 1)
+                return {"month" : mes, "valor" : item} }))
+            col.push({"label" : "Remuneraciones","data" : valor ? valor : []});
+
+            let nivel2Months = data[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0, 12) || Array(12).fill(0);
+            let nivel1Months = data[0]["nivel1"]['1.3. GASTOS DE ADMINISTRACION Y VENTAS']?.months?.slice(0, 12) || Array(12).fill(0);
+            
+            valor = nivel1Months.map((value, idx) => { 
+                const mes = year + '-' + parseInt(idx + 1)
+                return {"month" : mes, "valor" : value - nivel2Months[idx]}
+            });
+            col.push({"label" : "Gastos Operacionales","data" : valor ? valor : []});
+
+            valor = (data[0]["nivel1"]['2.1. INGRESOS NO OPERACIONALES']?.months?.slice(0,12).map((item, idx)  => { 
+                const mes = year + '-' + parseInt(idx + 1)
+                return {"month" : mes, "valor" : item} }))
+            col.push({"label" : "Ingresos No Oper.","data" : valor ? valor : []});
+
+            nivel2Months = data[0]["nivel1"]['2.2. GASTOS NO OPERACIONALES']?.months?.slice(0, 12) || Array(12).fill(0);
+            nivel1Months = data[0]["nivel1"]['2.1. INGRESOS NO OPERACIONALES']?.months?.slice(0, 12) || Array(12).fill(0);
+
+            valor = nivel2Months.map((value, idx) => { 
+                const mes = year + '-' + parseInt(idx + 1)
+                return {"month" : mes, "valor" : value - nivel1Months[idx] || 0}
+            });
+            col.push({"label" : "Costos No Oper.","data" : valor ? valor : []});
+
+            const sumColumns = Array(12).fill(0);
+            col.forEach(item => {
+                item.data.forEach((mes, idx) => {
+                    sumColumns[idx] += mes.valor;
+                });
+            });
+            valor = sumColumns.map((value, idx) => { 
+                const mes = year + '-' + parseInt(idx + 1)
+                return {"month" : mes, "valor" : value}
+            });
+            
+            col.push({"label" : "Utilidad","data" : valor ? valor : []});
+            const result = col.map((item, index) => {
                 const label = item.label
                 const axisLabel = item.data.map(item => item.month)
                 const data = item.data.map(item => item.valor)
@@ -51,43 +99,15 @@ export default function UtilidadMesAnual({data, anio}){
                     }
                 }
                 return result
-            });
-            const labels = filteredArray.flatMap(item => item.data).map(item => item.data.map(item => item.month))[0]
+            });            
+            const labels = col.map(item => item.data.map(item => item.month))[0]
             setGrpconfig({
                 labels:labels,
                 datasets:result.map(item => item.datasets)
-            })
+            })            
         }
-
-    }, [anio]);
-
-    useEffect(() => {
-        const OrderedData = UserData?.sort((a, b) => a.anio - b.anio);
-        setOrderedData(OrderedData);
-        const filteredArray = orderedData?.filter(item => anio?.includes(item.anio));
-        const result = filteredArray.flatMap(item => item.data).map((item, index) => {
-            const label = item.label
-            const axisLabel = item.data.map(item => item.month)
-            const data = item.data.map(item => item.valor)
-            const result = {
-                labels: axisLabel,
-                datasets: {
-                    label: label,
-                    data: data,
-                    backgroundColor: bgcolor[index],
-                    borderColor: bdcolor[index],
-                    borderWidth: 1
-                }
-            }
-            return result
-        });
-        const labels = filteredArray.flatMap(item => item.data).map(item => item.data.map(item => item.month))[0]
-        setGrpconfig({
-            labels:labels,
-            datasets:result.map(item => item.datasets)
-        })
         
-    }, [data, anio]);
+    }, [data]);
 
     useEffect(() => {
         if(anio.length === 1){

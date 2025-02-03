@@ -59,7 +59,7 @@ export default function VentasAnual({anio, data, anios}){
 
     useEffect(() => { 
         if(data.length>0 && anio.length === 1){            
-            const filteredArray = data?.filter(item => item.year === anio[0])[0]["nivel2"]['1.1.1. VENTAS NACIONALES'].months;
+            const filteredArray = data?.filter(item => item.year === anio[0])[0]["nivel2"]['1.1.1. VENTAS NACIONALES'].months?.slice(0,12);
             const result = filteredArray.slice(0,12).map((item,idx) => {
                 const mes = idx+1;
                 return {
