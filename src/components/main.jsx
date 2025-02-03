@@ -101,7 +101,6 @@ export default function Main ({data}) {
         setSumaNiveles(result);
         const resultFiltrado = result.filter(item => item.year === anioSelected[0].year);
         setSumaNivelesFiltrado(resultFiltrado);
-        console.log('result', resultFiltrado, anioSelected);
     }, [data, anios, anioSelected]);    
 
     return ( 
