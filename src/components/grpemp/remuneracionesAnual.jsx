@@ -48,8 +48,8 @@ export default function RemuneracionesAnual({data, anio}){
                 borderWidth: 1,
                 yAxisID: 'currency',
             })
-
-            filteredArray = series[0].data.map((item, idx) => Math.round((parseInt(series[1].data[idx]) > 0 ? item / series[1].data[idx] : 0 * 100)/100));
+            
+            filteredArray = series[0].data.map((item, idx) => ((item > 0 ? series[1].data[idx] / item  : 0) * 100));
             result = filteredArray?.slice(0,12).map((item,idx) => {
                 const mes = idx+1;
                 return {

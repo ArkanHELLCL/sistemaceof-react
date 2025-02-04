@@ -22,7 +22,7 @@ const meses = [
     { "label": "Diciembre", "month": 12 }
 ]
 
-export default function PanelFinancieroAnual({anio, mes}){
+export default function PanelFinancieroAnual({data, anio, mes}){
     const selectdMes = meses?.filter(item => item.month === mes[0]).sort((a, b) => a.month - b.month)
     const [mesSelected, setMesSelected] = useState(selectdMes);
     const [title, setTitle] = useState('Panel Financiero');
@@ -57,7 +57,7 @@ export default function PanelFinancieroAnual({anio, mes}){
                         <h2 className="text-2xl font-light text-center">{title}</h2>
                     </div>
                 </Grid>
-                <Grid item xs={3}> 
+                <Grid item xs={3}>
                     <Autocomplete
                         disablePortal
                         disableClearable={true}
@@ -74,7 +74,7 @@ export default function PanelFinancieroAnual({anio, mes}){
                         renderInput={(params) => <TextField {...params} label="Mes" variant="standard"/>}
                     />
                 </Grid>            
-                <Grid item xs={12}>                  
+                <Grid item xs={12}>
                     <PanelFinancieroTable anio={anio[0]} mes={mesSelected[0].label} anioant={anio[0]-1} mesant={meses[mesSelected[0].month-2].label} rangomes={'Enero a Noviembre'} data={resultData} />
                 </Grid>
             </Grid>            
