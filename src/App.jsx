@@ -15,6 +15,7 @@ function App() {
   const [data, setData] = useState();
   const [dataFormatted, setDataFormatted] = useState();
   const [headers, setHeaders] = useState([]);
+  const [mesfinal, setMesFinal] = useState();
 
   useEffect(() => {
     fetch('https://ceofconsultores.com/system/home/getUsuario.php')
@@ -29,7 +30,6 @@ function App() {
       .catch(error => console.error(error));
   }, []);  
 
-  //window.location.href = '../'
 
   useEffect(() => {
     Papa.parse('https://ceofconsultores.com/system/home/uploads/76201608/data/base.csv', { 
@@ -39,7 +39,16 @@ function App() {
         //setData(results);
       },
     });
-    setData(Cubo);    
+    setData(Cubo);
+    const idxMes = Cubo.data[0].indexOf('N_MES');
+    const meses = Cubo.data.slice(1).map(row => row[idxMes]);
+  
+    // Rescatar el mes inicial y final del arreglo
+    //const mesInicial = meses[0];
+    //const mesFinal = meses[meses.length - 1];
+    setMesFinal(parseInt(meses[meses.length - 1]));
+    //console.log('Mes Inicial:', mesInicial);
+    //console.log('Mes Final:', mesFinal);
   }, [Cubo]);
 
 
@@ -55,13 +64,8 @@ useEffect(() => {
       });
       return obj;
   },[data]);
-  
-  //const anioFiltrado = "2024"; // Año que queremos filtrar
-  //const datosFiltrados = formattedData?.filter(item => item["ANO"] === anioFiltrado);
-
 
   const grouped = formattedData?.reduce((acc, item) => {
-  //const grouped = datosFiltrados?.reduce((acc, item) => {    
       const anio = item["ANO"];
       const resultado = item["RESULTADO"];
       const nivel1 = item["NIVEL 1"];
@@ -126,12 +130,12 @@ useEffect(() => {
 
   return (
     //user && user.USR_Id && data && headers ?
-    dataFormatted && headers &&
+    dataFormatted && headers && mesfinal &&
       <main className="dashtemplate">
         <Header title={title}/>
         <Sidebar setTitle={setTitle} user={user}/>
         <Footer user={user}/>
-        <Main data={dataFormatted} />
+        <Main data={dataFormatted} mes={[mesfinal]}/>
       </main>        
   );
 }

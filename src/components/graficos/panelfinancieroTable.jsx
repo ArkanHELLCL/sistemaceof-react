@@ -8,7 +8,7 @@ export default function PanelFinancieroTable({anio, mes, anioant, mesant, rangom
                 <tr>
                     <th rowSpan="2" className="bg-[#4cbab5] rounded-tl-xl">Panel de Finanzas</th>
                     <th colSpan="5" className="bg-[#4cbab5]">RESULTADO DE {mes.toUpperCase()}</th>
-                    <th colSpan="3" className="bg-[#4cbab5] rounded-tr-xl">YTD_{mes.toUpperCase().slice(3)}</th>
+                    <th colSpan="3" className="bg-[#4cbab5] rounded-tr-xl">YTD_{mes.toUpperCase().slice(0,3)}</th>
                 </tr>
                 <tr>
                     
@@ -37,7 +37,12 @@ export default function PanelFinancieroTable({anio, mes, anioant, mesant, rangom
                             {
                                 item.data?.map((item, index) => {
                                     return (
-                                        <td key={'r-' + idx + '-' + index} >{item.value}</td>
+                                        <td key={'r-' + idx + '-' + index} className={`${index===0 ? 'text-left' : 'text-center'} text-wrap`}>{item.valor.toLocaleString?.('en-ES', {
+                                            style: 'currency',
+                                            currency: 'USD',
+                                            minimumFractionDigits: 0,
+                                            maximumFractionDigits: 0,
+                                          }).replaceAll(',', '.')}</td>
                                     )
                                 })
                             }

@@ -78,7 +78,7 @@ const processData = (data) => {
   return result;
 };
 
-export default function Main ({data}) {    
+export default function Main ({data, mes}) {    
     const [empresas, setEmpresas] = useState([]);
     const [empresa, setEmpresa] = useState('');
     const fixedOptions = [];
@@ -91,11 +91,11 @@ export default function Main ({data}) {
     ))
     const [anios, setAnios] = useState(Anios); 
     const [anioSelected, setAnioSelected] = useState([anios[anios.length - 1]]);
-    
     useEffect(() => {
         setEmpresas(emps);
         setEmpresa(emps[0].label);
-        const DatosFiltrados = data.data?.filter(item => item.anio === anioSelected[0].year)[0].data;        
+        const DatosFiltrados = data.data?.filter(item => item.anio === anioSelected[0].year)[0].data; 
+        console.log('DatosFiltrados', DatosFiltrados)       
         const result = processData(data.data);
         setDatosFiltrados(DatosFiltrados);
         setSumaNiveles(result);
@@ -174,7 +174,7 @@ export default function Main ({data}) {
                     <Grid item xs={6}> 
                     </Grid>                
                     <Grid item xs={12} xl={4}>                    
-                        <UtilidadMes anio={[anioSelected[0].year]} mes={[11]} data={sumaNivelesFitrado}/>
+                        <UtilidadMes anio={[anioSelected[0].year]} mes={mes} data={sumaNivelesFitrado}/>
                     </Grid>
                     <Grid item xs={12} xl={8}>
                         <VentasAnual anio={[anios[anios.length - 1].year]} data={sumaNiveles} anios={anios}/>
@@ -183,7 +183,7 @@ export default function Main ({data}) {
                         <UtilidadMesAnual anio={[anioSelected[0].year]} data={sumaNivelesFitrado}/>
                     </Grid>
                     <Grid item xs={12} xl={4}>                    
-                        <UtilidadYTD anio={[anioSelected[0].year]} mes={[11]} data={sumaNivelesFitrado}/>
+                        <UtilidadYTD anio={[anioSelected[0].year]} mes={mes} data={sumaNivelesFitrado}/>
                     </Grid>
                     <Grid item xs={12} xl={12}>                    
                         <RemuneracionesAnual anio={[anioSelected[0].year]} data={sumaNivelesFitrado}/>
@@ -192,10 +192,10 @@ export default function Main ({data}) {
                         <GoaAnual anio={[anioSelected[0].year]} data={sumaNivelesFitrado}/>
                     </Grid>
                     <Grid item xs={12} xl={12}>                    
-                        <PanelFinancieroAnual anio={[anioSelected[0].year]} mes={[11]} data={sumaNivelesFitrado}/>
+                        <PanelFinancieroAnual anio={[anioSelected[0].year]} mes={mes} data={sumaNiveles}/>
                     </Grid>
                     <Grid item lg={12} xs={12}>
-                        <CuboAnual anio={[anioSelected[0].year]} data={datosFiltrados} sumaNiveles={sumaNivelesFitrado} />
+                        <CuboAnual anio={[anioSelected[0].year]} data={datosFiltrados} sumaNiveles={sumaNivelesFitrado}/>
                     </Grid>
                 </Grid>                    
             </section>
