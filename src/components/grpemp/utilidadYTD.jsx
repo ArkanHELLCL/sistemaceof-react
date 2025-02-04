@@ -2,68 +2,54 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import { UserData } from '../../../mock/data4.js';
 import DoughnutChart from '../graficos/doughnutChart.jsx';
 
-export default function UtilidadYTD({anio, mes}){
+export default function UtilidadYTD({data, anio}){
     const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico
-    const [title, setTitle] = useState('Gráfico de Ventas');
-    const [orderedData, setOrderedData] = useState();     //Todos los datos ordenados por año
-    const [resultData, setResultData] = useState();       //Datos filtrados por año(s) seleccionado(s)
+    const [title, setTitle] = useState('Gráfico de Utilidades');
 
     useEffect(() => {
-        if(orderedData){
-            const filteredArray = orderedData?.filter(item => item.anio === anio[0])[0]?.data;
-            if(filteredArray){
-                setResultData(filteredArray);
-                setGrpconfig({
-                    labels: filteredArray?.map(item => item.cuenta),
-                    datasets: [
-                    {
-                        label: "Gráfico de Utilidades YTD",
-                        data: filteredArray?.map(item => item.valor),
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(255, 159, 64, 0.2)',
-                            'rgba(255, 205, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(153, 102, 255, 0.2)',
-                            'rgba(201, 203, 207, 0.2)',
-                            'rgba(233, 180, 257, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgb(255, 99, 132)',
-                            'rgb(255, 159, 64)',
-                            'rgb(255, 205, 86)',
-                            'rgb(75, 192, 192)',
-                            'rgb(54, 162, 235)',
-                            'rgb(153, 102, 255)',
-                            'rgb(201, 203, 207)',
-                            'rgb(233, 180, 257)'
-                        ],
-                        borderWidth: 1
-                    }
-                    ]
-                })
-            }
-        }
+        if(data?.length>0 && anio.length === 1){
+            const col=[];
+            let valor = parseInt(data[0]["nivel1"]['1.1. INGRESO DE EXPLOTACION']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
+            valor = valor ? valor : 0;
+            console.log(valor,"Ingresos" );
+            col.push({"cuenta" : "Ingresos","valor" : valor ? valor : 0});
 
-    }, [anio]);
+            valor = parseInt(data[0]["nivel1"]['1.2. COSTOS DE EXPLOTACION']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
+            valor = valor ? valor : 0;
+            col.push({"cuenta" : "Costos de Explotación","valor" : valor ? valor : 0});
 
-    useEffect(() => {
-        const OrderedData = UserData?.sort((a, b) => a.anio - b.anio);
-        setOrderedData(OrderedData);
-        const filteredArray = OrderedData?.filter(item => item.anio === anio[0])[0]?.data;
-        const result = null
-        if(filteredArray){
-            setResultData(result);
+            valor = parseInt(data[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
+            valor = valor ? valor : 0;
+            col.push({"cuenta" : "Remuneraciones","valor" : valor ? valor : 0});
+
+            valor = parseInt(data[0]["nivel1"]['1.3. GASTOS DE ADMINISTRACION Y VENTAS']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) 
+            let valor2 = parseInt(data[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
+            valor = valor ? valor : 0;
+            valor2 = valor2 ? valor2 : 0;
+            valor = valor - valor2;
+            col.push({"cuenta" : "Gastos Operacionales","valor" : valor ? valor : 0});
+
+            valor =  parseInt(data[0]["nivel1"]['2.1. INGRESOS NO OPERACIONALES']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
+            valor = valor ? valor : 0;
+            col.push({"cuenta" : "Ingresos No Oper.","valor" : valor ? valor : 0});
+
+            valor = parseInt(data[0]["nivel1"]['2.2. GASTOS NO OPERACIONALES']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) 
+            valor2 = parseInt(data[0]["nivel1"]['2.1. INGRESOS NO OPERACIONALES']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
+            valor = valor ? valor : 0;
+            valor2 = valor2 ? valor2 : 0;
+            valor = valor - valor2;
+            col.push({"cuenta" : "Costos No Oper.","valor" : valor ? valor : 0});        
+
+            col.push({"cuenta" : "Utilidad", "valor" : col.reduce((acc, item) => acc + parseInt(item.valor), 0)});
+
             setGrpconfig({
-                labels: filteredArray?.map(item => item.cuenta),
+                labels: col?.map(item => item.cuenta),
                 datasets: [
                 {
                     label: "Gráfico de Utilidades YTD",
-                    data: filteredArray?.map(item => item.valor),
+                    data: col?.map(item => item.valor),
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(255, 159, 64, 0.2)',
@@ -88,13 +74,8 @@ export default function UtilidadYTD({anio, mes}){
                 }
                 ]
             })
-        }else{
-            setGrpconfig({
-                labels: [],
-                datasets: []
-            })            
         }
-    }, [UserData, anio, mes]);
+    }, [data, anio]);
 
     useEffect(() => {
         if(anio.length === 1){

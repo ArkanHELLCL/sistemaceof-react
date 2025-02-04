@@ -13,8 +13,6 @@ export default function VentasAnual({anio, data, anios}){
     const selectedAnios = anios?.filter(item => anio?.includes(item.year)).sort((a, b) => a.year - b.year)
     const [aniosSelected, setAniosSelected] = useState(selectedAnios);
     const [title, setTitle] = useState('Gráfico de Ventas');
-    //const [resultData, setResultData] = useState([]);       //Datos filtrados por año(s) seleccionado(s)
-
 
     useEffect(() => {
         const yearArray = aniosSelected.map(item => item.year);
@@ -33,13 +31,12 @@ export default function VentasAnual({anio, data, anios}){
             })
 
         const result = filteredArray.flatMap(item => item);
-        //setResultData(result);
         if(result.length>0){
             setGrpconfig({
                 labels: result.map(data => data.month),
                 datasets: [
                 {
-                    label: "Ventas Anuales",
+                    label: "Ventas Mensuales",
                     data: result?.map(data => data.venta),
                     borderColor: '#8e7cb9',
                     backgroundColor: 'rgba(238, 237, 248, 0.8)',
