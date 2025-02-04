@@ -1,107 +1,85 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
-import { UserData } from '../../../mock/data5.js';
 import MultipleChart from '../graficos/mutipleChart.jsx';
 
-export default function RemuneracionesAnual({anio}){
+export default function RemuneracionesAnual({data, anio}){
     const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico
     const [title, setTitle] = useState('Gráfico de Ventas');
-    const [orderedData, setOrderedData] = useState();     //Todos los datos ordenados por año
-    const [resultData, setResultData] = useState();       //Datos filtrados por año(s) seleccionado(s)
 
     useEffect(() => {
-        if(orderedData){
-            const filteredArray = orderedData?.filter(item => item.anio === anio[0])[0]?.data;
-            if(filteredArray){
-                setResultData(filteredArray);
-                setGrpconfig({
-                    labels: filteredArray[0]?.data?.map(item => item.month),
-                    datasets: [
-                    {
-                        label: filteredArray[0].label,
-                        data: filteredArray[0].data.map(item => item.valor),
-                        type: 'bar',
-                        backgroundColor: 'rgba(255, 159, 64, 0.2)',
-                        borderColor: 'rgb(255, 159, 64)',
-                        borderWidth: 1,
-                        yAxisID: 'currency',
-                    },
-                    {
-                        label: filteredArray[1].label,
-                        data: filteredArray[1].data.map(item => item.valor),
-                        type: 'bar',
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderColor: 'rgb(255, 99, 132)',
-                        borderWidth: 1,
-                        yAxisID: 'currency',
-                    },
-                    {
-                        label: filteredArray[2].label,
-                        data: filteredArray[2].data.map(item => item.valor),
-                        type: 'line',
-                        borderColor: '#8e7cb9',
-                        backgroundColor: 'rgba(238, 237, 248, 0.8)',
-                        borderWidth: 1,
-                        yAxisID: 'percentage',
-                        tension: 0.5
-                    }
-                    ]
-                })
-            }
-        }
-
-    }, [anio]);
-
-    useEffect(() => {
-        const OrderedData = UserData?.sort((a, b) => a.anio - b.anio);
-        setOrderedData(OrderedData);
-        const filteredArray = OrderedData.filter(item => item.anio === anio[0])[0]?.data;
-        if(filteredArray){
-            setResultData(filteredArray);
-            setGrpconfig({
-                labels: filteredArray[0].data.map(item => item.month),
-                datasets: [
-                {
-                    label: filteredArray[0].label,
-                    data: filteredArray[0].data.map(item => item.valor),
-                    type: 'bar',
-                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
-                    borderColor: 'rgb(255, 159, 64)',
-                    borderWidth: 1,
-                    yAxisID: 'currency',
-                },
-                {
-                    label: filteredArray[1].label,
-                    data: filteredArray[1].data.map(item => item.valor),
-                    type: 'bar',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgb(255, 99, 132)',
-                    borderWidth: 1,
-                    yAxisID: 'currency',
-                },
-                {
-                    label: filteredArray[2].label,
-                    data: filteredArray[2].data.map(item => item.valor),
-                    type: 'line',
-                    borderColor: '#8e7cb9',
-                    backgroundColor: 'rgba(238, 237, 248, 0.8)',
-                    borderWidth: 1,
-                    yAxisID: 'percentage',
-                    tension: 0.5
+        if(data.length>0 && anio.length === 1){  
+            const series = []          
+            let filteredArray = data[0]["nivel1"]['1.1. INGRESO DE EXPLOTACION']?.months?.slice(0,12) || Array(12).fill(0);
+            let result = filteredArray.slice(0,12).map((item,idx) => {
+                const mes = idx+1;
+                return {
+                    month: anio[0] + '-' + mes,
+                    venta: item
                 }
-                ]
+            });
+            const labels = result.map(data => data.month);
+            series.push({
+                label: "Ingresos ($)",
+                data: result.map(data => data.venta),
+                type: 'bar',
+                backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                borderColor: 'rgb(255, 159, 64)',
+                borderWidth: 1,
+                yAxisID: 'currency',
             })
+
+            filteredArray = data[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0,12) || Array(12).fill(0);
+            result = filteredArray?.slice(0,12).map((item,idx) => {
+                const mes = idx+1;
+                return {
+                    month: anio[0] + '-' + mes,
+                    venta: Math.abs(item)
+                }
+            });
+
+            series.push({
+                label: "Remuneraciones ($)",
+                data: result.map(data => data.venta),
+                type: 'bar',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgb(255, 99, 132)',
+                borderWidth: 1,
+                yAxisID: 'currency',
+            })
+
+            filteredArray = series[0].data.map((item, idx) => Math.round((parseInt(series[1].data[idx]) > 0 ? item / series[1].data[idx] : 0 * 100)/100));
+            result = filteredArray?.slice(0,12).map((item,idx) => {
+                const mes = idx+1;
+                return {
+                    month: anio[0] + '-' + mes,
+                    venta: item
+                }
+            });
+
+            series.push({
+                label: "Ratio Mano de Obra (%)",
+                data: result.map(data => data.venta),
+                type: 'line',
+                borderColor: '#8e7cb9',
+                backgroundColor: 'rgba(238, 237, 248, 0.8)',
+                borderWidth: 1,
+                yAxisID: 'percentage',
+                tension: 0.5
+            })
+
+            setGrpconfig({
+                labels: labels,
+                datasets: series
+            })        
         }else{
             setGrpconfig({
                 labels: [],
                 datasets: []
             })            
         }
-    }, [UserData, anio]);
+    }, [data, anio]);
 
     useEffect(() => {
         if(anio.length === 1){

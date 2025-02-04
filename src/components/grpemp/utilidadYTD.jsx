@@ -13,7 +13,6 @@ export default function UtilidadYTD({data, anio}){
             const col=[];
             let valor = parseInt(data[0]["nivel1"]['1.1. INGRESO DE EXPLOTACION']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
             valor = valor ? valor : 0;
-            console.log(valor,"Ingresos" );
             col.push({"cuenta" : "Ingresos","valor" : valor ? valor : 0});
 
             valor = parseInt(data[0]["nivel1"]['1.2. COSTOS DE EXPLOTACION']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
