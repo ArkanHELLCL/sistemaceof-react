@@ -9,6 +9,7 @@ import BusinessIcon from '@mui/icons-material/Business';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import PublishIcon from '@mui/icons-material/Publish';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
@@ -61,8 +62,8 @@ const CustomTreeItem = forwardRef(function CustomTreeItem(props, ref) {
           </TreeItem2IconContainer>
           <TreeItem2Checkbox {...getCheckboxProps()} />
           <Box sx={{ flexGrow: 1, display: 'flex', gap: 1 }}>{
-            itemId === '1' ? <DashboardIcon /> : itemId === '2' ? <AddchartIcon /> : itemId === '5' ? <StorageIcon /> : itemId === '8' ? <ContactSupportIcon /> : itemId === '3' ? <CloudUploadIcon /> : itemId === '4' ? <SummarizeIcon /> : itemId === '6' ? <BusinessIcon /> : itemId === '7' ? <PeopleAltIcon /> : itemId === '9' ? <PublishIcon /> : itemId === '10' ? <UploadFileIcon /> : null}
-            <TreeItem2Label {...getLabelProps()} className={` ${(itemId === '1' || itemId === '2' || itemId === '5' || itemId === '8') ? ' !text-lg !font-bold' : '' }  !truncate`} onClick={()=>onClickHandle(itemId, label, setTitle)} />
+            itemId === '1' ? <DashboardIcon /> : itemId === '2' ? <AddchartIcon /> : itemId === '5' ? <StorageIcon /> : itemId === '8' ? <ContactSupportIcon /> : itemId === '3' ? <CloudUploadIcon /> : itemId === '4' ? <SummarizeIcon /> : itemId === '6' ? <BusinessIcon /> : itemId === '7' ? <PeopleAltIcon /> : itemId === '9' ? <PublishIcon /> : itemId === '10' ? <UploadFileIcon /> : itemId === '11' ? <CloudDownloadIcon/> : null}
+            <TreeItem2Label {...getLabelProps()} className={` ${(itemId === '1' || itemId === '2' || itemId === '5' || itemId === '8' || itemId === '11') ? ' !text-lg !font-bold' : '' }  !truncate`} onClick={()=>onClickHandle(itemId, label, setTitle)} />
           </Box>
         </CustomTreeItemContent>
         {children && <TreeItem2GroupTransition {...getGroupTransitionProps()} />}
@@ -97,12 +98,16 @@ export default function Menu({setTitle, user}) {
             </>
         : 
             <>
+              <Box sx={{ minHeight: 200, minWidth: 250, maxHeight: 600, overflowY: 'auto' }} >
                 <SimpleTreeView>
                     <CustomTreeItem itemId="1" label="Dashboard" setTitle={setTitle}>
+                    </CustomTreeItem>
+                    <CustomTreeItem itemId="11" label="Descarga" setTitle={setTitle}>
                     </CustomTreeItem>
                     <CustomTreeItem itemId="8" label="Contacto" setTitle={setTitle}>
                     </CustomTreeItem>
                 </SimpleTreeView>
+              </Box>
             </>
     )
 }

@@ -78,7 +78,7 @@ const processData = (data) => {
   return result;
 };
 
-export default function Main ({data, mes}) {    
+export default function Main ({data, mes, user}) {    
     const [empresas, setEmpresas] = useState([]);
     const [empresa, setEmpresa] = useState('');
     const fixedOptions = [];
@@ -105,7 +105,9 @@ export default function Main ({data, mes}) {
 
     return ( 
         sumaNiveles && anios && sumaNivelesFitrado &&
-            <section className="main bg-white w-full px-10 pt-4 pb-20">
+          <section className="main bg-white w-full px-10 pt-4 pb-20 relative">{
+            user?.PER_Id === 1 ?
+              <>
                 <h2 className="text-2xl font-light">Personalización del Dashboard </h2>
                 <div className="pt-4 mt-4 space-y-2 font-medium border-t border-purple-300 pb-4"></div>
                 <div className='flex align-bottom gap-6 pb-4'>
@@ -151,53 +153,55 @@ export default function Main ({data, mes}) {
                     />
                     <button className="bg-[#68488a] hover:bg-[#424685] transition-all text-white font-bold py-2 px-10 rounded"> Guardar </button>
                 </div>
-                <h2 className="text-2xl font-light pb-2 pt-4">Visualización del Dashboard </h2>
-                <div className="pt-4 mt-4 space-y-2 font-medium border-t border-purple-300"></div>            
-                <Grid container spacing={4}>
-                <   Grid item xs={6}>
-                        <Autocomplete
-                            disablePortal
-                            disableClearable={true}
-                            id="graficos-anios"
-                            value={anioSelected[0]}
-                            options={anios}
-                            sx={{ width: "100%"}}
-                            onChange={(event, newValue) => {
-                                setAnioSelected([
-                                    newValue,
-                                ]);
-                            }}
+              </> : null
+            }
+            <h2 className="text-2xl font-light pb-2 pt-4">Visualización del Dashboard </h2>
+            <div className="pt-4 mt-4 space-y-2 font-medium border-t border-purple-300"></div>            
+            <Grid container spacing={4}>
+              <Grid item xs={6} className='sticky top-0 bg-white z-10 opacity-85 pt-0'>
+                    <Autocomplete
+                        disablePortal
+                        disableClearable={true}
+                        id="graficos-anios"
+                        value={anioSelected[0]}
+                        options={anios}
+                        sx={{ width: "100%"}}
+                        onChange={(event, newValue) => {
+                            setAnioSelected([
+                                newValue,
+                            ]);
+                        }}
 
-                            renderInput={(params) => <TextField {...params} label="Año" variant="standard"/>}
-                        />
-                    </Grid>  
-                    <Grid item xs={6}> 
-                    </Grid>                
-                    <Grid item xs={12} xl={4}>                    
-                        <UtilidadMes anio={[anioSelected[0].year]} mes={mes} data={sumaNivelesFitrado}/>
-                    </Grid>
-                    <Grid item xs={12} xl={8}>
-                        <VentasAnual anio={[anios[anios.length - 1].year]} data={sumaNiveles} anios={anios}/>
-                    </Grid>
-                    <Grid item xs={12} xl={8}>
-                        <UtilidadMesAnual anio={[anioSelected[0].year]} data={sumaNivelesFitrado}/>
-                    </Grid>
-                    <Grid item xs={12} xl={4}>                    
-                        <UtilidadYTD anio={[anioSelected[0].year]} mes={mes} data={sumaNivelesFitrado}/>
-                    </Grid>
-                    <Grid item xs={12} xl={12}>                    
-                        <RemuneracionesAnual anio={[anioSelected[0].year]} data={sumaNivelesFitrado}/>
-                    </Grid>
-                    <Grid item xs={12} xl={12}>                    
-                        <GoaAnual anio={[anioSelected[0].year]} data={sumaNivelesFitrado}/>
-                    </Grid>
-                    <Grid item xs={12} xl={12}>                    
-                        <PanelFinancieroAnual anio={[anioSelected[0].year]} mes={mes} data={sumaNiveles}/>
-                    </Grid>
-                    <Grid item lg={12} xs={12}>
-                        <CuboAnual anio={[anioSelected[0].year]} data={datosFiltrados} sumaNiveles={sumaNivelesFitrado}/>
-                    </Grid>
-                </Grid>                    
-            </section>
+                        renderInput={(params) => <TextField {...params} label="Año a visualizar" variant="standard"/>}
+                    />
+                </Grid>  
+                <Grid item xs={6}> 
+                </Grid>                
+                <Grid item xs={12} xl={4}>                    
+                    <UtilidadMes anio={[anioSelected[0].year]} mes={mes} data={sumaNivelesFitrado}/>
+                </Grid>
+                <Grid item xs={12} xl={8}>
+                    <VentasAnual anio={[anios[anios.length - 1].year]} data={sumaNiveles} anios={anios}/>
+                </Grid>
+                <Grid item xs={12} xl={8}>
+                    <UtilidadMesAnual anio={[anioSelected[0].year]} data={sumaNivelesFitrado}/>
+                </Grid>
+                <Grid item xs={12} xl={4}>                    
+                    <UtilidadYTD anio={[anioSelected[0].year]} mes={mes} data={sumaNivelesFitrado}/>
+                </Grid>
+                <Grid item xs={12} xl={12}>                    
+                    <RemuneracionesAnual anio={[anioSelected[0].year]} data={sumaNivelesFitrado}/>
+                </Grid>
+                <Grid item xs={12} xl={12}>                    
+                    <GoaAnual anio={[anioSelected[0].year]} data={sumaNivelesFitrado}/>
+                </Grid>
+                <Grid item xs={12} xl={12}>                    
+                    <PanelFinancieroAnual anio={[anioSelected[0].year]} mes={mes} data={sumaNiveles}/>
+                </Grid>
+                <Grid item lg={12} xs={12}>
+                    <CuboAnual anio={[anioSelected[0].year]} data={datosFiltrados} sumaNiveles={sumaNivelesFitrado}/>
+                </Grid>
+            </Grid>                    
+          </section>
     );
 }

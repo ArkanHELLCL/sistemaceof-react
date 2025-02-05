@@ -132,10 +132,10 @@ useEffect(() => {
     //user && user.USR_Id && data && headers ?
     dataFormatted && headers && mesfinal &&
       <main className="dashtemplate">
-        <Header title={title}/>
+        <Header title={title} user={user}/>
         <Sidebar setTitle={setTitle} user={user}/>
         <Footer user={user}/>
-        <Main data={dataFormatted} mes={[mesfinal]}/>
+        <Main data={dataFormatted} mes={[mesfinal]} user={user}/>
       </main>        
   );
 }
