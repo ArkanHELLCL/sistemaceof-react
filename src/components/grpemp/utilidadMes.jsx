@@ -32,35 +32,35 @@ export default function UtilidadMes({data, anio, mes}){
             const col=[];
             let valor = parseInt(data?.filter(item => item.year === anio[0])[0]["nivel1"]['1.1. INGRESO DE EXPLOTACION']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0])
             valor = valor ? valor : 0;
-            col.push({"cuenta" : "Ingresos","valor" : valor ? valor : 0});
+            col.push({"cuenta" : "Ingresos","valor" : Math.abs(valor)});
            
             valor = parseInt(data?.filter(item => item.year === anio[0])[0]["nivel1"]['1.2. COSTOS DE EXPLOTACION']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0])
             valor = valor ? valor : 0;
-            col.push({"cuenta" : "Costos de Explotación","valor" : valor ? valor : 0});
+            col.push({"cuenta" : "Costos de Explotación","valor" : Math.abs(valor)});
           
             valor = parseInt(data?.filter(item => item.year === anio[0])[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0])
             valor = valor ? valor : 0;
-            col.push({"cuenta" : "Remuneraciones","valor" : valor ? valor : 0});
+            col.push({"cuenta" : "Remuneraciones","valor" : Math.abs(valor)});
            
             valor = parseInt(data?.filter(item => item.year === anio[0])[0]["nivel1"]['1.3. GASTOS DE ADMINISTRACION Y VENTAS']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0]) 
             let valor2 = parseInt(data?.filter(item => item.year === anio[0])[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0])            
             valor = valor ? valor : 0;
             valor2 = valor2 ? valor2 : 0;
             valor = valor - valor2;
-            col.push({"cuenta" : "Gastos Operacionales","valor" : valor ? valor : 0});
+            col.push({"cuenta" : "Gastos Operacionales","valor" : Math.abs(valor)});
 
             valor = parseInt(data?.filter(item => item.year === anio[0])[0]["nivel1"]['2.1. INGRESOS NO OPERACIONALES']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0])
             valor = valor ? valor : 0;
-            col.push({"cuenta" : "Ingresos No Oper.","valor" : valor ? valor : 0});
+            col.push({"cuenta" : "Ingresos No Oper.","valor" : Math.abs(valor)});
             
             valor = parseInt(data?.filter(item => item.year === anio[0])[0]["nivel1"]['2.2. GASTOS NO OPERACIONALES']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0]) 
             valor2 = parseInt(data?.filter(item => item.year === anio[0])[0]["nivel1"]['2.1. INGRESOS NO OPERACIONALES']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0])      
             valor = valor ? valor : 0;  
             valor2 = valor2 ? valor2 : 0;
             valor = valor - valor2;    
-            col.push({"cuenta" : "Costos No Oper.","valor" : valor ? valor : 0});
+            col.push({"cuenta" : "Costos No Oper.","valor" : Math.abs(valor)});
 
-            col.push({"cuenta" : "Utilidad", "valor" : col.reduce((acc, item) => acc + parseInt(item.valor), 0)});
+            col.push({"cuenta" : "Utilidad", "valor" : col.reduce((acc, item) => acc - parseInt(item.valor), 0)});
             
             setGrpconfig({
                 labels: col?.map(item => item.cuenta),
@@ -100,35 +100,35 @@ export default function UtilidadMes({data, anio, mes}){
             const col=[];
             let valor = parseInt(data[0]["nivel1"]['1.1. INGRESO DE EXPLOTACION']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0])
             valor = valor ? valor : 0;
-            col.push({"cuenta" : "Ingresos","valor" : valor ? valor : 0});
+            col.push({"cuenta" : "Ingresos","valor" : Math.abs(valor)});
 
             valor = parseInt(data[0]["nivel1"]['1.2. COSTOS DE EXPLOTACION']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0])
             valor = valor ? valor : 0;
-            col.push({"cuenta" : "Costos de Explotación","valor" : valor ? valor : 0});
+            col.push({"cuenta" : "Costos de Explotación","valor" : Math.abs(valor)});
 
             valor = parseInt(data[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0])
             valor = valor ? valor : 0;
-            col.push({"cuenta" : "Remuneraciones","valor" : valor ? valor : 0});
+            col.push({"cuenta" : "Remuneraciones","valor" : Math.abs(valor)});
 
             valor = parseInt(data[0]["nivel1"]['1.3. GASTOS DE ADMINISTRACION Y VENTAS']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0]) 
             let valor2 = parseInt(data[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0])
             valor = valor ? valor : 0;
             valor2 = valor2 ? valor2 : 0;
             valor = valor - valor2;
-            col.push({"cuenta" : "Gastos Operacionales","valor" : valor ? valor : 0});
+            col.push({"cuenta" : "Gastos Operacionales","valor" : Math.abs(valor)});
 
             valor =  parseInt(data[0]["nivel1"]['2.1. INGRESOS NO OPERACIONALES']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0])
             valor = valor ? valor : 0;
-            col.push({"cuenta" : "Ingresos No Oper.","valor" : valor ? valor : 0});
+            col.push({"cuenta" : "Ingresos No Oper.","valor" : Math.abs(valor)});
 
             valor = parseInt(data[0]["nivel1"]['2.2. GASTOS NO OPERACIONALES']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0]) 
             valor2 = parseInt(data[0]["nivel1"]['2.1. INGRESOS NO OPERACIONALES']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0])
             valor = valor ? valor : 0;
             valor2 = valor2 ? valor2 : 0;
             valor = valor - valor2;
-            col.push({"cuenta" : "Costos No Oper.","valor" : valor ? valor : 0});        
+            col.push({"cuenta" : "Costos No Oper.","valor" : Math.abs(valor)});        
 
-            col.push({"cuenta" : "Utilidad", "valor" : col.reduce((acc, item) => acc + parseInt(item.valor), 0)});
+            col.push({"cuenta" : "Utilidad", "valor" : col.reduce((acc, item) => acc - parseInt(item.valor), 0)});
 
             setGrpconfig({
                 labels: col?.map(item => item.cuenta),

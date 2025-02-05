@@ -158,7 +158,7 @@ export default function Main ({data, mes, user}) {
             <h2 className="text-2xl font-light pb-2 pt-4">Visualización del Dashboard </h2>
             <div className="pt-4 mt-4 space-y-2 font-medium border-t border-purple-300 pb-6"></div>            
             <Grid container spacing={4}>
-              <Grid item xs={6} className='sticky !-top-3 bg-white z-10 opacity-85 !pt-0'>
+              <Grid item xs={6} className='sticky !-top-3 bg-white z-10 opacity-85 !pt-2'>
                     <Autocomplete
                         disablePortal
                         disableClearable={true}
