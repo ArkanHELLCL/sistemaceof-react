@@ -22,21 +22,26 @@ const meses = [
 ]
 
 export default function PanelFinancieroAnual({data, anio, mes}){
-    const selectdMes = meses?.filter(item => item.month === mes[0]).sort((a, b) => a.month - b.month)
+    const selectdMes = meses?.filter(item => item.month === mes[0])
     const [mesSelected, setMesSelected] = useState(selectdMes);
     const [title, setTitle] = useState('Panel Financiero');
     const [resultData, setResultData] = useState([]);
     const [rangoMes, setRangoMes] = useState([]);
+    const [anioant, setAnioant] = useState(anio[0]-1);
+    const [mesant, setMesant] = useState();
 
     const column = (label, data, nivel, item, mes) =>{
         const col = [];
+        const year = data.filter(item => item.year === anio[0])[0]
+        const yearant = data.filter(item => item.year === anio[0]-1)[0]
+
         col.push({"id" : 1, "valor" : label});
 
-        let valor = parseInt(data.filter(item => item.year === anio[0])[0][nivel][item]?.months?.slice(0,12).filter((item, idx) => idx === mes-1)[0])
+        let valor = year ? parseInt(year[nivel][item]?.months?.slice(0,12).filter((item, idx) => idx === mes-1)[0]) : 0
         valor = valor ? valor : 0;
         col.push({"id" : 2, "valor" : valor ? valor : 0});
 
-        valor = parseInt(data.filter(item => item.year === anio[0])[0][nivel][item]?.months?.slice(0,12).filter((item, idx) => idx === mes-2)[0])
+        valor = year ? parseInt(year[nivel][item]?.months?.slice(0,12).filter((item, idx) => idx === mes-2)[0]) : 0
         valor = valor ? valor : 0;
         col.push({"id" : 3, "valor" : valor ? valor : 0});
 
@@ -47,7 +52,7 @@ export default function PanelFinancieroAnual({data, anio, mes}){
         valor = valor ? Math.round(valor) : 0;
         col.push({"id" : 4, "valor" : `${valor ? valor : 0}%`});
 
-        valor = parseInt(data.filter(item => item.year === anio[0]-1)[0][nivel][item]?.months?.slice(0,12).filter((item, idx) => idx === mes-1)[0])
+        valor = yearant ? parseInt(yearant[nivel][item]?.months?.slice(0,12).filter((item, idx) => idx === mes-1)[0]) : 0
         valor = valor ? valor : 0;
         col.push({"id" : 5, "valor" : valor ? valor : 0});
 
@@ -59,11 +64,11 @@ export default function PanelFinancieroAnual({data, anio, mes}){
         col.push({"id" : 6, "valor" : `${valor ? valor : 0}%`});
 
         //Acumular por el maximo de meses cargados actualmente - todo
-        valor = parseInt(data.filter(item => item.year === anio[0])[0][nivel][item]?.months?.slice(0,mes).reduce((acc, val) => acc + val, 0))
+        valor = year ? parseInt(year[nivel][item]?.months?.slice(0,mes).reduce((acc, val) => acc + val, 0)) : 0
         valor = valor ? valor : 0
         col.push({"id" : 7, "valor" : valor ? valor : 0});
 
-        valor = parseInt(data.filter(item => item.year === anio[0]-1)[0][nivel][item]?.months?.slice(0,mes).reduce((acc, val) => acc + val, 0))
+        valor = yearant ? parseInt(yearant[nivel][item]?.months?.slice(0,mes).reduce((acc, val) => acc + val, 0)) : 0
         valor = valor ? valor : 0
         col.push({"id" : 8, "valor" : valor ? valor : 0});
 
@@ -82,7 +87,6 @@ export default function PanelFinancieroAnual({data, anio, mes}){
     useEffect(() => {
         if(data?.length>0 && anio.length === 1 && mesSelected[0].month > 0){
             const rows=[];
-            console.log('month', mesSelected)
             //Row 1            
             rows.push({
                 "data": column("Ventas Nacionales", data, 'nivel2', '1.1.1. VENTAS NACIONALES', mesSelected[0].month)
@@ -155,10 +159,13 @@ export default function PanelFinancieroAnual({data, anio, mes}){
             //console.log('rows', rows)                    
 
             setResultData(rows);    
-
-            setRangoMes(
-                `${meses[0].label} a ${meses[mesSelected[0].month-1].label}`
-            )
+            
+            const MesAnt = mesSelected[0].month === 1 ? meses[11].label : meses[mesSelected[0].month-1].label; //meses[mesSelected[0].month-2].label
+            const AnioAnt = mesSelected[0].month > 1 ? anio[0]-1 : anio[0]-2;
+            console.log('AnioAnt', AnioAnt, 'MesAnt', MesAnt)
+            setAnioant(AnioAnt);
+            setMesant(MesAnt);
+            setRangoMes(`${meses[0].label} a ${meses[mesSelected[0].month-1].label}`)
         }
     }, [mesSelected, anio]);
 
@@ -239,10 +246,11 @@ export default function PanelFinancieroAnual({data, anio, mes}){
             //console.log('rows', rows)                    
 
             setResultData(rows);    
-
-            setRangoMes(
-                `${meses[0].label} a ${meses[mes-1].label}`
-            )
+            const MesAnt = mes[0] === 1 ? meses[11].label : meses[mes[0]-2].label;
+            const AnioAnt = mes[0] > 1 ? anio[0]-1 : anio[0]-2;
+            setAnioant(AnioAnt);
+            setMesant(MesAnt);
+            setRangoMes(`${meses[0].label} a ${meses[mes-1].label}`)
         }
         
     }, [data, anio, mes]);
@@ -257,7 +265,7 @@ export default function PanelFinancieroAnual({data, anio, mes}){
     }, [anio, mesSelected]);
 
     return (
-        resultData && rangoMes && 
+        resultData && rangoMes && anioant && mesant &&
         <>
             <Grid container spacing={2} className='pb-20'>
                 <Grid item xs={12} className='pb-4'>
@@ -283,7 +291,7 @@ export default function PanelFinancieroAnual({data, anio, mes}){
                     />
                 </Grid>            
                 <Grid item xs={12}>
-                    <PanelFinancieroTable anio={anio[0]} mes={mesSelected[0].label} anioant={anio[0]-1} mesant={meses[mesSelected[0].month-2].label} rangomes={rangoMes} data={resultData} />
+                    <PanelFinancieroTable anio={anio[0]} mes={mesSelected[0].label} anioant={anioant} mesant={mesant} rangomes={rangoMes} data={resultData} />
                 </Grid>
             </Grid>            
         </>

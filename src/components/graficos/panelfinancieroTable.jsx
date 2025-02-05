@@ -2,6 +2,7 @@
 //'rgba(54, 162, 235, 0.2)',
 //'rgba(153, 102, 255, 0.2)',
 export default function PanelFinancieroTable({anio, mes, anioant, mesant, rangomes, data}) {
+    console.log(anio, mes, anioant, mesant, rangomes, data)
     const Tablehead = ({anio, mes, anioant, mesant}) => {
         return (
             <thead>
