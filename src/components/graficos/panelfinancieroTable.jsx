@@ -1,8 +1,5 @@
 /* eslint-disable react/prop-types */
-//'rgba(54, 162, 235, 0.2)',
-//'rgba(153, 102, 255, 0.2)',
 export default function PanelFinancieroTable({anio, mes, anioant, mesant, rangomes, data}) {
-    console.log(anio, mes, anioant, mesant, rangomes, data)
     const Tablehead = ({anio, mes, anioant, mesant}) => {
         return (
             <thead>
@@ -34,7 +31,7 @@ export default function PanelFinancieroTable({anio, mes, anioant, mesant, rangom
             <tbody>{
                 data?.map((item, idx)  => {
                     return (
-                        <tr key={'row-'+ idx} className={`${idx === 2 || idx === 5 || idx === 6 || idx === 11 || idx === 12 || idx === 17 || idx === 18 ? 'bg-[#36a2eb33] font-bold text-black' : idx === 7 || idx === 13 || idx === 19 ? ' bg-[#9966ff33] font-bold text-black' : idx === 20 || idx === 21 || idx === 22 ? 'bg-[#4bc0c033] font-bold text-black' : ''}`}>
+                        <tr key={'row-'+ idx} className={`${idx === 2 || idx === 5 || idx === 6 || idx === 12 || idx === 13 || idx === 19 || idx === 20 ? 'bg-[#36a2eb33] font-bold text-black' : idx === 7 || idx === 14 || idx === 19 || idx === 21? ' bg-[#9966ff33] font-bold text-black' : idx === 20 || idx === 23 || idx === 22 ? 'bg-[#4bc0c033] font-bold text-black' : ''}`}>
                             {
                                 item.data?.map((item, index) => {
                                     return (

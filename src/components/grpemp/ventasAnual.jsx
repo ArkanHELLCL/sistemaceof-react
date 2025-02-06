@@ -7,15 +7,40 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
 import LineChart from '../graficos/lineChart.jsx';
 
+const bgcolor = [
+    'rgba(238, 237, 248, 0.8)',
+    'rgba(255, 159, 64, 0.2)',
+    'rgba(255, 205, 86, 0.2)',
+    'rgba(75, 192, 192, 0.2)',
+    'rgba(54, 162, 235, 0.2)',
+    'rgba(153, 102, 255, 0.2)',
+    'rgba(201, 203, 207, 0.2)',
+    'rgba(233, 180, 257, 0.2)'
+]
+
+const bdcolor = [
+    '#8e7cb9',
+    'rgb(255, 159, 64)',
+    'rgb(255, 205, 86)',
+    'rgb(75, 192, 192)',
+    'rgb(54, 162, 235)',
+    'rgb(153, 102, 255)',
+    'rgb(201, 203, 207)',
+    'rgb(233, 180, 257)'
+]
+
 export default function VentasAnual({anio, data, anios}){
     const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico
     const fixedOptions = [];
     const selectedAnios = anios?.filter(item => anio?.includes(item.year)).sort((a, b) => a.year - b.year)
     const [aniosSelected, setAniosSelected] = useState(selectedAnios);
     const [title, setTitle] = useState('Gráfico de Ventas');
+    const [multipleLine, setMultipleLine] = useState(false);
 
     useEffect(() => {
         const yearArray = aniosSelected.map(item => item.year);
+        let labels = [];
+        let dataset = [];
         const filteredArray = data?.filter(item => 
             yearArray?.includes(item.year)).map(item => {
                 const year = item.year;
@@ -30,16 +55,15 @@ export default function VentasAnual({anio, data, anios}){
                 )
             })
 
-        const result = filteredArray.flatMap(item => item);
-        if(result.length>0){
-            setGrpconfig({
-                labels: result.map(data => data.month),
-                datasets: [
+        if(!multipleLine){            
+            const result = filteredArray.flatMap(item => item);
+            labels = result.map(data => data.month)
+            dataset = [
                 {
                     label: "Ventas Mensuales",
                     data: result?.map(data => data.venta),
-                    borderColor: '#8e7cb9',
-                    backgroundColor: 'rgba(238, 237, 248, 0.8)',
+                    borderColor: bdcolor,
+                    backgroundColor: bgcolor,
                     fill: {
                         target: 'origin',
                         above: 'rgba(238, 237, 248, 0.5)',
@@ -47,14 +71,33 @@ export default function VentasAnual({anio, data, anios}){
                     },
                     borderWidth: 1,
                     tension: 0.5
+                }]
+            
+        }else{
+            labels = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];            
+            dataset = filteredArray.map(item => {
+                const year = item[0].month.slice(0,4);
+                return {
+                    label: "Ventas Mensuales " + year,
+                    data: item.map(data => data.venta),
+                    borderColor: bdcolor,
+                    backgroundColor: bgcolor,
+                    borderWidth: 1,
+                    tension: 0.5
                 }
-                ]
+            })
+        }
+
+        if(dataset.length>0){
+            setGrpconfig({
+                labels: labels,
+                datasets: dataset.map(item => item)
             })
         }
 
     }, [aniosSelected]);
 
-    useEffect(() => { 
+    useEffect(() => {
         if(data.length>0 && anio.length === 1){            
             const filteredArray = data?.filter(item => item.year === anio[0])[0]["nivel2"]['1.1.1. VENTAS NACIONALES'].months?.slice(0,12);
             const result = filteredArray.slice(0,12).map((item,idx) => {
@@ -106,7 +149,7 @@ export default function VentasAnual({anio, data, anios}){
                         <h2 className="text-2xl font-light text-center">{title}</h2>
                     </div>
                 </Grid>
-                <Grid item xs={12}> 
+                <Grid item xs={12}>
                     <Autocomplete
                         multiple
                         disableClearable={true}

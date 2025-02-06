@@ -95,7 +95,6 @@ export default function Main ({data, mes, user}) {
         setEmpresas(emps);
         setEmpresa(emps[0].label);
         const DatosFiltrados = data.data?.filter(item => item.anio === anioSelected[0].year)[0].data; 
-        console.log('DatosFiltrados', DatosFiltrados)       
         const result = processData(data.data);
         setDatosFiltrados(DatosFiltrados);
         setSumaNiveles(result);

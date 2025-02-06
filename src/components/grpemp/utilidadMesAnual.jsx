@@ -87,7 +87,16 @@ export default function UtilidadMesAnual({data, anio}){
             const result = col.map((item, index) => {
                 const label = item.label
                 const axisLabel = item.data.map(item => item.month)
-                const data = item.data.map(item => item.valor)
+                const data = item.data.map(subitem => {
+                    let valor
+                    //const valor = subitem.valor ? label.toUpperCase().trim() === 'UTILIDAD' : Math.abs(subitem.valor)
+                    if(label.toUpperCase().trim() === 'UTILIDAD')
+                        valor = subitem.valor
+                    else
+                        valor = Math.abs(subitem.valor)                        
+                    //console.log(label, valor)
+                    return valor
+                })
                 const result = {
                     labels: axisLabel,
                     datasets: {
@@ -111,13 +120,13 @@ export default function UtilidadMesAnual({data, anio}){
 
     useEffect(() => {
         if(anio.length === 1){
-            setTitle('Gráfico de Utilidades por Mes año ' + anio[0] );
+            setTitle('Gráfico de Utilidades año ' + anio[0] );
         }
         else if(anio.length > 1){
-            setTitle('Gráfico de Utilidades por Mes años' + anio.map(item => item.title).join(', '));
+            setTitle('Gráfico de Utilidades años' + anio.map(item => item.title).join(', '));
         }
         else{
-           setTitle('Gráfico de Utilidades Mes');
+           setTitle('Gráfico de Utilidades');
         }
     }, [anio]);
 

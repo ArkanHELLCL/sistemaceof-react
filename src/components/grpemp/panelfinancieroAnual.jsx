@@ -30,6 +30,20 @@ export default function PanelFinancieroAnual({data, anio, mes}){
     const [anioant, setAnioant] = useState(anio[0]-1);
     const [mesant, setMesant] = useState();
 
+    const emptyColumn = (label) => {
+        const col = [];
+        col.push({"id" : 1, "valor" : label});
+        col.push({"id" : 2, "valor" : ''});
+        col.push({"id" : 3, "valor" : ''});
+        col.push({"id" : 4, "valor" : ''});
+        col.push({"id" : 5, "valor" : ''});
+        col.push({"id" : 6, "valor" : ''});
+        col.push({"id" : 7, "valor" : ''});
+        col.push({"id" : 8, "valor" : ''});
+        col.push({"id" : 9, "valor" : ''});
+        return col;
+    }
+
     const column = (label, data, nivel, item, mes) =>{
         const col = [];
         const year = data.filter(item => item.year === anio[0])[0]
@@ -48,7 +62,8 @@ export default function PanelFinancieroAnual({data, anio, mes}){
         if(col[2].valor === 0)
             valor = 0
         else
-        valor = ((col[2].valor-col[1].valor)*100) / col[2].valor
+            valor = (col[1].valor-col[2].valor) / Math.abs(col[2].valor) * 100
+        
         valor = valor ? Math.round(valor) : 0;
         col.push({"id" : 4, "valor" : `${valor ? valor : 0}%`});
 
@@ -59,7 +74,8 @@ export default function PanelFinancieroAnual({data, anio, mes}){
         if(col[4].valor === 0)
             valor = 0
         else
-        valor = ((col[1].valor-col[4].valor)*100) / col[4].valor
+            valor = ((col[1].valor-col[4].valor) / Math.abs(col[4].valor )) * 100
+
         valor = valor ? Math.round(valor) : 0;
         col.push({"id" : 6, "valor" : `${valor ? valor : 0}%`});
 
@@ -75,13 +91,168 @@ export default function PanelFinancieroAnual({data, anio, mes}){
         if(col[7].valor === 0)
             valor = 0
         else
-            valor = ((col[6].valor-col[7].valor)*100) / col[7].valor
-        if(col[7].valor <0 && col[6].valor <0)
-            valor = valor * -1
+            valor = ((col[6].valor-col[7].valor) / Math.abs(col[7].valor)) * 100
+                
         valor = valor ? Math.round(valor) : 0;
         col.push({"id" : 9, "valor" : `${valor ? valor : 0}%`});
 
         return col
+    }
+
+    const sumarColumnas = (label, array1, array2) => {
+        if (array1.length !== array2.length) {
+          throw new Error('Los arrays deben tener la misma longitud');
+        }
+        let valor = 0;
+        const col = [];
+        col.push({"id" : 1, "valor" : label});
+        
+        valor = array1[1].valor + array2[1].valor;
+        col.push({"id" : 2, "valor" : valor ? valor : 0});
+
+        valor = array1[2].valor + array2[2].valor;
+        col.push({"id" : 3, "valor" : valor ? valor : 0});
+
+        if(col[2].valor === 0)
+            valor = 0
+        else
+            valor = ((col[1].valor-col[2].valor) / Math.abs(col[2].valor )) * 100
+
+        valor = valor ? Math.round(valor) : 0;
+        col.push({"id" : 4, "valor" : `${valor ? valor : 0}%`});
+
+        valor = array1[4].valor + array2[4].valor;
+        col.push({"id" : 5, "valor" : valor ? valor : 0});
+
+        if(col[4].valor === 0)
+            valor = 0
+        else
+            valor = ((col[1].valor-col[4].valor) / Math.abs(col[4].valor )) * 100
+
+        valor = valor ? Math.round(valor) : 0;
+        col.push({"id" : 6, "valor" : `${valor ? valor : 0}%`});
+
+        valor = array1[6].valor + array2[6].valor;
+        col.push({"id" : 7, "valor" : valor ? valor : 0});
+
+        valor = array1[7].valor + array2[7].valor;
+        col.push({"id" : 8, "valor" : valor ? valor : 0});
+
+        if(col[7].valor === 0)
+            valor = 0
+        else
+            valor = ((col[6].valor-col[7].valor) / Math.abs(col[7].valor )) * 100
+
+        valor = valor ? Math.round(valor) : 0;
+        col.push({"id" : 6, "valor" : `${valor ? valor : 0}%`});
+      
+        return col;
+    };
+
+    const restar3Columnas = (label, array1, array2, array3) => {
+        let valor = 0;
+        const col = [];
+        col.push({"id" : 1, "valor" : label});
+        
+        valor = array1[1].valor - array2[1].valor - array3[1].valor;
+        col.push({"id" : 2, "valor" : valor ? valor : 0});
+
+        valor = array1[2].valor - array2[2].valor - array3[2].valor;
+        col.push({"id" : 3, "valor" : valor ? valor : 0});
+
+        if(col[2].valor === 0)
+            valor = 0
+        else
+            valor = ((col[1].valor-col[2].valor) / Math.abs(col[2].valor )) * 100
+
+        valor = valor ? Math.round(valor) : 0;
+        col.push({"id" : 4, "valor" : `${valor ? valor : 0}%`});
+
+        valor = array1[4].valor - array2[4].valor - array3[4].valor;
+        col.push({"id" : 5, "valor" : valor ? valor : 0});
+
+        if(col[4].valor === 0)
+            valor = 0
+        else
+            valor = ((col[1].valor-col[4].valor) / Math.abs(col[4].valor )) * 100
+
+        valor = valor ? Math.round(valor) : 0;
+        col.push({"id" : 6, "valor" : `${valor ? valor : 0}%`});
+
+        valor = array1[6].valor - array2[6].valor - array3[6].valor;
+        col.push({"id" : 7, "valor" : valor ? valor : 0});
+
+        valor = array1[7].valor - array2[7].valor - array3[7].valor;
+        col.push({"id" : 8, "valor" : valor ? valor : 0});
+
+        if(col[7].valor === 0)
+            valor = 0
+        else
+            valor = ((col[6].valor-col[7].valor) / Math.abs(col[7].valor )) * 100
+
+        valor = valor ? Math.round(valor) : 0;
+        col.push({"id" : 6, "valor" : `${valor ? valor : 0}%`});
+      
+        return col;
+    };
+
+    const percentajeColumns = (label, array1, array2, decimal) => {
+        if (array1.length !== array2.length) {
+            throw new Error('Los arrays deben tener la misma longitud');
+        }
+        let valor = 0;
+        const col = [];
+        col.push({"id" : 1, "valor" : label});
+
+        if(array1[1].valor === 0)
+            valor = 0
+        else
+            valor = ((array2[1].valor / array1[1].valor ) * 100 ).toFixed(decimal);
+        col.push({"id" : 2, "valor" : `${valor ? valor : 0}%`});
+
+        if(array1[2].valor === 0)
+            valor = 0
+        else
+            valor = ((array2[2].valor / array1[2].valor ) * 100 ).toFixed(decimal);
+        col.push({"id" : 3, "valor" : `${valor ? valor : 0}%`});
+
+        if(parseInt(col[2].valor.replace('%','')) === 0)
+            valor = 0
+        else
+            valor = (((parseInt(col[1].valor.replace('%',''))-parseInt(col[2].valor.replace('%',''))) / (parseInt(col[2].valor.replace('%','')))) * 100 );
+        col.push({"id" : 4, "valor" : `${valor ? (valor).toFixed(decimal) : 0}%`});
+
+        if(array1[4].valor === 0)
+            valor = 0
+        else
+            valor = ((array2[4].valor / array1[4].valor ) * 100 ).toFixed(decimal);
+        col.push({"id" : 5, "valor" : `${valor ? valor : 0}%`});
+
+        if(parseInt(col[4].valor.replace('%','')) === 0)
+            valor = 0
+        else
+            valor = (((parseInt(col[1].valor.replace('%',''))-parseInt(col[4].valor.replace('%',''))) / (parseInt(col[4].valor.replace('%','')))) * 100 );
+        col.push({"id" : 6, "valor" : `${valor ? (valor).toFixed(decimal) : 0}%`});
+
+        if(array1[6].valor === 0)
+            valor = 0
+        else
+            valor = ((array2[6].valor / array1[6].valor ) * 100 ).toFixed(decimal);
+        col.push({"id" : 7, "valor" : `${valor ? valor : 0}%`});
+
+        if(array1[7].valor === 0)
+            valor = 0
+        else
+            valor = ((array2[7].valor / array1[7].valor ) * 100 ).toFixed(decimal);
+        col.push({"id" : 8, "valor" : `${valor ? valor : 0}%`});
+
+        if(parseInt(col[7].valor.replace('%','')) === 0)
+            valor = 0
+        else
+            valor = (((parseInt(col[6].valor.replace('%',''))-parseInt(col[7].valor.replace('%',''))) / (parseInt(col[7].valor.replace('%','')))) * 100 );
+        col.push({"id" : 6, "valor" : `${valor ? (valor).toFixed(decimal) : 0}%`});
+
+        return col;
     }
 
     useEffect(() => {
@@ -112,6 +283,10 @@ export default function PanelFinancieroAnual({data, anio, mes}){
                 "data": column("Costos de Explotación", data, 'nivel1', '1.2. COSTOS DE EXPLOTACION', mesSelected[0].month)
             })
             //Row 7
+            //Fila 4 - 6
+            rows.push({
+                "data": sumarColumnas("Margen de Explotación",rows[2].data, rows[5].data)
+            })
             //Row 8
             //Row 9
             rows.push({
@@ -155,14 +330,10 @@ export default function PanelFinancieroAnual({data, anio, mes}){
             rows.push({
                 "data": column("Resultadado No Operacional", data, 'resultado', '2. NO OPERACIONAL', mesSelected[0].month)
             })
-
-            //console.log('rows', rows)                    
-
             setResultData(rows);    
             
             const MesAnt = mesSelected[0].month === 1 ? meses[11].label : meses[mesSelected[0].month-1].label; //meses[mesSelected[0].month-2].label
             const AnioAnt = mesSelected[0].month > 1 ? anio[0]-1 : anio[0]-2;
-            console.log('AnioAnt', AnioAnt, 'MesAnt', MesAnt)
             setAnioant(AnioAnt);
             setMesant(MesAnt);
             setRangoMes(`${meses[0].label} a ${meses[mesSelected[0].month-1].label}`)
@@ -199,7 +370,15 @@ export default function PanelFinancieroAnual({data, anio, mes}){
                 "data": column("Costos de Explotación", data, 'nivel1', '1.2. COSTOS DE EXPLOTACION', mes[0])
             })
             //Row 7
+            //Fila 2 - 5
+            rows.push({
+                "data": sumarColumnas("Margen de Explotación",rows[2].data, rows[5].data)
+            })
             //Row 8
+            //Fila 2 - 6
+            rows.push({
+                "data": percentajeColumns("% Margen de Explotación",rows[2].data, rows[6].data,0)
+            })
             //Row 9
             rows.push({
                 "data": column("Gasto de Remuneraciones", data, 'nivel2', '1.3.1. REMUNERACION Y HONORARIOS', mes[0])
@@ -213,15 +392,26 @@ export default function PanelFinancieroAnual({data, anio, mes}){
                 "data": column("Gastos Financieros", data, 'nivel2', '1.3.6. GASTOS FINANCIEROS', mes[0])
             })
             //Row 12
+            rows.push({
+                "data" : emptyColumn("Otros Gastos")
+            })
             //Row 13
             rows.push({
                 "data": column("Gastos de Administración y Ventas", data, 'nivel1', '1.3. GASTOS DE ADMINISTRACION Y VENTAS', mes[0])
-            })                      
+            })      
+            
+            //Actualizando Otros Gastos
+            rows[11].data = restar3Columnas("Otros Gastos", rows[12].data, rows[9].data, rows[8].data)
+
             //Row 14
             rows.push({
                 "data": column("Resultado Operacional", data, 'resultado', '1. OPERACIONAL', mes[0])
             })
             //Row 15
+            //Fila 2 - 13
+            rows.push({
+                "data": percentajeColumns("% ROP",rows[2].data, rows[13].data,0)
+            })
             //Row 16
             rows.push({
                 "data": column("Ingresos no Operacionales", data, 'nivel2', '2.1.1. INGRESOS NO OPERACIONALES', mes[0])
@@ -242,8 +432,16 @@ export default function PanelFinancieroAnual({data, anio, mes}){
             rows.push({
                 "data": column("Resultadado No Operacional", data, 'resultado', '2. NO OPERACIONAL', mes[0])
             })
-
-            //console.log('rows', rows)                    
+            //Row 21
+            //Fila 13 - 19
+            rows.push({
+                "data": sumarColumnas("Utilidad",rows[13].data, rows[19].data)
+            })
+            //Row 22
+            //Fila 2 - 20
+            rows.push({
+                "data": percentajeColumns("% Utilidad",rows[2].data, rows[20].data,1)
+            })
 
             setResultData(rows);    
             const MesAnt = mes[0] === 1 ? meses[11].label : meses[mes[0]-2].label;
