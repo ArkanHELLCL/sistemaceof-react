@@ -31,16 +31,11 @@ export default function PanelFinancieroTable({anio, mes, anioant, mesant, rangom
             <tbody>{
                 data?.map((item, idx)  => {
                     return (
-                        <tr key={'row-'+ idx} className={`${idx === 2 || idx === 5 || idx === 6 || idx === 12 || idx === 13 || idx === 19 || idx === 20 ? 'bg-[#36a2eb33] font-bold text-black' : idx === 7 || idx === 14 || idx === 19 || idx === 21? ' bg-[#9966ff33] font-bold text-black' : idx === 20 || idx === 23 || idx === 22 ? 'bg-[#4bc0c033] font-bold text-black' : ''}`}>
+                        <tr key={'row-'+ idx} className={`${idx === 2 || idx === 5 || idx === 6 || idx === 12 || idx === 13 || idx === 19 || idx === 20 ? 'bg-[#36a2eb33] font-bold text-black' : idx === 7 || idx === 14 || idx === 19 || idx === 21? ' bg-[#9966ff33] font-bold text-black' : idx === 20 || idx === 23 || idx === 22 || idx === 24 ? 'bg-[#4bc0c033] font-bold text-black' : ''}`}>
                             {
-                                item.data?.map((item, index) => {
+                                item?.map((item, index) => {
                                     return (
-                                        <td key={'r-' + idx + '-' + index} className={`${index===0 ? 'text-left' : 'text-center'} text-wrap`}>{item.valor.toLocaleString?.('en-ES', {
-                                            style: 'currency',
-                                            currency: 'USD',
-                                            minimumFractionDigits: 0,
-                                            maximumFractionDigits: 0,
-                                          }).replaceAll(',', '.')}</td>
+                                        <td key={'r-' + idx + '-' + index} className={`${index===0 ? 'text-left' : 'text-center'} text-wrap`}>{item}</td>
                                     )
                                 })
                             }
