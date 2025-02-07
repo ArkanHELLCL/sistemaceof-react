@@ -377,83 +377,149 @@ export default function PanelFinancieroAnual({data, anio, mes}){
             const rows=[];
             //Row 1            
             rows.push({
-                "row": column("Ventas Nacionales", data, 'nivel2', '1.1.1. VENTAS NACIONALES', mesSelected[0].month)
+                "row": column("Ventas Nacionales", data, 'nivel2', '1.1.1. VENTAS NACIONALES',mesSelected[0].month)
             })
             //Row 2     
             rows.push({
-                "row": column("Otros Ingresos", data, 'nivel2', '1.1.3. OTROS INGRESOS', mesSelected[0].month)
+                "row": column("Otros Ingresos", data, 'nivel2', '1.1.3. OTROS INGRESOS',mesSelected[0].month)
             })
             //Row 3   
             rows.push({
-                "row": column("Ingresos de Explotación", data, 'nivel1', '1.1. INGRESO DE EXPLOTACION', mesSelected[0].month)
+                "row": column("Ingresos de Explotación", data, 'nivel1', '1.1. INGRESO DE EXPLOTACION',mesSelected[0].month)
             })            
             //Row 4
             rows.push({
-                "row": column("Costos Directos", data, 'nivel2', '1.2.1. COSTOS DIRECTOS', mesSelected[0].month)
+                "row": column("Costos Directos", data, 'nivel2', '1.2.1. COSTOS DIRECTOS',mesSelected[0].month)
             })
             //Row 5
             rows.push({
-                "row": column("Otros Costos", data, 'nivel2', '1.2.2. OTROS COSTOS EXPLOTACION', mesSelected[0].month)
+                "row": column("Otros Costos", data, 'nivel2', '1.2.2. OTROS COSTOS EXPLOTACION',mesSelected[0].month)
             })
             //Row 6
             rows.push({
-                "row": column("Costos de Explotación", data, 'nivel1', '1.2. COSTOS DE EXPLOTACION', mesSelected[0].month)
+                "row": column("Costos de Explotación", data, 'nivel1', '1.2. COSTOS DE EXPLOTACION',mesSelected[0].month)
             })
             //Row 7
-            //Fila 4 - 6
+            //Fila 2 - 5
             rows.push({
                 "row": sumarColumnas("Margen de Explotación",rows[2].row, rows[5].row)
             })
             //Row 8
+            //Fila 2 - 6
+            rows.push({
+                "row": percentajeColumns("% Margen de Explotación",rows[2].row, rows[6].row,0)
+            })
             //Row 9
             rows.push({
-                "row": column("Gasto de Remuneraciones", data, 'nivel2', '1.3.1. REMUNERACION Y HONORARIOS', mesSelected[0].month)
+                "row": column("Gasto de Remuneraciones", data, 'nivel2', '1.3.1. REMUNERACION Y HONORARIOS',mesSelected[0].month)
             })
             //Row 10
             rows.push({
-                "row": column("Gasto Mantención", data, 'nivel2', '1.3.4. GASTOS MANTENCION', mesSelected[0].month)
+                "row": column("Gasto Mantención", data, 'nivel2', '1.3.4. GASTOS MANTENCION',mesSelected[0].month)
             })
             //Row 11
             rows.push({
-                "row": column("Gastos Financieros", data, 'nivel2', '1.3.6. GASTOS FINANCIEROS', mesSelected[0].month)
+                "row": column("Gastos Financieros", data, 'nivel2', '1.3.6. GASTOS FINANCIEROS',mesSelected[0].month)
             })
             //Row 12
+            rows.push({
+                "row" : emptyColumn("Otros Gastos")
+            })
             //Row 13
             rows.push({
-                "row": column("Gastos de Administración y Ventas", data, 'nivel1', '1.3. GASTOS DE ADMINISTRACION Y VENTAS', mesSelected[0].month)
-            })                      
+                "row": column("Gastos de Administración y Ventas", data, 'nivel1', '1.3. GASTOS DE ADMINISTRACION Y VENTAS',mesSelected[0].month)
+            })      
+            
+            //Actualizando Otros Gastos 8-9-10-12
+            rows[11].row = restar4Columnas("Otros Gastos", rows[12].row, rows[10].row, rows[9].row, rows[8].row)
+
             //Row 14
             rows.push({
-                "row": column("Resultado Operacional", data, 'resultado', '1. OPERACIONAL', mesSelected[0].month)
+                "row": column("Resultado Operacional", data, 'resultado', '1. OPERACIONAL',mesSelected[0].month)
             })
             //Row 15
+            //Fila 2 - 13
+            rows.push({
+                "row": percentajeColumns("% ROP",rows[2].row, rows[13].row,0)
+            })
             //Row 16
             rows.push({
-                "row": column("Ingresos no Operacionales", data, 'nivel2', '2.1.1. INGRESOS NO OPERACIONALES', mesSelected[0].month)
+                "row": column("Ingresos no Operacionales", data, 'nivel2', '2.1.1. INGRESOS NO OPERACIONALES',mesSelected[0].month)
             })
             //Row 17
             rows.push({
-                "row": column("Impuesto a la Renta", data, 'nivel2', '2.2.3. IMPUESTO A LA RENTA', mesSelected[0].month)
+                "row": column("Impuesto a la Renta", data, 'nivel2', '2.2.3. IMPUESTO A LA RENTA',mesSelected[0].month)
             })
             //Row 18
             rows.push({
-                "row": column("Intereses", data, 'nivel2', '2.2.4. INTERERES', mesSelected[0].month)
+                "row": column("Intereses", data, 'nivel2', '2.2.4. INTERERES',mesSelected[0].month)
             })
             //Row 19
             rows.push({
-                "row": column("Otros No Operacional", data, 'nivel2', '2.2.5. OTROS GASTOS Y VARIOS', mesSelected[0].month)
-            })
+                "row" : emptyColumn("Otros No Operacional")
+            })            
             //Row 20
             rows.push({
-                "row": column("Resultadado No Operacional", data, 'resultado', '2. NO OPERACIONAL', mesSelected[0].month)
+                "row": column("Resultadado No Operacional", data, 'resultado', '2. NO OPERACIONAL',mesSelected[0].month)
             })
-            setResultData(rows);    
-            
-            const MesAnt = mesSelected[0].month === 1 ? meses[11].label : meses[mesSelected[0].month-1].label; //meses[mesSelected[0].month-2].label
+
+            //Actualizando Otros Gastos 19-15-16-17
+            rows[18].row = restar4Columnas("Otros No Operacional", rows[19].row, rows[17].row, rows[16].row, rows[15].row)
+
+            //Row 21
+            //Fila 13 - 19
+            rows.push({
+                "row": sumarColumnas("Utilidad",rows[13].row, rows[19].row,1)
+            })
+            //Row 22
+            //Fila 2 - 20
+            rows.push({
+                "row": percentajeColumns("% Utilidad",rows[2].row, rows[20].row,1)
+            })
+            //Row 23
+            //Fila 2 - 5
+            rows.push({
+                "row": percentajeColumns("Ratio Costos Expl.",rows[2].row, rows[5].row,0,true)
+            })
+            //Row 24
+            //Fila 2 - 8
+            rows.push({
+                "row": percentajeColumns("Ratio M.O. Total.",rows[2].row, rows[8].row,0,true)
+            })
+            //Row 25
+            //Fila 2 - 12
+            rows.push({
+                "row": percentajeColumns("Ratio GOA.",rows[2].row, rows[12].row,0,true)
+            })
+            //console.log(rows)
+            const rowsCurrencyFormatted = rows.map((item, index) => item.row.map((item, idx) => {
+                    if((index === 24 || index === 23 || index === 22 || index === 21) && (idx > 0)) return parseFloat(item.valor * -1).toLocaleString?.('en-EN', {
+                        style: 'percent'                           
+                      }).replaceAll(',', '.')
+                    if((index === 14 || index === 7) && (idx > 0)) return parseFloat(item.valor).toLocaleString?.('en-EN', {
+                    style: 'percent'                           
+                    }).replaceAll(',', '.')
+                    if(idx === 0) return item.valor
+                    if(idx === 1 || idx === 2 || idx === 4 || idx === 6 || idx === 7)                       
+                        return item.valor.toLocaleString?.('en-ES', {
+                            style: 'currency',
+                            currency: 'USD',
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                          }).replaceAll(',', '.')
+                    else
+                        return parseFloat(item.valor).toLocaleString?.('en-EN', {
+                            style: 'percent'                           
+                          }).replaceAll(',', '.')
+                }))
+            //console.log(rowsCurrencyFormatted)
+            setResultData(rowsCurrencyFormatted);                
+            //setResultData(rows);
+            const MesAnt = mesSelected[0].month === 1 ? meses[11].label : meses[mes[0]-2].label;
             const AnioAnt = mesSelected[0].month > 1 ? anio[0]-1 : anio[0]-2;
             setAnioant(AnioAnt);
             setMesant(MesAnt);
-            setRangoMes(`${meses[0].label} a ${meses[mesSelected[0].month-1].label}`)
+            setRangoMes(`${meses[0].label} a ${meses[mes-1].label}`)
         }
     }, [mesSelected, anio]);
     
