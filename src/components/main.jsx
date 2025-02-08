@@ -78,7 +78,7 @@ const processData = (data) => {
   return result;
 };
 
-export default function Main ({data, mes, user}) {    
+export default function Main ({data, mes, user, menu}) {    
     const [empresas, setEmpresas] = useState([]);
     const [empresa, setEmpresa] = useState('');
     const fixedOptions = [];
@@ -100,7 +100,9 @@ export default function Main ({data, mes, user}) {
         setSumaNiveles(result);
         const resultFiltrado = result.filter(item => item.year === anioSelected[0].year);
         setSumaNivelesFiltrado(resultFiltrado);
-    }, [data, anios, anioSelected]);    
+    }, [data, anios, anioSelected]);
+
+    console.log(menu);
 
     return ( 
         sumaNiveles && anios && sumaNivelesFitrado &&

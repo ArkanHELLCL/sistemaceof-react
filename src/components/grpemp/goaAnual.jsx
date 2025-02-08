@@ -28,6 +28,7 @@ export default function GoaAnual({data, anio}){
                 borderColor: 'rgb(255, 159, 64)',
                 borderWidth: 1,
                 yAxisID: 'currency',
+                minBarLength: 5
             })
 
             filteredArray = data[0]["nivel1"]['1.3. GASTOS DE ADMINISTRACION Y VENTAS']?.months?.slice(0,12) || Array(12).fill(0);
@@ -47,6 +48,7 @@ export default function GoaAnual({data, anio}){
                 borderColor: 'rgb(255, 99, 132)',
                 borderWidth: 1,
                 yAxisID: 'currency',
+                minBarLength: 5
             })
 
             filteredArray = series[0].data.map((item, idx) => ((item > 0 ? series[1].data[idx] / item : 0) * 100));

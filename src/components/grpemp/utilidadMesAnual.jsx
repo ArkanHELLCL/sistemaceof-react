@@ -2,131 +2,120 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import StackedChart from '../graficos/stackedChart.jsx';
-
-const bgcolor = [
-    'rgba(255, 99, 132, 0.2)',
-    'rgba(255, 159, 64, 0.2)',
-    'rgba(255, 205, 86, 0.2)',
-    'rgba(75, 192, 192, 0.2)',
-    'rgba(54, 162, 235, 0.2)',
-    'rgba(153, 102, 255, 0.2)',
-    'rgba(201, 203, 207, 0.2)',
-    'rgba(233, 180, 257, 0.2)'
-]
-
-const bdcolor = [
-    'rgb(255, 99, 132)',
-    'rgb(255, 159, 64)',
-    'rgb(255, 205, 86)',
-    'rgb(75, 192, 192)',
-    'rgb(54, 162, 235)',
-    'rgb(153, 102, 255)',
-    'rgb(201, 203, 207)',
-    'rgb(233, 180, 257)'
-]
+import FloatingBarChart from '../graficos/floatingBarChart.jsx';
 
 export default function UtilidadMesAnual({data, anio}){
     const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico
-    const [title, setTitle] = useState('Gráfico de Ventas');
+    const [title, setTitle] = useState('Gráfico de Utilidades');
 
-    useEffect(() => {        
+    useEffect(() => {
         if(data?.length>0 && anio.length === 1){
-            const year = data[0].year
             const col=[];
-            let valor = (data[0]["nivel1"]['1.1. INGRESO DE EXPLOTACION']?.months?.slice(0,12).map((item, idx)  => { 
-                const mes = year + '-' + parseInt(idx + 1)
-                return {"month" : mes, "valor" : item} }))
-            col.push({"label" : "Ingresos","data" : valor ? valor : []});
-
-            valor = (data[0]["nivel1"]['1.2. COSTOS DE EXPLOTACION']?.months?.slice(0,12).map((item, idx)  => { 
-                const mes = year + '-' + parseInt(idx + 1)
-                return {"month" : mes, "valor" : item} }))
-            col.push({"label" : "Costos de Explotación" , "data" : valor ? valor : []});
-
-            valor = (data[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0,12).map((item, idx)  => { 
-                const mes = year + '-' + parseInt(idx + 1)
-                return {"month" : mes, "valor" : item} }))
-            col.push({"label" : "Remuneraciones","data" : valor ? valor : []});
-
-            let nivel2Months = data[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0, 12) || Array(12).fill(0);
-            let nivel1Months = data[0]["nivel1"]['1.3. GASTOS DE ADMINISTRACION Y VENTAS']?.months?.slice(0, 12) || Array(12).fill(0);
+            let valor = parseInt(data[0]["nivel1"]['1.1. INGRESO DE EXPLOTACION']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
+            let result = [0,valor];
+            let valorAnt = valor;
+            col.push({"cuenta" : "Ingresos","valor" : result});
             
-            valor = nivel1Months.map((value, idx) => { 
-                const mes = year + '-' + parseInt(idx + 1)
-                return {"month" : mes, "valor" : value - nivel2Months[idx]}
-            });
-            col.push({"label" : "Gastos Operacionales","data" : valor ? valor : []});
+            valor = parseInt(data[0]["nivel1"]['1.2. COSTOS DE EXPLOTACION']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
+            if(valor !== 0){
+                valor = valorAnt + valor;
+                result = [valor, valorAnt]
+                valorAnt = valor;
+            }else{
+                result = [0, 0]
+            }
+            col.push({"cuenta" : "Costos de Explotación","valor" : result});
 
-            valor = (data[0]["nivel1"]['2.1. INGRESOS NO OPERACIONALES']?.months?.slice(0,12).map((item, idx)  => { 
-                const mes = year + '-' + parseInt(idx + 1)
-                return {"month" : mes, "valor" : item} }))
-            col.push({"label" : "Ingresos No Oper.","data" : valor ? valor : []});
+            valor = parseInt(data[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
+            if(valor !== 0){
+                valor = valorAnt + valor;
+                result = [valor, valorAnt]
+                valorAnt = valor;
+            }else{
+                result = [0, 0]
+            }
+            col.push({"cuenta" : "Remuneraciones","valor" : result});
 
-            nivel2Months = data[0]["nivel1"]['2.2. GASTOS NO OPERACIONALES']?.months?.slice(0, 12) || Array(12).fill(0);
-            nivel1Months = data[0]["nivel1"]['2.1. INGRESOS NO OPERACIONALES']?.months?.slice(0, 12) || Array(12).fill(0);
+            valor = parseInt(data[0]["nivel1"]['1.3. GASTOS DE ADMINISTRACION Y VENTAS']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) 
+            let valor2 = parseInt(data[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
+            valor = valor ? valor : 0;
+            valor2 = valor2 ? valor2 : 0;
+            valor = valor - valor2;
+            if(valor !== 0){
+                valor = valorAnt + valor;
+                result = [valor, valorAnt]
+                valorAnt = valor;
+            }else{
+                result = [0, 0]
+            }
+            col.push({"cuenta" : "Gastos Operacionales","valor" : result});
 
-            valor = nivel2Months.map((value, idx) => { 
-                const mes = year + '-' + parseInt(idx + 1)
-                return {"month" : mes, "valor" : value - nivel1Months[idx] || 0}
-            });
-            col.push({"label" : "Costos No Oper.","data" : valor ? valor : []});
+            valor =  parseInt(data[0]["nivel1"]['2.1. INGRESOS NO OPERACIONALES']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
+            if(valor !== 0){
+                valor = valorAnt + valor;
+                result = [valor, valorAnt]
+                valorAnt = valor;
+            }else{
+                result = [0, 0]
+            }
+            col.push({"cuenta" : "Ingresos No Oper.","valor" : result});
 
-            const sumColumns = Array(12).fill(0);
-            col.forEach(item => {
-                item.data.forEach((mes, idx) => {
-                    sumColumns[idx] += mes.valor;
-                });
-            });
-            valor = sumColumns.map((value, idx) => { 
-                const mes = year + '-' + parseInt(idx + 1)
-                return {"month" : mes, "valor" : value}
-            });
-            
-            col.push({"label" : "Utilidad","data" : valor ? valor : []});
-            const result = col.map((item, index) => {
-                const label = item.label
-                const axisLabel = item.data.map(item => item.month)
-                const data = item.data.map(subitem => {
-                    let valor
-                    //const valor = subitem.valor ? label.toUpperCase().trim() === 'UTILIDAD' : Math.abs(subitem.valor)
-                    if(label.toUpperCase().trim() === 'UTILIDAD')
-                        valor = subitem.valor
-                    else
-                        valor = Math.abs(subitem.valor)                        
-                    //console.log(label, valor)
-                    return valor
-                })
-                const result = {
-                    labels: axisLabel,
-                    datasets: {
-                        label: label,
-                        data: data,
-                        backgroundColor: bgcolor[index],
-                        borderColor: bdcolor[index],
-                        borderWidth: 1
-                    }
-                }
-                return result
-            });            
-            const labels = col.map(item => item.data.map(item => item.month))[0]
+            valor = parseInt(data[0]["nivel1"]['2.2. GASTOS NO OPERACIONALES']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) 
+            valor2 = parseInt(data[0]["nivel1"]['2.1. INGRESOS NO OPERACIONALES']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
+            valor = valor ? valor : 0;
+            valor2 = valor2 ? valor2 : 0;
+            valor = valor + valor2;
+            if(valor !== 0){
+                valor = valorAnt + valor;
+                result = [valor, valorAnt]
+                valorAnt = valor;
+            }else{
+                result = [0, 0]
+            }
+            col.push({"cuenta" : "Costos No Oper.","valor" : result});  
+
+            col.push({"cuenta" : "Utilidad", "valor" : col.slice(1).reduce((acc, item) => acc + (parseInt(item.valor[0] - item.valor[1])), 0) + col[0].valor[1]});
+
             setGrpconfig({
-                labels:labels,
-                datasets:result.map(item => item.datasets)
-            })            
+                labels: col?.map(item => item.cuenta),
+                datasets: [
+                {
+                    label: "Gráfico de Utilidades YTD",
+                    data: col?.map(item => item.valor),
+                    backgroundColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(201, 203, 207)',
+                        'rgb(233, 180, 257)'
+                    ],
+                    borderColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(201, 203, 207)',
+                        'rgb(233, 180, 257)'
+                    ],
+                    borderWidth: 1,
+                    minBarLength: 5
+                }
+                ]
+            })
         }
-        
-    }, [data]);
+    }, [data, anio]);
 
     useEffect(() => {
         if(anio.length === 1){
-            setTitle('Gráfico de Utilidades año ' + anio[0] );
-        }
-        else if(anio.length > 1){
-            setTitle('Gráfico de Utilidades años' + anio.map(item => item.title).join(', '));
-        }
+            setTitle('Gráfico de Utilidades YTD ' + ' año ' + anio[0] );
+        }        
         else{
-           setTitle('Gráfico de Utilidades');
+           setTitle('Gráfico de Utilidades YTD');
         }
     }, [anio]);
 
@@ -134,13 +123,14 @@ export default function UtilidadMesAnual({data, anio}){
         <>
             <Grid container spacing={2} className='pb-4'>
                 <Grid item xs={12} className='pb-4'>
-                    <div className="flex justify-center rounded-xl bg-[#06a7d7] text-white shadow-md py-4 align-middle">
+                    <div className="flex justify-center rounded-xl bg-[#4cbab5] text-white shadow-md py-4 align-middle">
                         <h2 className="text-2xl font-light text-center">{title}</h2>
                     </div>
-                </Grid>                
-                <Grid item xs={12} sx={{height: '400px'}}>
-                    <StackedChart chartData={grpconfig} title={title} /> 
+                </Grid>                            
+                <Grid item xs={12} sx={{height: '400px'}}> 
+                    <FloatingBarChart chartData={grpconfig} title={title}/> 
                 </Grid>
-            </Grid>            
+            </Grid>
+            
         </> : null
 }

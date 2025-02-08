@@ -10,7 +10,19 @@ function DoughnutChart({ chartData, title }) {
                     title: {
                         display: false,
                         text: title,
-                    }
+                    },
+                    /*tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                const dataset = tooltipItem.dataset;
+                                const total = dataset.data.reduce((previousValue, currentValue) => previousValue + currentValue, 0);
+                                console.log(total);
+                                const currentValue = dataset.data[tooltipItem.dataIndex];
+                                const percentage = Math.floor(((currentValue / total) * 100) + 0.5);         
+                                return `${tooltipItem.label}: ${percentage}%`;
+                            }
+                        }
+                      }*/
                 },
                 responsive: true,                
                 maintainAspectRatio: false

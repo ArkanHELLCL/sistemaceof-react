@@ -16,6 +16,7 @@ function App() {
   const [dataFormatted, setDataFormatted] = useState();
   const [headers, setHeaders] = useState([]);
   const [mesfinal, setMesFinal] = useState();
+  const [menu, setMenu] = useState({"Dashboard" : true});
 
   useEffect(() => {
     fetch('https://ceofconsultores.com/system/home/getUsuario.php')
@@ -42,13 +43,8 @@ function App() {
     setData(Cubo);
     const idxMes = Cubo.data[0].indexOf('N_MES');
     const meses = Cubo.data.slice(1).map(row => row[idxMes]);
-  
-    // Rescatar el mes inicial y final del arreglo
-    //const mesInicial = meses[0];
-    //const mesFinal = meses[meses.length - 1];
+
     setMesFinal(parseInt(meses[meses.length - 1]));
-    //console.log('Mes Inicial:', mesInicial);
-    //console.log('Mes Final:', mesFinal);
   }, [Cubo]);
 
 
@@ -129,13 +125,12 @@ useEffect(() => {
 }, [data]);
 
   return (
-    //user && user.USR_Id && data && headers ?
-    dataFormatted && headers && mesfinal &&
+    dataFormatted && headers && mesfinal && //user && user.USR_Id &&
       <main className="dashtemplate">
-        <Header title={title} user={user}/>
-        <Sidebar setTitle={setTitle} user={user}/>
+        <Header title={title} user={user} menu={menu}/>
+        <Sidebar setTitle={setTitle} user={user} setMenu={setMenu}/>
         <Footer user={user}/>
-        <Main data={dataFormatted} mes={[mesfinal]} user={user}/>
+        <Main data={dataFormatted} mes={[mesfinal]} user={user} menu={menu}/>
       </main>        
   );
 }

@@ -26,12 +26,27 @@ import { TreeItem2Icon } from '@mui/x-tree-view/TreeItem2Icon';
 import { TreeItem2Provider } from '@mui/x-tree-view/TreeItem2Provider';
 import { forwardRef } from 'react';
 
-const onClickHandle = (itemId, label, setTitle) => {
+const onClickHandle = (itemId, label, setTitle, setMenu) => {
     let msg = label;
     if(itemId === '2' || itemId === '5')
         return;
     //if(itemId === '1')
      //   msg = 'Dashboard - Empresa 1';
+    let menu = {};
+    if(itemId === '1')
+        menu = {"Dashboard" : true};
+    else if(itemId === '9')
+        menu = {"Upload" : true};
+    else if(itemId === '10' || itemId === '11')
+        menu = {"Download" : true};
+    else if(itemId === '6')
+        menu = {"Empresas" : true};
+    else if(itemId === '7')
+        menu = {"Usuarios" : true};
+    else if(itemId === '8')
+        menu = {"Contacto" : true};
+
+    setMenu(menu);
     setTitle(msg);
 }
 
@@ -41,7 +56,7 @@ const CustomTreeItemContent = styled(TreeItem2Content)(({ theme }) => ({
 }));
 
 const CustomTreeItem = forwardRef(function CustomTreeItem(props, ref) {
-  const { id, itemId, label, disabled, children, setTitle, ...other } = props;
+  const { id, itemId, label, disabled, children, setTitle, setMenu, ...other } = props;
 
   const {
     getRootProps,
@@ -63,7 +78,7 @@ const CustomTreeItem = forwardRef(function CustomTreeItem(props, ref) {
           <TreeItem2Checkbox {...getCheckboxProps()} />
           <Box sx={{ flexGrow: 1, display: 'flex', gap: 1 }}>{
             itemId === '1' ? <DashboardIcon /> : itemId === '2' ? <AddchartIcon /> : itemId === '5' ? <StorageIcon /> : itemId === '8' ? <ContactSupportIcon /> : itemId === '3' ? <CloudUploadIcon /> : itemId === '4' ? <SummarizeIcon /> : itemId === '6' ? <BusinessIcon /> : itemId === '7' ? <PeopleAltIcon /> : itemId === '9' ? <PublishIcon /> : itemId === '10' ? <UploadFileIcon /> : itemId === '11' ? <CloudDownloadIcon/> : null}
-            <TreeItem2Label {...getLabelProps()} className={` ${(itemId === '1' || itemId === '2' || itemId === '5' || itemId === '8' || itemId === '11') ? ' !text-lg !font-bold' : '' }  !truncate`} onClick={()=>onClickHandle(itemId, label, setTitle)} />
+            <TreeItem2Label {...getLabelProps()} className={` ${(itemId === '1' || itemId === '2' || itemId === '5' || itemId === '8' || itemId === '11') ? ' !text-lg !font-bold' : '' }  !truncate`} onClick={()=>onClickHandle(itemId, label, setTitle, setMenu)} />
           </Box>
         </CustomTreeItemContent>
         {children && <TreeItem2GroupTransition {...getGroupTransitionProps()} />}
@@ -72,26 +87,25 @@ const CustomTreeItem = forwardRef(function CustomTreeItem(props, ref) {
   );
 });
 
-export default function Menu({setTitle, user}) {
+export default function Menu({setTitle, user, setMenu}) {
     return (
         user?.PER_Id === 1 ?
             <>
                 <Box sx={{ minHeight: 200, minWidth: 250, maxHeight: 600, overflowY: 'auto' }} >
                     <SimpleTreeView defaultExpandedItems={['2', '5']}>
-                        <CustomTreeItem itemId="1" label="Dashboard" setTitle={setTitle}>
+                        <CustomTreeItem itemId="1" label="Dashboard" setTitle={setTitle} setMenu={setMenu}>
                         </CustomTreeItem>
                         <CustomTreeItem itemId="2" label="Datos" >
-                            <CustomTreeItem itemId="3" label="Carga" setTitle={setTitle}>
-                              <CustomTreeItem itemId="9" label="Empresa" setTitle={setTitle} />
-                              <CustomTreeItem itemId="10" label="Informes" setTitle={setTitle} />
+                            <CustomTreeItem itemId="3" label="Carga" setTitle={setTitle} setMenu={setMenu}>
+                              <CustomTreeItem itemId="9" label="Empresa" setTitle={setTitle} setMenu={setMenu}/>
+                              <CustomTreeItem itemId="10" label="Informes" setTitle={setTitle} setMenu={setMenu}/>
                             </CustomTreeItem>
-                            <CustomTreeItem itemId="4" label="Informe de errores" setTitle={setTitle} />          
                         </CustomTreeItem>
                         <CustomTreeItem itemId="5" label="Mantenedores" >
-                            <CustomTreeItem itemId="6" label="Empresas" setTitle={setTitle} />
-                            <CustomTreeItem itemId="7" label="Usuarios" setTitle={setTitle} />
+                            <CustomTreeItem itemId="6" label="Empresas" setTitle={setTitle} setMenu={setMenu}/>
+                            <CustomTreeItem itemId="7" label="Usuarios" setTitle={setTitle} setMenu={setMenu}/>
                         </CustomTreeItem>
-                        <CustomTreeItem itemId="8" label="Contacto" setTitle={setTitle}>
+                        <CustomTreeItem itemId="8" label="Contacto" setTitle={setTitle} setMenu={setMenu}>
                         </CustomTreeItem>
                     </SimpleTreeView>
                 </Box>                
@@ -100,11 +114,11 @@ export default function Menu({setTitle, user}) {
             <>
               <Box sx={{ minHeight: 200, minWidth: 250, maxHeight: 600, overflowY: 'auto' }} >
                 <SimpleTreeView>
-                    <CustomTreeItem itemId="1" label="Dashboard" setTitle={setTitle}>
+                    <CustomTreeItem itemId="1" label="Dashboard" setTitle={setTitle} setMenu={setMenu}>
                     </CustomTreeItem>
-                    <CustomTreeItem itemId="11" label="Descarga" setTitle={setTitle}>
+                    <CustomTreeItem itemId="11" label="Descarga" setTitle={setTitle} setMenu={setMenu}>
                     </CustomTreeItem>
-                    <CustomTreeItem itemId="8" label="Contacto" setTitle={setTitle}>
+                    <CustomTreeItem itemId="8" label="Contacto" setTitle={setTitle} setMenu={setMenu}>
                     </CustomTreeItem>
                 </SimpleTreeView>
               </Box>
