@@ -6,6 +6,7 @@ import Sidebar from './components/sidebar.jsx'
 import Footer from './components/footer.jsx'
 import Main from './components/main.jsx';
 import Papa from 'papaparse';
+import User from '../mock/usuario.json';
 
 import Cubo from '../mock/data.json';
 
@@ -23,12 +24,14 @@ function App() {
       .then(response => response.json())
       .then(user => {        
         const { data } = user;
-        setUser(data[0])
+        //setUser(data[0])
       })
       .finally(() => {
         //console.log('finally');
       })
       .catch(error => console.error(error));
+
+      setUser(User.data[0]);
   }, []);  
 
 

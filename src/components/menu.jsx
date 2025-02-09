@@ -30,8 +30,6 @@ const onClickHandle = (itemId, label, setTitle, setMenu) => {
     let msg = label;
     if(itemId === '2' || itemId === '5')
         return;
-    //if(itemId === '1')
-     //   msg = 'Dashboard - Empresa 1';
     let menu = {};
     if(itemId === '1')
         menu = {"Dashboard" : true};
@@ -96,7 +94,7 @@ export default function Menu({setTitle, user, setMenu}) {
                         <CustomTreeItem itemId="1" label="Dashboard" setTitle={setTitle} setMenu={setMenu}>
                         </CustomTreeItem>
                         <CustomTreeItem itemId="2" label="Datos" >
-                            <CustomTreeItem itemId="3" label="Carga" setTitle={setTitle} setMenu={setMenu}>
+                            <CustomTreeItem itemId="3" label="Carga">
                               <CustomTreeItem itemId="9" label="Empresa" setTitle={setTitle} setMenu={setMenu}/>
                               <CustomTreeItem itemId="10" label="Informes" setTitle={setTitle} setMenu={setMenu}/>
                             </CustomTreeItem>
