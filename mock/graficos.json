@@ -1,12 +1,12 @@
 {
     "graficos": [
-        { "title": "Panel Financiero", "year": 2024 },
-        { "title": "Cubo", "year": 2024 },
-        { "title": "Ventas", "year": 2024 },
-        { "title": "Utilidad Mes", "year": 2024, "month" : 11 },
-        { "title": "Utilidad Mes Anual", "year": 2024 },
-        { "title": "Utilidad YTD", "year": 2024 },
-        { "title": "Remunearaciones", "year": 2024 },
-        { "title": "GOA", "year": 2024 }
+        { "title": "Panel Financiero", "year": 2024, "id": 1},
+        { "title": "Cubo", "year": 2024, "id": 2 },
+        { "title": "Ventas", "year": 2024, "id": 3 },
+        { "title": "Utilidad Mes", "year": 2024, "month" : 11, "id": 4 },
+        { "title": "Utilidad YTD", "year": 2024, "id": 5 },
+        { "title": "Utilidad YTD (Dona)", "year": 2024, "id": 6 },
+        { "title": "Remunearaciones", "year": 2024, "id": 7 },
+        { "title": "GOA", "year": 2024, "id": 8 }
     ]
 }

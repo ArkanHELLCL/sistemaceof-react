@@ -7,8 +7,9 @@ import Footer from './components/footer.jsx'
 import Main from './components/main.jsx';
 import Papa from 'papaparse';
 import User from '../mock/usuario.json';
-
 import Cubo from '../mock/data.json';
+import { empresas as emps } from '../mock/empresas.json';
+import { graficos as grps } from '../mock/graficos.json';
 
 function App() {
   const [title, setTitle] = useState('Dashboard');
@@ -18,6 +19,8 @@ function App() {
   const [headers, setHeaders] = useState([]);
   const [mesfinal, setMesFinal] = useState();
   const [menu, setMenu] = useState({"Dashboard" : true});
+  const [empresas, setEmpresas] = useState([]);
+  const [graficos, setGraficos] = useState([]);
 
   useEffect(() => {
     fetch('https://ceofconsultores.com/system/home/getUsuario.php')
@@ -36,9 +39,40 @@ function App() {
 
 
   useEffect(() => {
-    Papa.parse('https://ceofconsultores.com/system/home/uploads/76201608/data/base.csv', { 
+    if(user?.PER_Id === 1){
+      fetch('https://ceofconsultores.com/system/home/getEmpresas.php')
+      .then(response => response.json())
+      .then(user => {        
+        const { data } = user;
+        //setUser(data[0])
+      })
+      .finally(() => {
+        //console.log('finally');
+      })
+      .catch(error => console.error(error));
+      setEmpresas(emps);
+
+      fetch('https://ceofconsultores.com/system/home/getGraficos.php')
+      .then(response => response.json())
+      .then(user => {        
+        const { data } = user;
+        //setUser(data[0])
+      })
+      .finally(() => {
+        //console.log('finally');
+      })
+      .catch(error => console.error(error));
+      setGraficos(grps);
+    }
+  },[user])
+
+
+  useEffect(() => {
+    //Papa.parse('https://ceofconsultores.com/system/home/uploads/76201608/data/base.csv', { 
+    Papa.parse('https://ceofconsultores.com/system/home/data.php', { 
       worker: true, 
       download: true,
+      downloadRequestBody: 'id=1',
       complete: function(results) {
         //setData(results);
       },
@@ -128,12 +162,12 @@ useEffect(() => {
 }, [data]);
 
   return (
-    dataFormatted && headers && mesfinal && //user && user.USR_Id &&
+    dataFormatted && headers && mesfinal && //empresas && graficos &&//user && user.USR_Id &&
       <main className="dashtemplate">
         <Header title={title} user={user} menu={menu}/>
         <Sidebar setTitle={setTitle} user={user} setMenu={setMenu}/>
         <Footer user={user}/>
-        <Main data={dataFormatted} mes={[mesfinal]} user={user} menu={menu}/>
+        <Main data={dataFormatted} mes={[mesfinal]} user={user} menu={menu} empresas={empresas} graficos={graficos} setGraficos={setGraficos}/>
       </main>        
   );
 }

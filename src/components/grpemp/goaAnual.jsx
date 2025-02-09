@@ -28,7 +28,8 @@ export default function GoaAnual({data, anio}){
                 borderColor: 'rgb(255, 159, 64)',
                 borderWidth: 1,
                 yAxisID: 'currency',
-                minBarLength: 5
+                minBarLength: 5,
+                order: 2
             })
 
             filteredArray = data[0]["nivel1"]['1.3. GASTOS DE ADMINISTRACION Y VENTAS']?.months?.slice(0,12) || Array(12).fill(0);
@@ -44,11 +45,12 @@ export default function GoaAnual({data, anio}){
                 label: "Gasto de Adm. y Ventas ($)",
                 data: result.map(data => data.venta),
                 type: 'bar',
-                backgroundColor: 'rgb(153, 102, 255)',
-                borderColor: 'rgb(153, 102, 255)',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
                 borderWidth: 1,
                 yAxisID: 'currency',
-                minBarLength: 5
+                minBarLength: 5,
+                order: 3
             })
 
             filteredArray = series[0].data.map((item, idx) => ((item > 0 ? series[1].data[idx] / item : 0) * 100));
@@ -66,9 +68,10 @@ export default function GoaAnual({data, anio}){
                 type: 'line',
                 borderColor: '#8e7cb9',
                 backgroundColor: 'rgba(238, 237, 248, 0.8)',
-                borderWidth: 1,
+                borderWidth: 2,
                 yAxisID: 'percentage',
-                tension: 0.5
+                tension: 0.5,
+                order: 1
             })
             setGrpconfig({
                 labels: labels,

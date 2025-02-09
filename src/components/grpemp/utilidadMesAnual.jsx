@@ -22,7 +22,7 @@ export default function UtilidadMesAnual({data, anio}){
                 result = [valor, valorAnt]
                 valorAnt = valor;
             }else{
-                result = [0, 0]
+                result = [valorAnt, valorAnt]
             }
             col.push({"cuenta" : "Costos de Explotación","valor" : result});
 
@@ -32,7 +32,7 @@ export default function UtilidadMesAnual({data, anio}){
                 result = [valor, valorAnt]
                 valorAnt = valor;
             }else{
-                result = [0, 0]
+                result = [valorAnt, valorAnt]
             }
             col.push({"cuenta" : "Remuneraciones","valor" : result});
 
@@ -46,7 +46,7 @@ export default function UtilidadMesAnual({data, anio}){
                 result = [valor, valorAnt]
                 valorAnt = valor;
             }else{
-                result = [0, 0]
+                result = [valorAnt, valorAnt]
             }
             col.push({"cuenta" : "Gastos Operacionales","valor" : result});
 
@@ -56,7 +56,7 @@ export default function UtilidadMesAnual({data, anio}){
                 result = [valor, valorAnt]
                 valorAnt = valor;
             }else{
-                result = [0, 0]
+                result = [valorAnt, valorAnt]
             }
             col.push({"cuenta" : "Ingresos No Oper.","valor" : result});
 
@@ -70,7 +70,7 @@ export default function UtilidadMesAnual({data, anio}){
                 result = [valor, valorAnt]
                 valorAnt = valor;
             }else{
-                result = [0, 0]
+                result = [valorAnt, valorAnt]
             }
             col.push({"cuenta" : "Costos No Oper.","valor" : result});  
 

@@ -4,8 +4,6 @@ import Chip from '@mui/material/Chip';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
-import { empresas as emps } from '../../../mock/empresas.json';
-import { graficos } from '../../../mock/graficos.json';
 import VentasAnual  from '../grpemp/ventasAnual.jsx';
 import UtilidadMesAnual from '../grpemp/utilidadMesAnual.jsx';
 import UtilidadMes from '../grpemp/utilidadMes.jsx';
@@ -78,11 +76,11 @@ const processData = (data) => {
     return result;
 };
 
-export default function DashBoard({data, mes, user}){
-    const [empresas, setEmpresas] = useState([]);
+export default function DashBoard({data, mes, user, empresas, graficos, setGraficos}){
+    
     const [empresa, setEmpresa] = useState('');
     const fixedOptions = [];
-    const [value, setValue] = useState([...fixedOptions, graficos[6], graficos[2]]);
+    //const [value, setValue] = useState([graficos[0], graficos[1],graficos[2], graficos[3],graficos[4], graficos[5],graficos[6], graficos[7]]);
     const [datosFiltrados, setDatosFiltrados] = useState([]);
     const [sumaNiveles, setSumaNiveles] = useState([]);
     const [sumaNivelesFitrado, setSumaNivelesFiltrado] = useState([]);
@@ -92,15 +90,15 @@ export default function DashBoard({data, mes, user}){
     const [anios, setAnios] = useState(Anios); 
     const [anioSelected, setAnioSelected] = useState([anios[anios.length - 1]]);
     useEffect(() => {
-        setEmpresas(emps);
-        setEmpresa(emps[0].label);
+        
+        setEmpresa(empresas[0]?.label);
         const DatosFiltrados = data.data?.filter(item => item.anio === anioSelected[0].year)[0].data; 
         const result = processData(data.data);
         setDatosFiltrados(DatosFiltrados);
         setSumaNiveles(result);
         const resultFiltrado = result.filter(item => item.year === anioSelected[0].year);
         setSumaNivelesFiltrado(resultFiltrado);
-    }, [data, anios, anioSelected]);
+    }, [data, anios, anioSelected, empresas]);
     
     return ( 
         sumaNiveles && anios && sumaNivelesFitrado &&
@@ -124,9 +122,9 @@ export default function DashBoard({data, mes, user}){
                         multiple
                         disableClearable={true}
                         id="graficos"
-                        value={value}
+                        value={graficos}
                         onChange={(event, newValue) => {
-                            setValue([
+                            setGraficos([
                             ...fixedOptions,
                             ...newValue.filter((option) => !fixedOptions.includes(option)),
                             ]);
@@ -151,7 +149,7 @@ export default function DashBoard({data, mes, user}){
                             <TextField {...params} label="Gráficos autorizados" placeholder="Gráfico" variant="standard"/>
                         )}
                     />
-                    <button className="bg-[#68488a] hover:bg-[#424685] transition-all text-white font-bold py-2 px-10 rounded"> Guardar </button>
+                    <button className="bg-[#68488a] hover:bg-[#424685] transition-all text-white font-bold py-2 px-10 rounded h-10"> Guardar </button>
                 </div>
               </> : null
             }
