@@ -88,38 +88,34 @@ const CustomTreeItem = forwardRef(function CustomTreeItem(props, ref) {
 export default function Menu({setTitle, user, setMenu}) {
     return (
         user?.PER_Id === 1 ?
-            <>
-                <Box sx={{ minHeight: 200, minWidth: 250, maxHeight: 600, overflowY: 'auto' }} >
-                    <SimpleTreeView defaultExpandedItems={['2', '5']}>
-                        <CustomTreeItem itemId="1" label="Dashboard" setTitle={setTitle} setMenu={setMenu}>
-                        </CustomTreeItem>
-                        <CustomTreeItem itemId="2" label="Datos" >
-                            <CustomTreeItem itemId="3" label="Carga">
-                              <CustomTreeItem itemId="9" label="Empresa" setTitle={setTitle} setMenu={setMenu}/>
-                              <CustomTreeItem itemId="10" label="Informes" setTitle={setTitle} setMenu={setMenu}/>
-                            </CustomTreeItem>
-                        </CustomTreeItem>
-                        <CustomTreeItem itemId="5" label="Mantenedores" >
-                            <CustomTreeItem itemId="6" label="Empresas" setTitle={setTitle} setMenu={setMenu}/>
-                            <CustomTreeItem itemId="7" label="Usuarios" setTitle={setTitle} setMenu={setMenu}/>
-                        </CustomTreeItem>
-                        <CustomTreeItem itemId="8" label="Contacto" setTitle={setTitle} setMenu={setMenu}>
-                        </CustomTreeItem>
-                    </SimpleTreeView>
-                </Box>                
-            </>
+          <>
+            <Box sx={{ minHeight: 200, minWidth: 250, maxHeight: 600, overflowY: 'auto' }} >
+              <SimpleTreeView defaultExpandedItems={['2', '5']}>
+                <CustomTreeItem itemId="1" label="Dashboard" setTitle={setTitle} setMenu={setMenu}>
+                </CustomTreeItem>
+                <CustomTreeItem itemId="2" label="Datos" >                            
+                  <CustomTreeItem itemId="9" label="Empresa" setTitle={setTitle} setMenu={setMenu}/>
+                  <CustomTreeItem itemId="10" label="Informes" setTitle={setTitle} setMenu={setMenu}/>
+                </CustomTreeItem>
+                <CustomTreeItem itemId="5" label="Mantenedores" >
+                    <CustomTreeItem itemId="6" label="Empresas" setTitle={setTitle} setMenu={setMenu}/>
+                    <CustomTreeItem itemId="7" label="Usuarios" setTitle={setTitle} setMenu={setMenu}/>
+                </CustomTreeItem>                        
+              </SimpleTreeView>
+            </Box>                
+          </>
         : 
-            <>
-              <Box sx={{ minHeight: 200, minWidth: 250, maxHeight: 600, overflowY: 'auto' }} >
-                <SimpleTreeView>
-                    <CustomTreeItem itemId="1" label="Dashboard" setTitle={setTitle} setMenu={setMenu}>
-                    </CustomTreeItem>
-                    <CustomTreeItem itemId="11" label="Descarga" setTitle={setTitle} setMenu={setMenu}>
-                    </CustomTreeItem>
-                    <CustomTreeItem itemId="8" label="Contacto" setTitle={setTitle} setMenu={setMenu}>
-                    </CustomTreeItem>
-                </SimpleTreeView>
-              </Box>
-            </>
+          <>
+            <Box sx={{ minHeight: 200, minWidth: 250, maxHeight: 600, overflowY: 'auto' }} >
+              <SimpleTreeView>
+                <CustomTreeItem itemId="1" label="Dashboard" setTitle={setTitle} setMenu={setMenu} />
+                <CustomTreeItem itemId="11" label="Descarga" setTitle={setTitle} setMenu={setMenu} />
+              </SimpleTreeView>
+            </Box>
+          </>
     )
 }
+
+
+/*<CustomTreeItem itemId="8" label="Contacto" setTitle={setTitle} setMenu={setMenu}>
+                        </CustomTreeItem> */
