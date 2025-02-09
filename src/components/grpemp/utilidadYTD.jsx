@@ -50,14 +50,14 @@ export default function UtilidadYTD({data, anio}){
                     label: "Gráfico de Utilidades YTD",
                     data: col?.map(item => item.valor),
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(255, 159, 64, 0.2)',
-                        'rgba(255, 205, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(201, 203, 207, 0.2)',
-                        'rgba(233, 180, 257, 0.2)'
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(201, 203, 207)',
+                        'rgb(233, 180, 257)'
                     ],
                     borderColor: [
                         'rgb(255, 99, 132)',
