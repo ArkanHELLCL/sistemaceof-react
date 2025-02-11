@@ -31,7 +31,6 @@ function App() {
         setUser(data[0])
       })
       .finally(() => {
-        //console.log('finally');
       })
       .catch(error => console.error(error));
 
@@ -43,11 +42,10 @@ function App() {
     if(user?.PER_Id === 1){
       fetch('https://ceofconsultores.com/system/home/getEmpresas.php')
       .then(response => response.json())
-      .then(emps => {        
-        setEmpresas(emps)
+      .then(emps => {     
+        setEmpresas(emps.data)
       })
       .finally(() => {
-        //console.log('finally');
       })
       .catch(error => console.error(error));
       //setEmpresas(emps);
@@ -58,7 +56,6 @@ function App() {
         setGraficos(grp.graficos)
       })
       .finally(() => {
-        //console.log('finally');
       })
       .catch(error => console.error(error));
       //setGraficos(grps);

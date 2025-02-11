@@ -32,10 +32,6 @@ const bdcolor = [
 export default function VentasAnual({data, anios}){
     const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico
     const fixedOptions = [];
-    //const anio = anios[anios.length-1];
-    //const anio=[anios[anios.length - 1].year]
-    //const selectedAnios = anios?.filter(item => anio?.includes(item.year)).sort((a, b) => a.year - b.year)
-    console.log(anios);
     const [aniosSelected, setAniosSelected] = useState([anios[anios.length-1]]);
     const [title, setTitle] = useState('Gráfico de Ventas');
     const [multipleLine, setMultipleLine] = useState(false);

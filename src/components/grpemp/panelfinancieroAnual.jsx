@@ -491,7 +491,6 @@ export default function PanelFinancieroAnual({data, anio, mes}){
             rows.push({
                 "row": percentajeColumns("Ratio GOA.",rows[2].row, rows[12].row,0,true)
             })
-            //console.log(rows)
             const rowsCurrencyFormatted = rows.map((item, index) => item.row.map((item, idx) => {
                     if((index === 24 || index === 23 || index === 22 || index === 21) && (idx > 0)) return parseFloat(item.valor * -1).toLocaleString?.('en-EN', {
                         style: 'percent'                           
@@ -512,7 +511,6 @@ export default function PanelFinancieroAnual({data, anio, mes}){
                             style: 'percent'                           
                           }).replaceAll(',', '.')
                 }))
-            //console.log(rowsCurrencyFormatted)
             setResultData(rowsCurrencyFormatted);                
             //setResultData(rows);
             const MesAnt = mesSelected[0].month === 1 ? meses[11].label : meses[mes[0]-2].label;
@@ -642,7 +640,6 @@ export default function PanelFinancieroAnual({data, anio, mes}){
             rows.push({
                 "row": percentajeColumns("Ratio GOA.",rows[2].row, rows[12].row,0,true)
             })
-            //console.log(rows)
             const rowsCurrencyFormatted = rows.map((item, index) => item.row.map((item, idx) => {
                     if((index === 24 || index === 23 || index === 22 || index === 21) && (idx > 0)) return parseFloat(item.valor * -1).toLocaleString?.('en-EN', {
                         style: 'percent'                           
@@ -663,9 +660,7 @@ export default function PanelFinancieroAnual({data, anio, mes}){
                             style: 'percent'                           
                           }).replaceAll(',', '.')
                 }))
-            //console.log(rowsCurrencyFormatted)
             setResultData(rowsCurrencyFormatted);                
-            //setResultData(rows);
             const MesAnt = mes[0] === 1 ? meses[11].label : meses[mes[0]-2].label;
             const AnioAnt = mes[0] > 1 ? anio[0]-1 : anio[0]-2;
             setAnioant(AnioAnt);

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 import Chip from '@mui/material/Chip';
@@ -107,55 +108,63 @@ export default function DashBoard({data, mes, user, empresas, graficos, setGrafi
                 <h2 className="text-2xl font-light">Personalización del Dashboard </h2>
                 <div className="pt-4 mt-4 space-y-2 font-medium border-t border-purple-300 pb-4"></div>
                 <div className='flex align-bottom gap-6 pb-4'>
-                    <Autocomplete
-                        disablePortal
-                        disableClearable={true}
-                        id="empresas"
-                        value={empresa}
-                        options={empresas}
-                        onChange={(event, newValue) => {setEmpresa(newValue)}}
-                        sx={{ width: 300}}
-                        renderInput={(params) => <TextField {...params} label="Empresa" variant="standard"/>}
-                    />
-                    <Autocomplete
-                        multiple
-                        disableClearable={true}
-                        id="graficos"
-                        value={graficos}
-                        onChange={(event, newValue) => {
-                            setGraficos([
-                            ...fixedOptions,
-                            ...newValue.filter((option) => !fixedOptions.includes(option)),
-                            ]);
-                        }}
-                        options={graficos}
-                        getOptionLabel={(option) => option.title}
-                        renderTags={(tagValue, getTagProps) =>
-                            tagValue.map((option, index) => {
-                            const { key, ...tagProps } = getTagProps({ index });
-                            return (
-                                <Chip
-                                    key={key}
-                                    label={option.title}
-                                    {...tagProps}
-                                    disabled={fixedOptions.includes(option)}
-                                />
-                            );
-                            })
-                        }
-                        style={{ width: 500 }}
-                        renderInput={(params) => (
-                            <TextField {...params} label="Gráficos autorizados" placeholder="Gráfico" variant="standard"/>
-                        )}
-                    />
-                    <button className="bg-[#68488a] hover:bg-[#424685] transition-all text-white font-bold py-2 px-10 rounded h-10"> Guardar </button>
+                  <Grid container spacing={4}>
+                    <Grid item xl={5} xs={12}>
+                        <Autocomplete
+                            disablePortal
+                            disableClearable={true}
+                            id="empresas"
+                            value={empresa}
+                            options={empresas}
+                            onChange={(event, newValue) => {setEmpresa(newValue)}}
+                            sx={{ width: "100%"}}
+                            renderInput={(params) => <TextField {...params} label="Empresa" variant="standard"/>}
+                        />
+                    </Grid>
+                    <Grid item xl={5} xs={12}>
+                        <Autocomplete
+                            multiple
+                            disableClearable={true}
+                            id="graficos"
+                            value={graficos}
+                            onChange={(event, newValue) => {
+                                setGraficos([
+                                ...fixedOptions,
+                                ...newValue.filter((option) => !fixedOptions.includes(option)),
+                                ]);
+                            }}
+                            options={graficos}
+                            getOptionLabel={(option) => option.title}
+                            renderTags={(tagValue, getTagProps) =>
+                                tagValue.map((option, index) => {
+                                const { key, ...tagProps } = getTagProps({ index });
+                                return (
+                                    <Chip
+                                        key={key}
+                                        label={option.title}
+                                        {...tagProps}
+                                        disabled={fixedOptions.includes(option)}
+                                    />
+                                );
+                                })
+                            }
+                            sx={{ width: "100%"}}
+                            renderInput={(params) => (
+                                <TextField {...params} label="Gráficos autorizados" placeholder="Gráfico" variant="standard"/>
+                            )}
+                        />
+                    </Grid>
+                    <Grid item xl={2} xs={12}>
+                        <button className="bg-[#68488a] hover:bg-[#424685] transition-all text-white font-bold py-2 px-10 rounded h-10"> Guardar </button>
+                    </Grid>
+                  </Grid>
                 </div>
               </> : null
             }
             <h2 className="text-2xl font-light pb-2 pt-4">Visualización del Dashboard </h2>
             <div className="pt-4 mt-4 space-y-2 font-medium border-t border-purple-300 pb-6"></div>            
             <Grid container spacing={4}>
-              <Grid item xs={6} className='sticky !-top-3 bg-white z-10 opacity-85 !pt-2'>
+              <Grid item xl={6} xs={12} className='sticky !-top-3 bg-white z-10 opacity-85 !pt-2'>
                     <Autocomplete
                         disablePortal
                         disableClearable={true}
@@ -172,7 +181,7 @@ export default function DashBoard({data, mes, user, empresas, graficos, setGrafi
                         renderInput={(params) => <TextField {...params} label="Año a visualizar" variant="standard"/>}
                     />
                 </Grid>  
-                <Grid item xs={6}> 
+                <Grid item xl={6} xs={12}> 
                 </Grid>                
                 <Grid item xs={12} xl={4}>                    
                     <UtilidadMes anio={[anioSelected[0].year]} mes={mes} data={sumaNivelesFitrado}/>
