@@ -7,12 +7,12 @@ import Contact from "./pages/contact.jsx";
 import Enterprise from "./maintainers/enterprise.jsx";
 import User from "./maintainers/user.jsx";
 
-export default function Main ({data, mes, user, menu, empresas, graficos, setGraficos}) {
+export default function Main ({data, mes, user, menu, empresas, graficos, setGraficos, empresa, setEmpresa}) {
   return (
     <section className="main bg-white w-full px-10 pt-4 pb-20 relative">
       {
         menu.Dashboard &&
-          <DashBoard data={data} mes={mes} user={user} empresas={empresas} graficos={graficos} setGraficos={setGraficos}/>
+          <DashBoard data={data} mes={mes} user={user} empresas={empresas} graficos={graficos} setGraficos={setGraficos} empresa={empresa} setEmpresa={setEmpresa}/>
       }{
         menu.Download &&
           <Download data={data} mes={mes} user={user}/>

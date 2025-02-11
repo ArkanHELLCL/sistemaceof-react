@@ -15,20 +15,20 @@ function FloatingBarChart({ chartData, title }) {
                         callbacks: {
                             label: function(TooltipItem) {
                                 if(TooltipItem.dataIndex === 0)
-                                    return `${TooltipItem.label}: ${TooltipItem.dataset.data[TooltipItem.dataIndex][1].toLocaleString?.('en-ES', {
+                                    return `${TooltipItem.label}: ${(TooltipItem.dataset.data[TooltipItem.dataIndex][1] || 0 ).toLocaleString?.('en-ES', {
                                         style: 'currency',
                                         currency: 'USD',
                                         minimumFractionDigits: 0,
                                         maximumFractionDigits: 0,
                                       }).replaceAll(',', '.')}`;
                                 if(TooltipItem.dataIndex === TooltipItem.dataset.data.length-1)
-                                    return `${TooltipItem.label}: ${TooltipItem.dataset.data[TooltipItem.dataIndex].toLocaleString?.('en-ES', {
+                                    return `${TooltipItem.label}: ${(TooltipItem.dataset.data[TooltipItem.dataIndex] || 0).toLocaleString?.('en-ES', {
                                         style: 'currency',
                                         currency: 'USD',
                                         minimumFractionDigits: 0,
                                         maximumFractionDigits: 0,
                                       }).replaceAll(',', '.')}`;
-                                return `${TooltipItem.label}: ${(TooltipItem.dataset.data[TooltipItem.dataIndex][0]-TooltipItem.dataset.data[TooltipItem.dataIndex][1]).toLocaleString?.('en-ES', {
+                                return `${TooltipItem.label}: ${((TooltipItem.dataset.data[TooltipItem.dataIndex][0] || 0 )-(TooltipItem.dataset.data[TooltipItem.dataIndex][1] || 0)).toLocaleString?.('en-ES', {
                                     style: 'currency',
                                     currency: 'USD',
                                     minimumFractionDigits: 0,

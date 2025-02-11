@@ -61,7 +61,7 @@ export default function UtilidadMes({data, anio, mes}){
             col.push({"cuenta" : "Costos de Explotación","valor" : result});
             
 
-            valor = parseInt(data[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0])
+            valor = parseInt(data[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0] || 0)
             if(valor !== 0){
                 valor = valorAnt + valor;
                 result = [valor, valorAnt]
@@ -71,8 +71,8 @@ export default function UtilidadMes({data, anio, mes}){
             }
             col.push({"cuenta" : "Remuneraciones","valor" : result});
 
-            valor = parseInt(data[0]["nivel1"]['1.3. GASTOS DE ADMINISTRACION Y VENTAS']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0]) 
-            let valor2 = parseInt(data[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0])
+            valor = parseInt(data[0]["nivel1"]['1.3. GASTOS DE ADMINISTRACION Y VENTAS']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0] || 0) 
+            let valor2 = parseInt(data[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0] || 0)
             valor = valor ? valor : 0;
             valor2 = valor2 ? valor2 : 0;
             valor = valor - valor2;
@@ -85,7 +85,7 @@ export default function UtilidadMes({data, anio, mes}){
             }
             col.push({"cuenta" : "Gastos Operacionales","valor" : result});
 
-            valor =  parseInt(data[0]["nivel1"]['2.1. INGRESOS NO OPERACIONALES']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0])
+            valor =  parseInt(data[0]["nivel1"]['2.1. INGRESOS NO OPERACIONALES']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0] || 0)
             if(valor !== 0){
                 valor = valorAnt + valor;
                 result = [valor, valorAnt]
@@ -95,8 +95,8 @@ export default function UtilidadMes({data, anio, mes}){
             }
             col.push({"cuenta" : "Ingresos No Oper.","valor" : result});
 
-            valor = parseInt(data[0]["nivel1"]['2.2. GASTOS NO OPERACIONALES']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0]) 
-            valor2 = parseInt(data[0]["nivel1"]['2.1. INGRESOS NO OPERACIONALES']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0])
+            valor = parseInt(data[0]["nivel1"]['2.2. GASTOS NO OPERACIONALES']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0] || 0) 
+            valor2 = parseInt(data[0]["nivel1"]['2.1. INGRESOS NO OPERACIONALES']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0] || 0)
             valor = valor ? valor : 0;
             valor2 = valor2 ? valor2 : 0;
             valor = valor + valor2;
@@ -109,7 +109,7 @@ export default function UtilidadMes({data, anio, mes}){
             }
             col.push({"cuenta" : "Costos No Oper.","valor" : result});  
                   
-            col.push({"cuenta" : "Utilidad", "valor" : col.slice(1).reduce((acc, item) => acc + (parseInt(item.valor[0] - item.valor[1])), 0) + col[0].valor[1]});
+            col.push({"cuenta" : "Utilidad", "valor" : col.slice(1).reduce((acc, item) => acc + (parseInt(item.valor[0] - item.valor[1])), 0) + col[0].valor[1]} || 0);
 
             setGrpconfig({
                 labels: col?.map(item => item.cuenta),
@@ -137,7 +137,8 @@ export default function UtilidadMes({data, anio, mes}){
                         'rgb(201, 203, 207)',
                         'rgb(233, 180, 257)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 1,
+                    minBarLength: 5
                 }
                 ]
             })
@@ -162,7 +163,7 @@ export default function UtilidadMes({data, anio, mes}){
             }
             col.push({"cuenta" : "Costos de Explotación","valor" : result});            
 
-            valor = parseInt(data[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0])
+            valor = parseInt(data[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0] || 0)
             if(valor !== 0){
                 valor = valorAnt + valor;
                 result = [valor, valorAnt]
@@ -172,8 +173,8 @@ export default function UtilidadMes({data, anio, mes}){
             }
             col.push({"cuenta" : "Remuneraciones","valor" : result});
 
-            valor = parseInt(data[0]["nivel1"]['1.3. GASTOS DE ADMINISTRACION Y VENTAS']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0]) 
-            let valor2 = parseInt(data[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0])
+            valor = parseInt(data[0]["nivel1"]['1.3. GASTOS DE ADMINISTRACION Y VENTAS']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0] || 0) 
+            let valor2 = parseInt(data[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0] || 0)
             valor = valor ? valor : 0;
             valor2 = valor2 ? valor2 : 0;
             valor = valor - valor2;
@@ -186,7 +187,7 @@ export default function UtilidadMes({data, anio, mes}){
             }
             col.push({"cuenta" : "Gastos Operacionales","valor" : result});
 
-            valor =  parseInt(data[0]["nivel1"]['2.1. INGRESOS NO OPERACIONALES']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0])
+            valor =  parseInt(data[0]["nivel1"]['2.1. INGRESOS NO OPERACIONALES']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0] || 0)
             if(valor !== 0){
                 valor = valorAnt + valor;
                 result = [valor, valorAnt]
@@ -196,8 +197,8 @@ export default function UtilidadMes({data, anio, mes}){
             }
             col.push({"cuenta" : "Ingresos No Oper.","valor" : result});
 
-            valor = parseInt(data[0]["nivel1"]['2.2. GASTOS NO OPERACIONALES']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0]) 
-            valor2 = parseInt(data[0]["nivel1"]['2.1. INGRESOS NO OPERACIONALES']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0])
+            valor = parseInt(data[0]["nivel1"]['2.2. GASTOS NO OPERACIONALES']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0] || 0) 
+            valor2 = parseInt(data[0]["nivel1"]['2.1. INGRESOS NO OPERACIONALES']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0] || 0)
             valor = valor ? valor : 0;
             valor2 = valor2 ? valor2 : 0;
             valor = valor + valor2;
@@ -210,7 +211,7 @@ export default function UtilidadMes({data, anio, mes}){
             }
             col.push({"cuenta" : "Costos No Oper.","valor" : result});  
 
-            col.push({"cuenta" : "Utilidad", "valor" : col.slice(1).reduce((acc, item) => acc + (parseInt(item.valor[0] - item.valor[1])), 0) + col[0].valor[1]});
+            col.push({"cuenta" : "Utilidad", "valor" : col.slice(1).reduce((acc, item) => acc + (parseInt(item.valor[0] - item.valor[1])), 0) + col[0].valor[1]} || 0);
 
             setGrpconfig({
                 labels: col?.map(item => item.cuenta),

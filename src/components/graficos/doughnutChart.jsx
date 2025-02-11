@@ -11,18 +11,18 @@ function DoughnutChart({ chartData, title }) {
                         display: false,
                         text: title,
                     },
-                    /*tooltip: {
+                    tooltip: {
                         callbacks: {
-                            label: function(tooltipItem) {
-                                const dataset = tooltipItem.dataset;
+                            label: function(context) {
+                               const dataset = context.dataset;
                                 const total = dataset.data.reduce((previousValue, currentValue) => previousValue + currentValue, 0);
                                 console.log(total);
-                                const currentValue = dataset.data[tooltipItem.dataIndex];
+                                const currentValue = dataset.data[context.dataIndex];
                                 const percentage = Math.floor(((currentValue / total) * 100) + 0.5);         
-                                return `${tooltipItem.label}: ${percentage}%`;
+                                return `${context.label}: ${percentage}%`;                              
                             }
                         }
-                      }*/
+                      }
                 },
                 responsive: true,                
                 maintainAspectRatio: false

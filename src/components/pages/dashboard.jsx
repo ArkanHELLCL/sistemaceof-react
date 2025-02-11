@@ -76,9 +76,7 @@ const processData = (data) => {
     return result;
 };
 
-export default function DashBoard({data, mes, user, empresas, graficos, setGraficos}){
-    
-    const [empresa, setEmpresa] = useState('');
+export default function DashBoard({data, mes, user, empresas, graficos, setGraficos, empresa, setEmpresa}){
     const fixedOptions = [];
     //const [value, setValue] = useState([graficos[0], graficos[1],graficos[2], graficos[3],graficos[4], graficos[5],graficos[6], graficos[7]]);
     const [datosFiltrados, setDatosFiltrados] = useState([]);
@@ -115,6 +113,7 @@ export default function DashBoard({data, mes, user, empresas, graficos, setGrafi
                         id="empresas"
                         value={empresa}
                         options={empresas}
+                        onChange={(event, newValue) => {setEmpresa(newValue)}}
                         sx={{ width: 300}}
                         renderInput={(params) => <TextField {...params} label="Empresa" variant="standard"/>}
                     />
@@ -179,7 +178,7 @@ export default function DashBoard({data, mes, user, empresas, graficos, setGrafi
                     <UtilidadMes anio={[anioSelected[0].year]} mes={mes} data={sumaNivelesFitrado}/>
                 </Grid>
                 <Grid item xs={12} xl={8}>
-                    <VentasAnual anio={[anios[anios.length - 1].year]} data={sumaNiveles} anios={anios}/>
+                    <VentasAnual data={sumaNiveles} anios={anios}/>
                 </Grid>
                 <Grid item xs={12} xl={8}>
                     <UtilidadMesAnual anio={[anioSelected[0].year]} data={sumaNivelesFitrado}/>

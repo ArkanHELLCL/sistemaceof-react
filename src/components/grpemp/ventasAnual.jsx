@@ -29,16 +29,19 @@ const bdcolor = [
     'rgb(233, 180, 257)'
 ]
 
-export default function VentasAnual({anio, data, anios}){
+export default function VentasAnual({data, anios}){
     const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico
     const fixedOptions = [];
-    const selectedAnios = anios?.filter(item => anio?.includes(item.year)).sort((a, b) => a.year - b.year)
-    const [aniosSelected, setAniosSelected] = useState(selectedAnios);
+    //const anio = anios[anios.length-1];
+    //const anio=[anios[anios.length - 1].year]
+    //const selectedAnios = anios?.filter(item => anio?.includes(item.year)).sort((a, b) => a.year - b.year)
+    console.log(anios);
+    const [aniosSelected, setAniosSelected] = useState([anios[anios.length-1]]);
     const [title, setTitle] = useState('Gráfico de Ventas');
     const [multipleLine, setMultipleLine] = useState(false);
 
     useEffect(() => {
-        const yearArray = aniosSelected.map(item => item.year);
+        const yearArray = aniosSelected?.map(item => item.year);
         let labels = [];
         let dataset = [];
         const filteredArray = data?.filter(item => 
@@ -95,9 +98,9 @@ export default function VentasAnual({anio, data, anios}){
             })
         }
 
-    }, [aniosSelected]);
+    }, [data, aniosSelected]);
 
-    useEffect(() => {
+    /*useEffect(() => {
         if(data.length>0 && anio.length === 1){            
             const filteredArray = data?.filter(item => item.year === anio[0])[0]["nivel2"]['1.1.1. VENTAS NACIONALES'].months?.slice(0,12);
             const result = filteredArray.slice(0,12).map((item,idx) => {
@@ -127,19 +130,19 @@ export default function VentasAnual({anio, data, anios}){
                 ]
             })
         }
-    }, [data, anio]);
+    }, [data, anio]);*/
 
     useEffect(() => {
-        if(aniosSelected.length === 1){
-            setTitle('Gráfico de Ventas Mensuales año ' + aniosSelected[0].label );
+        if(aniosSelected?.length === 1){
+            setTitle('Gráfico de Ventas Mensuales año ' + aniosSelected[0]?.label );
         }
-        else if(aniosSelected.length > 1){  
-            setTitle('Gráfico de Ventas Mensuales años ' + aniosSelected.map(item => item.label).join(', '));
+        else if(aniosSelected?.length > 1){  
+            setTitle('Gráfico de Ventas Mensuales años ' + aniosSelected?.map(item => item.label).join(', '));
         }
         else{
            setTitle('Gráfico de Ventas');
         }
-    }, [aniosSelected,anio]);
+    }, [aniosSelected]);
 
     return grpconfig ? 
         <>

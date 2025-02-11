@@ -21,20 +21,21 @@ function App() {
   const [menu, setMenu] = useState({"Dashboard" : true});
   const [empresas, setEmpresas] = useState([]);
   const [graficos, setGraficos] = useState([]);
+  const [empresa, setEmpresa] = useState('');
 
   useEffect(() => {
     fetch('https://ceofconsultores.com/system/home/getUsuario.php')
       .then(response => response.json())
-      .then(user => {        
-        const { data } = user;
-        //setUser(data[0])
+      .then(usr => {        
+        const { data } = usr;
+        setUser(data[0])
       })
       .finally(() => {
         //console.log('finally');
       })
       .catch(error => console.error(error));
 
-      setUser(User.data[0]);
+      //setUser(User.data[0]);
   }, []);  
 
 
@@ -42,47 +43,48 @@ function App() {
     if(user?.PER_Id === 1){
       fetch('https://ceofconsultores.com/system/home/getEmpresas.php')
       .then(response => response.json())
-      .then(user => {        
-        const { data } = user;
-        //setUser(data[0])
+      .then(emps => {        
+        setEmpresas(emps)
       })
       .finally(() => {
         //console.log('finally');
       })
       .catch(error => console.error(error));
-      setEmpresas(emps);
+      //setEmpresas(emps);
 
       fetch('https://ceofconsultores.com/system/home/getGraficos.php')
       .then(response => response.json())
-      .then(user => {        
-        const { data } = user;
-        //setUser(data[0])
+      .then(grp => {        
+        setGraficos(grp.graficos)
       })
       .finally(() => {
         //console.log('finally');
       })
       .catch(error => console.error(error));
-      setGraficos(grps);
+      //setGraficos(grps);
     }
   },[user])
 
 
   useEffect(() => {
-    //Papa.parse('https://ceofconsultores.com/system/home/uploads/76201608/data/base.csv', { 
-    Papa.parse('https://ceofconsultores.com/system/home/data.php', { 
+    Papa.parse('https://ceofconsultores.com/system/home/download.php?file_id=2', { 
       worker: true, 
       download: true,
-      downloadRequestBody: 'id=1',
+      //downloadRequestBody: 'id=1',
       complete: function(results) {
-        //setData(results);
+        setData(results);
+        const idxMes = results.data[0].indexOf('N_MES');
+        const meses = results.data.slice(1).map(row => row[idxMes]);
+
+        setMesFinal(parseInt(meses[meses.length - 1]));
       },
     });
-    setData(Cubo);
+    /*setData(Cubo);
     const idxMes = Cubo.data[0].indexOf('N_MES');
     const meses = Cubo.data.slice(1).map(row => row[idxMes]);
 
-    setMesFinal(parseInt(meses[meses.length - 1]));
-  }, [Cubo]);
+    setMesFinal(parseInt(meses[meses.length - 1]));*/
+  }, [empresa]);
 
 
 useEffect(() => {
@@ -167,7 +169,7 @@ useEffect(() => {
         <Header title={title} user={user} menu={menu}/>
         <Sidebar setTitle={setTitle} user={user} setMenu={setMenu}/>
         <Footer user={user}/>
-        <Main data={dataFormatted} mes={[mesfinal]} user={user} menu={menu} empresas={empresas} graficos={graficos} setGraficos={setGraficos}/>
+        <Main data={dataFormatted} mes={[mesfinal]} user={user} menu={menu} empresas={empresas} graficos={graficos} setGraficos={setGraficos} empresa={empresa} setEmpresa={setEmpresa}/>
       </main>        
   );
 }
