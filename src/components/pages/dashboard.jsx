@@ -79,23 +79,20 @@ const processData = (data) => {
 
 export default function DashBoard({data, mes, user, empresas, graficos, setGraficos, empresa, setEmpresa}){
     const fixedOptions = [];
-    //const [value, setValue] = useState([graficos[0], graficos[1],graficos[2], graficos[3],graficos[4], graficos[5],graficos[6], graficos[7]]);
     const [datosFiltrados, setDatosFiltrados] = useState([]);
     const [sumaNiveles, setSumaNiveles] = useState([]);
     const [sumaNivelesFitrado, setSumaNivelesFiltrado] = useState([]);
-    const Anios = data.data.map(item => (
+    const Anios = data?.data?.map(item => (
         { label: `${item.anio}`, year: item.anio }
     ))
     const [anios, setAnios] = useState(Anios); 
-    const [anioSelected, setAnioSelected] = useState([anios[anios.length - 1]]);
+    const [anioSelected, setAnioSelected] = useState([anios[anios?.length - 1]]);
     useEffect(() => {
-        
-        setEmpresa(empresas[0]?.label);
-        const DatosFiltrados = data.data?.filter(item => item.anio === anioSelected[0].year)[0].data; 
-        const result = processData(data.data);
+        const DatosFiltrados = data?.data?.filter(item => item.anio === anioSelected[0].year)[0]?.data || []; 
+        const result = processData(data?.data) || [];
         setDatosFiltrados(DatosFiltrados);
         setSumaNiveles(result);
-        const resultFiltrado = result.filter(item => item.year === anioSelected[0].year);
+        const resultFiltrado = result.filter(item => item.year === anioSelected[0].year) || [];
         setSumaNivelesFiltrado(resultFiltrado);
     }, [data, anios, anioSelected, empresas]);
     
@@ -126,14 +123,14 @@ export default function DashBoard({data, mes, user, empresas, graficos, setGrafi
                             multiple
                             disableClearable={true}
                             id="graficos"
-                            value={graficos}
+                            value={graficos || []}
                             onChange={(event, newValue) => {
                                 setGraficos([
                                 ...fixedOptions,
                                 ...newValue.filter((option) => !fixedOptions.includes(option)),
                                 ]);
                             }}
-                            options={graficos}
+                            options={graficos || []}
                             getOptionLabel={(option) => option.title}
                             renderTags={(tagValue, getTagProps) =>
                                 tagValue.map((option, index) => {

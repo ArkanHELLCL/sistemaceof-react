@@ -6,15 +6,11 @@ import Sidebar from './components/sidebar.jsx'
 import Footer from './components/footer.jsx'
 import Main from './components/main.jsx';
 import Papa from 'papaparse';
-import User from '../mock/usuario.json';
-import Cubo from '../mock/data.json';
-import { empresas as emps } from '../mock/empresas.json';
-import { graficos as grps } from '../mock/graficos.json';
 
 function App() {
   const [title, setTitle] = useState('Dashboard');
   const [user, setUser] = useState();
-  const [data, setData] = useState();
+  const [data, setData] = useState({});
   const [dataFormatted, setDataFormatted] = useState();
   const [headers, setHeaders] = useState([]);
   const [mesfinal, setMesFinal] = useState();
@@ -23,70 +19,98 @@ function App() {
   const [graficos, setGraficos] = useState([]);
   const [empresa, setEmpresa] = useState('');
 
+  const VITE_API_GETEMPRESAS_URL = import.meta.env.VITE_API_GETEMPRESAS_URL;
+  const VITE_API_GETUSUARIO_URL = import.meta.env.VITE_API_GETUSUARIO_URL;
+  const VITE_API_GETGRAFICOS_URL = import.meta.env.VITE_API_GETGRAFICOS_URL;
+  const VITE_API_GETBASECSV_URL = import.meta.env.VITE_API_GETBASECSV_URL;
+  const VITE_CSVCONVERT_DOWNLOAD = import.meta.env.VITE_CSVCONVERT_DOWNLOAD;
+
+  const getEmpresas = () => {
+    fetch(`${VITE_API_GETEMPRESAS_URL}`)
+    .then(response => response.json())
+    .then(emps => {
+      setEmpresas(emps.data)
+      setEmpresa(emps.data[0])
+      getGraficos(emps.data[0]);
+      getBasecsv(emps.data[0]);
+    })
+    .finally(() => {
+    })
+    //.catch(error => window.location.href = 'https://ceofconsultores.com/system/');
+  }
+
+  const getGraficos = (empresa) => {
+    if(empresa?.id===undefined) return;
+    fetch(`${VITE_API_GETGRAFICOS_URL}?emp_id=${empresa?.id}`)
+    .then(response => response.json())
+    .then(grp => {        
+      setGraficos(grp.data)
+    })
+    .finally(() => {
+    })
+    //.catch(error => window.location.href = 'https://ceofconsultores.com/system/');
+  }
+
+  const getBasecsv = (empresa) => {
+    if(empresa?.id===undefined) return;
+    Papa.parse(`${VITE_API_GETBASECSV_URL}?file_id=${empresa?.id}`, { 
+      worker: true, 
+      download: VITE_CSVCONVERT_DOWNLOAD,
+      skipEmptyLines: true,
+      complete: function(results) {
+        setData(results || {});
+        let meses = [];
+        if(results.data === undefined) return
+        const idxMes = results.data[0]?.indexOf('N_MES') || null;
+        if(idxMes===null) return;
+        meses = results.data?.slice(1).map(row => row[idxMes]) || [];
+        setMesFinal(parseInt(meses[meses.length - 1]));
+
+        console.log("results",results,"meses",meses,"ultimo",parseInt(meses[meses.length - 1]),"index mes",idxMes);
+      },
+      error: function(err, file, inputElem, reason)
+      {        
+        //window.location.href = 'https://ceofconsultores.com/system/'
+      },
+    });    
+  }
+  
+  //usuario
   useEffect(() => {
-    fetch('https://ceofconsultores.com/system/home/getUsuario.php')
+    fetch(`${VITE_API_GETUSUARIO_URL}`)
       .then(response => response.json())
       .then(usr => {        
-        const { data } = usr;
-        setUser(data[0])
+        setUser(usr.data[0])
       })
       .finally(() => {
       })
-      .catch(error => console.error(error));
-
-      //setUser(User.data[0]);
+      //.catch(error => console.error(error));
   }, []);  
 
 
-  useEffect(() => {
+  useEffect(() => {    
     if(user?.PER_Id === 1){
-      fetch('https://ceofconsultores.com/system/home/getEmpresas.php')
-      .then(response => response.json())
-      .then(emps => {     
-        setEmpresas(emps.data)
-      })
-      .finally(() => {
-      })
-      .catch(error => console.error(error));
-      //setEmpresas(emps);
-
-      fetch('https://ceofconsultores.com/system/home/getGraficos.php')
-      .then(response => response.json())
-      .then(grp => {        
-        setGraficos(grp.graficos)
-      })
-      .finally(() => {
-      })
-      .catch(error => console.error(error));
-      //setGraficos(grps);
+      getEmpresas();
     }
   },[user])
 
+  useEffect(() => {
+    if(empresa?.id!==undefined){
+      getGraficos(empresa);
+    }
+  },[empresa, user])
 
   useEffect(() => {
-    Papa.parse('https://ceofconsultores.com/system/home/download.php?file_id=2', { 
-      worker: true, 
-      download: true,
-      //downloadRequestBody: 'id=1',
-      complete: function(results) {
-        setData(results);
-        const idxMes = results.data[0].indexOf('N_MES');
-        const meses = results.data.slice(1).map(row => row[idxMes]);
-
-        setMesFinal(parseInt(meses[meses.length - 1]));
-      },
-    });
-    /*setData(Cubo);
-    const idxMes = Cubo.data[0].indexOf('N_MES');
-    const meses = Cubo.data.slice(1).map(row => row[idxMes]);
-
-    setMesFinal(parseInt(meses[meses.length - 1]));*/
-  }, [empresa]);
+    if(empresa?.id!==undefined){
+      getBasecsv(empresa);
+    }
+  }, [empresa,user]);
 
 
 useEffect(() => {
-  const Headers = data?.data[0];
-  const rows = data?.data.slice(1);
+  if(data?.data ===  undefined) return;
+  const Headers = data?.data[0] || [];
+  const rows = data?.data?.slice(1) || [];
   setHeaders(Headers);
 
   const formattedData = rows?.map(row => {
@@ -104,7 +128,7 @@ useEffect(() => {
       const nivel2 = item["NIVEL 2"];
       const cuenta = item["CUENTA"];
       const mes = item["N_MES"];
-      const monto = parseFloat(item["REAL " + anio].replaceAll('.', '').replaceAll(',', '.'));
+      const monto = parseFloat(item["REAL " + anio]?.replaceAll('.', '').replaceAll(',', '.'));
   
       // Crear la estructura si no existe
       if (!acc[anio]) acc[anio] = {data:{}};
@@ -161,7 +185,7 @@ useEffect(() => {
 }, [data]);
 
   return (
-    dataFormatted && headers && mesfinal && //empresas && graficos &&//user && user.USR_Id &&
+    user && empresas && dataFormatted && //graficos && headers && mesfinal &&  user &&
       <main className="dashtemplate">
         <Header title={title} user={user} menu={menu}/>
         <Sidebar setTitle={setTitle} user={user} setMenu={setMenu}/>

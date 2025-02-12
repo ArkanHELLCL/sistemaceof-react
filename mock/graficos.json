@@ -1,5 +1,5 @@
 {
-    "graficos": [
+    "data": [
         { "title": "Panel Financiero", "year": 2024, "id": 1},
         { "title": "Cubo", "year": 2024, "id": 2 },
         { "title": "Ventas", "year": 2024, "id": 3 },
