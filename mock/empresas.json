@@ -4,72 +4,12 @@
         {
             "id": 1,
             "label": "Empresa 1",
-            "direccion": "Calle 1",
-            "telefono": "123456789",
-            "email": ""
+            "tipografico": 1
         },
         {
             "id": 2,
             "label": "Empresa 2",
-            "direccion": "Calle 2",
-            "telefono": "987654321",
-            "email": ""
-        },
-        {
-            "id": 3,
-            "label": "Empresa 3",
-            "direccion": "Calle 3",
-            "telefono": "123456789",
-            "email": ""
-        },
-        {
-            "id": 4,
-            "label": "Empresa 4",
-            "direccion": "Calle 4",
-            "telefono": "987654321",
-            "email": ""
-        },
-        {
-            "id": 5,
-            "label": "Empresa 5",
-            "direccion": "Calle 5",
-            "telefono": "123456789",
-            "email": ""
-        },
-        {
-            "id": 6,
-            "label": "Empresa 6",
-            "direccion": "Calle 6",
-            "telefono": "987654321",
-            "email": ""
-        },
-        {
-            "id": 7,
-            "label": "Empresa 7",
-            "direccion": "Calle 7",
-            "telefono": "123456789",
-            "email": ""
-        },
-        {
-            "id": 8,
-            "label": "Empresa 8",
-            "direccion": "Calle 8",
-            "telefono": "987654321",
-            "email": ""
-        },
-        {
-            "id": 9,
-            "label": "Empresa 9",
-            "direccion": "Calle 9",
-            "telefono": "123456789",
-            "email": ""
-        },
-        {
-            "id": 10,
-            "label": "Empresa 10",
-            "direccion": "Calle 10",
-            "telefono": "987654321",
-            "email": ""
+            "tipografico": 2
         }
     ]
 }

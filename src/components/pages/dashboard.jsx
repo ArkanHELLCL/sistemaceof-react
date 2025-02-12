@@ -13,6 +13,7 @@ import RemuneracionesAnual from '../grpemp/remuneracionesAnual.jsx';
 import GoaAnual from '../grpemp/goaAnual.jsx';
 import PanelFinancieroAnual from '../grpemp/panelfinancieroAnual.jsx';
 import CuboAnual from '../grpemp/cuboAnual.jsx';
+import UtilidadMes2 from '../grpemp/utilidadMes2.jsx';
 
 const processData = (data) => {
     const result = [];
@@ -149,31 +150,42 @@ export default function DashBoard({data, mes, user, empresas, graficos, setGrafi
                     />
                 </Grid>  
                 <Grid item xl={6} xs={12}> 
-                </Grid>                
-                <Grid item xs={12} xl={12}>                    
-                    <UtilidadMes anio={[anioSelected[0]?.year]} mes={mes} data={sumaNivelesFitrado}/>
-                </Grid>
-                <Grid item xs={12} xl={12}>
-                    <VentasAnual data={sumaNiveles} anios={anios}/>
-                </Grid>
-                <Grid item xs={12} xl={8}>
-                    <UtilidadMesAnual anio={[anioSelected[0]?.year]} data={sumaNivelesFitrado}/>
-                </Grid>
-                <Grid item xs={12} xl={4}>                    
-                    <UtilidadYTD anio={[anioSelected[0]?.year]} mes={mes} data={sumaNivelesFitrado}/>
-                </Grid>
-                <Grid item xs={12} xl={12}>                    
-                    <RemuneracionesAnual anio={[anioSelected[0]?.year]} data={sumaNivelesFitrado}/>
-                </Grid>
-                <Grid item xs={12} xl={12}>                    
-                    <GoaAnual anio={[anioSelected[0]?.year]} data={sumaNivelesFitrado}/>
-                </Grid>
-                <Grid item xs={12} xl={12}>                    
-                    <PanelFinancieroAnual anio={[anioSelected[0]?.year]} mes={mes} data={sumaNiveles}/>
-                </Grid>
-                <Grid item lg={12} xs={12}>
-                    <CuboAnual anio={[anioSelected[0]?.year]} data={datosFiltrados} sumaNiveles={sumaNivelesFitrado}/>
-                </Grid>
+                </Grid>{
+                  ((user?.PER_Id === 1 && empresa?.tipografico === 1) || (user?.PER_Id > 1 && user?.EMP_TipoGrafico === 1))  &&
+                    <>
+                      <Grid item xs={12} xl={12}>                    
+                          <UtilidadMes anio={[anioSelected[0]?.year]} mes={mes} data={sumaNivelesFitrado}/>
+                      </Grid>
+                      <Grid item xs={12} xl={12}>
+                          <VentasAnual data={sumaNiveles} anios={anios}/>
+                      </Grid>
+                      <Grid item xs={12} xl={8}>
+                          <UtilidadMesAnual anio={[anioSelected[0]?.year]} data={sumaNivelesFitrado}/>
+                      </Grid>
+                      <Grid item xs={12} xl={4}>                    
+                          <UtilidadYTD anio={[anioSelected[0]?.year]} mes={mes} data={sumaNivelesFitrado}/>
+                      </Grid>
+                      <Grid item xs={12} xl={12}>                    
+                          <RemuneracionesAnual anio={[anioSelected[0]?.year]} data={sumaNivelesFitrado}/>
+                      </Grid>
+                      <Grid item xs={12} xl={12}>                    
+                          <GoaAnual anio={[anioSelected[0]?.year]} data={sumaNivelesFitrado}/>
+                      </Grid>
+                      <Grid item xs={12} xl={12}>                    
+                          <PanelFinancieroAnual anio={[anioSelected[0]?.year]} mes={mes} data={sumaNiveles}/>
+                      </Grid>
+                      <Grid item lg={12} xs={12}>
+                          <CuboAnual anio={[anioSelected[0]?.year]} data={datosFiltrados} sumaNiveles={sumaNivelesFitrado}/>
+                      </Grid>
+                    </>
+                  }{
+                    ((user?.PER_Id === 1 && empresa?.tipografico === 2) || (user?.PER_Id > 1 && user?.EMP_TipoGrafico === 2))  &&
+                      <>
+                        <Grid item xs={12} xl={12}>                    
+                            <UtilidadMes2 anio={[anioSelected[0]?.year]} mes={mes} data={sumaNivelesFitrado}/>
+                        </Grid>
+                      </>
+                    }
             </Grid>                    
           </>
     );
