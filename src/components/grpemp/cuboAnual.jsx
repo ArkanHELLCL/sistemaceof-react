@@ -12,7 +12,7 @@ export default function CuboAnual({anio, data, sumaNiveles}){
     const dataCubo = useMemo(() => {
       const dataC =  data.map((item,idx) => ({
         id: idx,
-        'cuenta': item['Resultado'],
+        'cuenta': item['Resultado'] + ' ' + item['label'],
         'enero' : sumaNiveles[0]?.['resultado'][item['Resultado'].toUpperCase()]['months'][0].toLocaleString?.('en-ES', {
           style: 'currency',
           currency: 'USD',
@@ -92,7 +92,7 @@ export default function CuboAnual({anio, data, sumaNiveles}){
           maximumFractionDigits: 0,
         }).replaceAll(',', '.'),
         subRows: item.data.map((n1item) => ({
-          'cuenta': n1item['Nivel 1'],
+          'cuenta': n1item['Nivel 1'] + ' ' + n1item['label'],
           'enero': sumaNiveles[0]?.['nivel1'][n1item['Nivel 1'].toUpperCase()]['months'][0].toLocaleString?.('en-ES', {
             style: 'currency',
             currency: 'USD',
@@ -172,7 +172,7 @@ export default function CuboAnual({anio, data, sumaNiveles}){
             maximumFractionDigits: 0,
           }).replaceAll(',', '.'),          
           subRows: n1item.data.map((n2item) => ({
-            'cuenta': n2item['Nivel 2'],
+            'cuenta': n2item['Nivel 2'] + ' ' + n2item['label'],
             'enero': sumaNiveles[0]?.['nivel2'][n2item['Nivel 2'].toUpperCase()]['months'][0].toLocaleString?.('en-ES', {
               style: 'currency',
               currency: 'USD',
@@ -254,80 +254,80 @@ export default function CuboAnual({anio, data, sumaNiveles}){
             subRows: n2item.data.map((cuentaitem) => {
               const cuentaRow = {
                 'cuenta': cuentaitem['Cuenta'],
-                'enero': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-1')[0]?.value.toLocaleString?.('en-ES', {
+                'enero': (cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-1')[0]?.value || 0).toLocaleString?.('en-ES', {
                   style: 'currency',
                   currency: 'USD',
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 0,
                 }).replaceAll(',', '.'),
-                'febrero': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-2')[0]?.value.toLocaleString?.('en-ES', {
+                'febrero': (cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-2')[0]?.value || 0).toLocaleString?.('en-ES', {
                   style: 'currency',
                   currency: 'USD',
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 0,
                 }).replaceAll(',', '.'),
-                'marzo': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-3')[0]?.value.toLocaleString?.('en-ES', {
+                'marzo': (cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-3')[0]?.value || 0).toLocaleString?.('en-ES', {
                   style: 'currency',
                   currency: 'USD',
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 0,
                 }).replaceAll(',', '.'),
-                'abril': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-4')[0]?.value.toLocaleString?.('en-ES', {
+                'abril': (cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-4')[0]?.value || 0).toLocaleString?.('en-ES', {
                   style: 'currency',
                   currency: 'USD',
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 0,
                 }).replaceAll(',', '.'),
-                'mayo': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-5')[0]?.value.toLocaleString?.('en-ES', {
+                'mayo': (cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-5')[0]?.value || 0).toLocaleString?.('en-ES', {
                   style: 'currency',
                   currency: 'USD',
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 0,
                 }).replaceAll(',', '.'),
-                'junio': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-6')[0]?.value.toLocaleString?.('en-ES', {
+                'junio': (cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-6')[0]?.value || 0).toLocaleString?.('en-ES', {
                   style: 'currency',
                   currency: 'USD',
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 0,
                 }).replaceAll(',', '.'),
-                'julio': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-7')[0]?.value.toLocaleString?.('en-ES', {
+                'julio': (cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-7')[0]?.value || 0).toLocaleString?.('en-ES', {
                   style: 'currency',
                   currency: 'USD',
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 0,
                 }).replaceAll(',', '.'),
-                'agosto': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-8')[0]?.value.toLocaleString?.('en-ES', {
+                'agosto': (cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-8')[0]?.value || 0).toLocaleString?.('en-ES', {
                   style: 'currency',
                   currency: 'USD',
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 0,
                 }).replaceAll(',', '.'),
-                'septiembre': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-9')[0]?.value.toLocaleString?.('en-ES', {
+                'septiembre': (cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-9')[0]?.value || 0).toLocaleString?.('en-ES', {
                   style: 'currency',
                   currency: 'USD',
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 0,
                 }).replaceAll(',', '.'),
-                'octubre': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-10')[0]?.value.toLocaleString?.('en-ES', {
+                'octubre': (cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-10')[0]?.value || 0).toLocaleString?.('en-ES', {
                   style: 'currency',
                   currency: 'USD',
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 0,
                 }).replaceAll(',', '.'),
-                'noviembre': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-11')[0]?.value.toLocaleString?.('en-ES', {
+                'noviembre': (cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-11')[0]?.value || 0).toLocaleString?.('en-ES', {
                   style: 'currency',
                   currency: 'USD',
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 0,
                 }).replaceAll(',', '.'),
-                'diciembre': cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-12')[0]?.value.toLocaleString?.('en-ES', {
+                'diciembre': (cuentaitem.data.filter((mesitem) => mesitem.month === anio[0] + '-12')[0]?.value || 0).toLocaleString?.('en-ES', {
                   style: 'currency',
                   currency: 'USD',
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 0,
                 }).replaceAll(',', '.')
               }
-              cuentaRow['totalesanual'] = Object.values(cuentaRow).slice(1, 12).reduce((acc, val) => acc + parseInt(val.replaceAll("$","").replaceAll(".","")), 0).toLocaleString?.('en-ES', {
+              cuentaRow['totalesanual'] = Object.values(cuentaRow).slice(1, 12).reduce((acc, val) => acc + parseInt(val?.replaceAll("$","").replaceAll(".","")), 0).toLocaleString?.('en-ES', {
                 style: 'currency',
                 currency: 'USD',
                 minimumFractionDigits: 0,

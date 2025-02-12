@@ -11,31 +11,31 @@ export default function UtilidadYTD({data, anio}){
     useEffect(() => {
         if(data?.length>0 && anio.length === 1){
             const col=[];
-            let valor = parseInt(data[0]["nivel1"]['1.1. INGRESO DE EXPLOTACION']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
+            let valor = parseInt(data[0]["nivel1"]['1.1.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
             valor = valor ? valor : 0;
             col.push({"cuenta" : "Ingresos","valor" : valor ? valor : 0});
 
-            valor = parseInt(data[0]["nivel1"]['1.2. COSTOS DE EXPLOTACION']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
+            valor = parseInt(data[0]["nivel1"]['1.2.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
             valor = valor ? valor : 0;
             col.push({"cuenta" : "Costos de Explotación","valor" : valor ? valor : 0});
 
-            valor = parseInt(data[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
+            valor = parseInt(data[0]["nivel2"]['1.3.1.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
             valor = valor ? valor : 0;
             col.push({"cuenta" : "Remuneraciones","valor" : valor ? valor : 0});
 
-            valor = parseInt(data[0]["nivel1"]['1.3. GASTOS DE ADMINISTRACION Y VENTAS']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) 
-            let valor2 = parseInt(data[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
+            valor = parseInt(data[0]["nivel1"]['1.3.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) 
+            let valor2 = parseInt(data[0]["nivel2"]['1.3.1.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
             valor = valor ? valor : 0;
             valor2 = valor2 ? valor2 : 0;
             valor = valor - valor2;
             col.push({"cuenta" : "Gastos Operacionales","valor" : valor ? valor : 0});
 
-            valor =  parseInt(data[0]["nivel1"]['2.1. INGRESOS NO OPERACIONALES']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
+            valor =  parseInt(data[0]["nivel1"]['2.1.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
             valor = valor ? valor : 0;
             col.push({"cuenta" : "Ingresos No Oper.","valor" : valor ? valor : 0});
 
-            valor = parseInt(data[0]["nivel1"]['2.2. GASTOS NO OPERACIONALES']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) 
-            valor2 = parseInt(data[0]["nivel1"]['2.1. INGRESOS NO OPERACIONALES']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
+            valor = parseInt(data[0]["nivel1"]['2.2.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) 
+            valor2 = parseInt(data[0]["nivel1"]['2.1.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
             valor = valor ? valor : 0;
             valor2 = valor2 ? valor2 : 0;
             valor = valor - valor2;

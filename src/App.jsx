@@ -36,7 +36,7 @@ function App() {
     })
     .finally(() => {
     })
-    //.catch(error => window.location.href = 'https://ceofconsultores.com/system/');
+    .catch(error => window.location.href = 'https://ceofconsultores.com/system/');
   }
 
   const getGraficos = (empresa) => {
@@ -48,7 +48,7 @@ function App() {
     })
     .finally(() => {
     })
-    //.catch(error => window.location.href = 'https://ceofconsultores.com/system/');
+    .catch(error => window.location.href = 'https://ceofconsultores.com/system/');
   }
 
   const getBasecsv = (empresa) => {
@@ -65,12 +65,10 @@ function App() {
         if(idxMes===null) return;
         meses = results.data?.slice(1).map(row => row[idxMes]) || [];
         setMesFinal(parseInt(meses[meses.length - 1]));
-
-        console.log("results",results,"meses",meses,"ultimo",parseInt(meses[meses.length - 1]),"index mes",idxMes);
       },
       error: function(err, file, inputElem, reason)
       {        
-        //window.location.href = 'https://ceofconsultores.com/system/'
+        window.location.href = 'https://ceofconsultores.com/system/'
       },
     });    
   }
@@ -84,7 +82,7 @@ function App() {
       })
       .finally(() => {
       })
-      //.catch(error => console.error(error));
+      .catch(error => window.location.href = 'https://ceofconsultores.com/system/');
   }, []);  
 
 
@@ -156,13 +154,16 @@ useEffect(() => {
           data: Object.keys(grouped).map(anio => ({
               anio: parseInt(anio),                    
               data: Object.keys(grouped[anio].data).map(resultado => ({
-                  Resultado: resultado,
+                  Resultado: resultado.split(' ')[0].trim(),
+                  label: resultado.substring(resultado.indexOf(' ') + 1).trim(),
                   Total: grouped[anio].data[resultado].total, // Monto acumulado para el Resultado
                   data: Object.keys(grouped[anio].data[resultado].data).map(nivel1 => ({
-                      "Nivel 1": nivel1,
+                      "Nivel 1": nivel1.split(' ')[0].trim(),
+                      label: nivel1.substring(nivel1.indexOf(' ') + 1).trim(),
                       Total: grouped[anio].data[resultado].data[nivel1].total, // Monto acumulado para Nivel 1
                       data: Object.keys(grouped[anio].data[resultado].data[nivel1].data).map(nivel2 => ({
-                          "Nivel 2": nivel2,
+                          "Nivel 2": nivel2.split(' ')[0].trim(),
+                          label: nivel2.substring(nivel2.indexOf(' ') + 1).trim(),
                           Total: grouped[anio].data[resultado].data[nivel1].data[nivel2].total, // Monto acumulado para Nivel 2
                           data: Object.keys(grouped[anio].data[resultado].data[nivel1].data[nivel2].data).map(cuenta => ({
                               Cuenta: cuenta,
@@ -180,6 +181,7 @@ useEffect(() => {
 
       // Convertir a JSON
       //const jsonResult = JSON.stringify(resultpivot, null, 4);
+      console.log(resultpivot);
       setDataFormatted(resultpivot);     
     }
 }, [data]);

@@ -34,17 +34,17 @@ export default function VentasAnual({data, anios}){
     const fixedOptions = [];
     const [aniosSelected, setAniosSelected] = useState([anios[anios.length-1]]);
     const [title, setTitle] = useState('Gráfico de Ventas');
-    const [multipleLine, setMultipleLine] = useState(false);
+    //const [multipleLine, setMultipleLine] = useState(false);
 
     useEffect(() => {
-        const yearArray = aniosSelected?.map(item => item.year);
+        const yearArray = aniosSelected?.map(item => item?.year);
         let labels = [];
         let dataset = [];
         const filteredArray = data?.filter(item => 
             yearArray?.includes(item.year)).map(item => {
                 const year = item.year;
                 return (
-                    item["nivel2"]['1.1.1. VENTAS NACIONALES'].months.slice(0,12).map((item, idx) => {
+                    item["nivel2"]['1.1.1.'].months.slice(0,12).map((item, idx) => {
                         const mes = idx+1;
                         return {
                             month: year + '-' + mes,
@@ -54,7 +54,7 @@ export default function VentasAnual({data, anios}){
                 )
             })
 
-        if(!multipleLine){            
+        //if(!multipleLine){            
             const result = filteredArray.flatMap(item => item);
             labels = result.map(data => data.month)
             dataset = [
@@ -72,7 +72,7 @@ export default function VentasAnual({data, anios}){
                     tension: 0.5
                 }]
             
-        }else{
+        /*}else{
             labels = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];            
             dataset = filteredArray.map(item => {
                 const year = item[0].month.slice(0,4);
@@ -85,7 +85,7 @@ export default function VentasAnual({data, anios}){
                     tension: 0.5
                 }
             })
-        }
+        }*/
 
         if(dataset.length>0){
             setGrpconfig({
@@ -96,44 +96,12 @@ export default function VentasAnual({data, anios}){
 
     }, [data, aniosSelected]);
 
-    /*useEffect(() => {
-        if(data.length>0 && anio.length === 1){            
-            const filteredArray = data?.filter(item => item.year === anio[0])[0]["nivel2"]['1.1.1. VENTAS NACIONALES'].months?.slice(0,12);
-            const result = filteredArray.slice(0,12).map((item,idx) => {
-                const mes = idx+1;
-                return {
-                    month: anio[0] + '-' + mes,
-                    venta: item
-                }
-            }
-            );
-            setGrpconfig({
-                labels: result.map(data => data.month),
-                datasets: [
-                {
-                    label: "Ventas Mensuales",
-                    data: result?.map(data => data.venta),
-                    borderColor: '#8e7cb9',
-                    backgroundColor: 'rgba(238, 237, 248, 0.8)',
-                    fill: {
-                        target: 'origin',
-                        above: 'rgba(238, 237, 248, 0.5)',
-                        below: 'rgba(238, 237, 248, 0.5)'
-                    },
-                    borderWidth: 1,
-                    tension: 0.5
-                }
-                ]
-            })
-        }
-    }, [data, anio]);*/
-
     useEffect(() => {
         if(aniosSelected?.length === 1){
             setTitle('Gráfico de Ventas Mensuales año ' + aniosSelected[0]?.label );
         }
         else if(aniosSelected?.length > 1){  
-            setTitle('Gráfico de Ventas Mensuales años ' + aniosSelected?.map(item => item.label).join(', '));
+            setTitle('Gráfico de Ventas Mensuales años ' + aniosSelected?.map(item => item?.label).join(', '));
         }
         else{
            setTitle('Gráfico de Ventas');
@@ -167,7 +135,7 @@ export default function VentasAnual({data, anios}){
                             return (
                                 <Chip
                                     key={key}
-                                    label={option.label}
+                                    label={option?.label}
                                     {...tagProps}
                                     disabled={fixedOptions.includes(option)}
                                 />

@@ -11,7 +11,7 @@ export default function GoaAnual({data, anio}){
     useEffect(() => {
         if(data.length>0 && anio.length === 1){  
             const series = []          
-            let filteredArray = data[0]["nivel1"]['1.1. INGRESO DE EXPLOTACION']?.months?.slice(0,12) || Array(12).fill(0);
+            let filteredArray = data[0]["nivel1"]['1.1.']?.months?.slice(0,12) || Array(12).fill(0);
             let result = filteredArray.slice(0,12).map((item,idx) => {
                 const mes = idx+1;
                 return {
@@ -32,7 +32,7 @@ export default function GoaAnual({data, anio}){
                 order: 2
             })
 
-            filteredArray = data[0]["nivel1"]['1.3. GASTOS DE ADMINISTRACION Y VENTAS']?.months?.slice(0,12) || Array(12).fill(0);
+            filteredArray = data[0]["nivel1"]['1.3.']?.months?.slice(0,12) || Array(12).fill(0);
             result = filteredArray?.slice(0,12).map((item,idx) => {
                 const mes = idx+1;
                 return {

@@ -5,6 +5,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
 import FloatingBarChart from '../graficos/floatingBarChart.jsx';
+import { borderColor } from '@mui/system';
 
 const meses = [
     { "label": "Enero", "month": 1 },
@@ -44,13 +45,13 @@ export default function UtilidadMes({data, anio, mes}){
     useEffect(() => {
         if(data.length>0 && anio.length === 1){
             const col=[];
-            let valor = parseInt(data[0]["nivel1"]['1.1. INGRESO DE EXPLOTACION']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0]) || 0;
+            let valor = parseInt(data[0]["nivel1"]['1.1.']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0]) || 0;
             let result = [0,valor];
             let valorAnt = valor;
             col.push({"cuenta" : "Ingresos","valor" : result});
             
 
-            valor = parseInt(data[0]["nivel1"]['1.2. COSTOS DE EXPLOTACION']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0]) || 0;
+            valor = parseInt(data[0]["nivel1"]['1.2.']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0]) || 0;
             if(valor !== 0){
                 valor = valorAnt + valor;
                 result = [valor, valorAnt]
@@ -61,7 +62,7 @@ export default function UtilidadMes({data, anio, mes}){
             col.push({"cuenta" : "Costos de Explotación","valor" : result});
             
 
-            valor = parseInt(data[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0] || 0)
+            valor = parseInt(data[0]["nivel2"]['1.3.1.']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0] || 0)
             if(valor !== 0){
                 valor = valorAnt + valor;
                 result = [valor, valorAnt]
@@ -71,8 +72,8 @@ export default function UtilidadMes({data, anio, mes}){
             }
             col.push({"cuenta" : "Remuneraciones","valor" : result});
 
-            valor = parseInt(data[0]["nivel1"]['1.3. GASTOS DE ADMINISTRACION Y VENTAS']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0] || 0) 
-            let valor2 = parseInt(data[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0] || 0)
+            valor = parseInt(data[0]["nivel1"]['1.3.']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0] || 0) 
+            let valor2 = parseInt(data[0]["nivel2"]['1.3.1.']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0] || 0)
             valor = valor ? valor : 0;
             valor2 = valor2 ? valor2 : 0;
             valor = valor - valor2;
@@ -85,7 +86,7 @@ export default function UtilidadMes({data, anio, mes}){
             }
             col.push({"cuenta" : "Gastos Operacionales","valor" : result});
 
-            valor =  parseInt(data[0]["nivel1"]['2.1. INGRESOS NO OPERACIONALES']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0] || 0)
+            valor =  parseInt(data[0]["nivel1"]['2.1.']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0] || 0)
             if(valor !== 0){
                 valor = valorAnt + valor;
                 result = [valor, valorAnt]
@@ -95,8 +96,8 @@ export default function UtilidadMes({data, anio, mes}){
             }
             col.push({"cuenta" : "Ingresos No Oper.","valor" : result});
 
-            valor = parseInt(data[0]["nivel1"]['2.2. GASTOS NO OPERACIONALES']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0] || 0) 
-            valor2 = parseInt(data[0]["nivel1"]['2.1. INGRESOS NO OPERACIONALES']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0] || 0)
+            valor = parseInt(data[0]["nivel1"]['2.2.']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0] || 0) 
+            valor2 = parseInt(data[0]["nivel1"]['2.1.']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0] || 0)
             valor = valor ? valor : 0;
             valor2 = valor2 ? valor2 : 0;
             valor = valor + valor2;
@@ -148,12 +149,12 @@ export default function UtilidadMes({data, anio, mes}){
     useEffect(() => {
         if(data?.length>0 && anio.length === 1){
             const col=[];
-            let valor = parseInt(data[0]["nivel1"]['1.1. INGRESO DE EXPLOTACION']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0]) || 0;
+            let valor = parseInt(data[0]["nivel1"]['1.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0]) || 0;
             let result = [0,valor];
             let valorAnt = valor;
             col.push({"cuenta" : "Ingresos","valor" : result});
             
-            valor = parseInt(data[0]["nivel1"]['1.2. COSTOS DE EXPLOTACION']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0]) || 0;
+            valor = parseInt(data[0]["nivel1"]['1.2.']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0]) || 0;
             if(valor !== 0){
                 valor = valorAnt + valor;
                 result = [valor, valorAnt]
@@ -163,7 +164,7 @@ export default function UtilidadMes({data, anio, mes}){
             }
             col.push({"cuenta" : "Costos de Explotación","valor" : result});            
 
-            valor = parseInt(data[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0] || 0)
+            valor = parseInt(data[0]["nivel2"]['1.3.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0] || 0)
             if(valor !== 0){
                 valor = valorAnt + valor;
                 result = [valor, valorAnt]
@@ -173,8 +174,8 @@ export default function UtilidadMes({data, anio, mes}){
             }
             col.push({"cuenta" : "Remuneraciones","valor" : result});
 
-            valor = parseInt(data[0]["nivel1"]['1.3. GASTOS DE ADMINISTRACION Y VENTAS']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0] || 0) 
-            let valor2 = parseInt(data[0]["nivel2"]['1.3.1. REMUNERACION Y HONORARIOS']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0] || 0)
+            valor = parseInt(data[0]["nivel1"]['1.3.']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0] || 0) 
+            let valor2 = parseInt(data[0]["nivel2"]['1.3.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0] || 0)
             valor = valor ? valor : 0;
             valor2 = valor2 ? valor2 : 0;
             valor = valor - valor2;
@@ -187,7 +188,7 @@ export default function UtilidadMes({data, anio, mes}){
             }
             col.push({"cuenta" : "Gastos Operacionales","valor" : result});
 
-            valor =  parseInt(data[0]["nivel1"]['2.1. INGRESOS NO OPERACIONALES']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0] || 0)
+            valor =  parseInt(data[0]["nivel1"]['2.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0] || 0)
             if(valor !== 0){
                 valor = valorAnt + valor;
                 result = [valor, valorAnt]
@@ -197,8 +198,8 @@ export default function UtilidadMes({data, anio, mes}){
             }
             col.push({"cuenta" : "Ingresos No Oper.","valor" : result});
 
-            valor = parseInt(data[0]["nivel1"]['2.2. GASTOS NO OPERACIONALES']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0] || 0) 
-            valor2 = parseInt(data[0]["nivel1"]['2.1. INGRESOS NO OPERACIONALES']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0] || 0)
+            valor = parseInt(data[0]["nivel1"]['2.2.']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0] || 0) 
+            valor2 = parseInt(data[0]["nivel1"]['2.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0] || 0)
             valor = valor ? valor : 0;
             valor2 = valor2 ? valor2 : 0;
             valor = valor + valor2;
@@ -219,26 +220,18 @@ export default function UtilidadMes({data, anio, mes}){
                 {
                     label: "Gráfico de Utilidades por Mes",
                     data: col?.map(item => item.valor),
-                    backgroundColor: [
-                        'rgb(255, 99, 132)',
-                        'rgb(255, 159, 64)',
-                        'rgb(255, 205, 86)',
-                        'rgb(75, 192, 192)',
-                        'rgb(54, 162, 235)',
-                        'rgb(153, 102, 255)',
-                        'rgb(201, 203, 207)',
-                        'rgb(233, 180, 257)'
-                    ],
-                    borderColor: [
-                        'rgb(255, 99, 132)',
-                        'rgb(255, 159, 64)',
-                        'rgb(255, 205, 86)',
-                        'rgb(75, 192, 192)',
-                        'rgb(54, 162, 235)',
-                        'rgb(153, 102, 255)',
-                        'rgb(201, 203, 207)',
-                        'rgb(233, 180, 257)'
-                    ],
+                    backgroundColor: col.map((item, index) => {
+                        if (index === 0 || index === col.length - 1) {
+                            return '#6aa1d7';
+                        }
+                        return item.valor[0] > item.valor[1] ? '#3f3088' : '#39bbd2'; 
+                    }),
+                    borderColor: col.map((item, index) => {
+                        if (index === 0 || index === col.length - 1) {
+                            return '#6aa1d7';
+                        }
+                        return item.valor[0] > item.valor[1] ? '#3f3088' : '#39bbd2'; 
+                    }),
                     borderWidth: 1,
                     minBarLength: 5
                 }
@@ -283,6 +276,20 @@ export default function UtilidadMes({data, anio, mes}){
                 </Grid>
                 <Grid item xs={12} sx={{height: '400px'}}> 
                     <FloatingBarChart chartData={grpconfig} title={title}/> 
+                </Grid>
+                <Grid item xs={12} className='flex justify-center mt-4'>
+                    <div className='flex items-center mr-4'>
+                        <div className='w-4 h-4 bg-[#6aa1d7] mr-2'></div>
+                        <span>Total</span>
+                    </div>
+                    <div className='flex items-center mr-4'>
+                        <div className='w-4 h-4 bg-[#3f3088] mr-2'></div>
+                        <span>Aumento</span>
+                    </div>
+                    <div className='flex items-center'>
+                        <div className='w-4 h-4 bg-[#39bbd2] mr-2'></div>
+                        <span>Disminución</span>
+                    </div>
                 </Grid>
             </Grid>
             

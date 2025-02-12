@@ -196,54 +196,6 @@ export default function PanelFinancieroAnual({data, anio, mes}){
         return col;
     };
 
-    /*const restar3Columnas = (label, array1, array2, array3) => {
-        let valor = 0;
-        const col = [];
-        col.push({"id" : 1, "valor" : label});
-        
-        valor = array1[1].valor - array2[1].valor - array3[1].valor;
-        col.push({"id" : 2, "valor" : valor ? valor : 0});
-
-        valor = array1[2].valor - array2[2].valor - array3[2].valor;
-        col.push({"id" : 3, "valor" : valor ? valor : 0});
-
-        if(col[2].valor === 0)
-            valor = 0
-        else
-            valor = ((col[1].valor-col[2].valor) / Math.abs(col[2].valor )) 
-
-        valor = valor ? valor : 0;
-        col.push({"id" : 4, "valor" : valor});
-
-        valor = array1[4].valor - array2[4].valor - array3[4].valor;
-        col.push({"id" : 5, "valor" : valor ? valor : 0});
-
-        if(col[4].valor === 0)
-            valor = 0
-        else
-            valor = ((col[1].valor-col[4].valor) / Math.abs(col[4].valor )) 
-
-        valor = valor ? (valor) : 0;
-        col.push({"id" : 6, "valor" : valor});
-
-        valor = array1[6].valor - array2[6].valor - array3[6].valor;
-        col.push({"id" : 7, "valor" : valor ? valor : 0});
-
-        valor = array1[7].valor - array2[7].valor - array3[7].valor;
-        col.push({"id" : 8, "valor" : valor ? valor : 0});
-
-        if(col[7].valor === 0)
-            valor = 0
-        else
-            valor = ((col[6].valor-col[7].valor) / Math.abs(col[7].valor )) 
-
-        valor = valor ? (valor) : 0;
-        col.push({"id" : 6, "valor" : valor});
-      
-        return col;
-    };*/
-
-
     const percentajeColumns = (label, array1, array2, negativo) => {
         let valor = 0;
         const col = [];
@@ -308,96 +260,32 @@ export default function PanelFinancieroAnual({data, anio, mes}){
         return col;
     }
 
-    /*const percentajeColumns2 = (label, array1, array2, decimal, negativo) => {
-        let valor = 0;
-        const col = [];
-        col.push({"id" : 1, "valor" : label});
-
-        if(array1[1].valor === 0)
-            valor = 0
-        else
-            valor = ((array2[1].valor / Math.abs(array1[1].valor ))  );
-
-        valor = negativo ? valor * - 1 : valor ;
-        col.push({"id" : 2, "valor" : valor});
-
-        if(array1[2].valor === 0)
-            valor = 0
-        else
-            valor = ((array2[2].valor / Math.abs(array1[2].valor ))  );
-        valor = negativo ? valor * - 1 : valor ;
-        col.push({"id" : 3, "valor" : valor});
-
-        if(parseFloat(array1[3].valor) === 0)
-            valor = 0
-        else
-            valor = (parseFloat(array2[3].valor) / Math.abs((parseFloat(array1[3].valor))) )  ;
-        valor = negativo ? valor * - 1 : valor ;
-        col.push({"id" : 4, "valor" : valor});
-        if(array1[4].valor === 0)
-            valor = 0
-        else
-            valor = ((array2[4].valor / Math.abs(array1[4].valor ))  );
-        valor = negativo ? valor * - 1 : valor ;
-        col.push({"id" : 5, "valor" : valor});
-
-        if(parseFloat(array1[5].valor) === 0)
-            valor = 0
-        else
-            valor = (parseFloat(array2[5].valor) / Math.abs((parseFloat(array1[5].valor))) )  ;
-        valor = negativo ? valor * - 1 : valor ;
-        col.push({"id" : 6, "valor" : valor});
-
-        if(array1[6].valor === 0)
-            valor = 0
-        else
-            valor = ((array2[6].valor / Math.abs(array1[6].valor ))  );
-        valor = negativo ? valor * - 1 : valor ;
-        col.push({"id" : 7, "valor" : valor});
-
-        if(array1[7].valor === 0)
-            valor = 0
-        else
-            valor = ((array2[7].valor / Math.abs(array1[7].valor ))  );
-        valor = negativo ? valor * - 1 : valor ;
-        col.push({"id" : 8, "valor" :  valor});
-
-        if(parseFloat(array1[8].valor) === 0)
-            valor = 0
-        else
-            valor = (parseFloat(array2[8].valor) / Math.abs((parseFloat(array1[8].valor))) )  ;
-        valor = negativo ? valor * - 1 : valor ;
-        col.push({"id" : 9, "valor" : valor});
-
-        return col;
-    }*/
-
     useEffect(() => {
         if(data?.length>0 && anio.length === 1 && mesSelected[0].month > 0){
             const rows=[];
             //Row 1            
             rows.push({
-                "row": column("Ventas Nacionales", data, 'nivel2', '1.1.1. VENTAS NACIONALES',mesSelected[0].month)
+                "row": column("Ventas Nacionales", data, 'nivel2', '1.1.1.',mesSelected[0].month)
             })
             //Row 2     
             rows.push({
-                "row": column("Otros Ingresos", data, 'nivel2', '1.1.3. OTROS INGRESOS',mesSelected[0].month)
+                "row": column("Otros Ingresos", data, 'nivel2', '1.1.3.',mesSelected[0].month)
             })
             //Row 3   
             rows.push({
-                "row": column("Ingresos de Explotación", data, 'nivel1', '1.1. INGRESO DE EXPLOTACION',mesSelected[0].month)
+                "row": column("Ingresos de Explotación", data, 'nivel1', '1.1.',mesSelected[0].month)
             })            
             //Row 4
             rows.push({
-                "row": column("Costos Directos", data, 'nivel2', '1.2.1. COSTOS DIRECTOS',mesSelected[0].month)
+                "row": column("Costos Directos", data, 'nivel2', '1.2.1.',mesSelected[0].month)
             })
             //Row 5
             rows.push({
-                "row": column("Otros Costos", data, 'nivel2', '1.2.2. OTROS COSTOS EXPLOTACION',mesSelected[0].month)
+                "row": column("Otros Costos", data, 'nivel2', '1.2.2.',mesSelected[0].month)
             })
             //Row 6
             rows.push({
-                "row": column("Costos de Explotación", data, 'nivel1', '1.2. COSTOS DE EXPLOTACION',mesSelected[0].month)
+                "row": column("Costos de Explotación", data, 'nivel1', '1.2.',mesSelected[0].month)
             })
             //Row 7
             //Fila 2 - 5
@@ -411,15 +299,15 @@ export default function PanelFinancieroAnual({data, anio, mes}){
             })
             //Row 9
             rows.push({
-                "row": column("Gasto de Remuneraciones", data, 'nivel2', '1.3.1. REMUNERACION Y HONORARIOS',mesSelected[0].month)
+                "row": column("Gasto de Remuneraciones", data, 'nivel2', '1.3.1.',mesSelected[0].month)
             })
             //Row 10
             rows.push({
-                "row": column("Gasto Mantención", data, 'nivel2', '1.3.4. GASTOS MANTENCION',mesSelected[0].month)
+                "row": column("Gasto Mantención", data, 'nivel2', '1.3.4.',mesSelected[0].month)
             })
             //Row 11
             rows.push({
-                "row": column("Gastos Financieros", data, 'nivel2', '1.3.6. GASTOS FINANCIEROS',mesSelected[0].month)
+                "row": column("Gastos Financieros", data, 'nivel2', '1.3.6.',mesSelected[0].month)
             })
             //Row 12
             rows.push({
@@ -427,7 +315,7 @@ export default function PanelFinancieroAnual({data, anio, mes}){
             })
             //Row 13
             rows.push({
-                "row": column("Gastos de Administración y Ventas", data, 'nivel1', '1.3. GASTOS DE ADMINISTRACION Y VENTAS',mesSelected[0].month)
+                "row": column("Gastos de Administración y Ventas", data, 'nivel1', '1.3.',mesSelected[0].month)
             })      
             
             //Actualizando Otros Gastos 8-9-10-12
@@ -435,7 +323,7 @@ export default function PanelFinancieroAnual({data, anio, mes}){
 
             //Row 14
             rows.push({
-                "row": column("Resultado Operacional", data, 'resultado', '1. OPERACIONAL',mesSelected[0].month)
+                "row": column("Resultado Operacional", data, 'resultado', '1.',mesSelected[0].month)
             })
             //Row 15
             //Fila 2 - 13
@@ -444,15 +332,15 @@ export default function PanelFinancieroAnual({data, anio, mes}){
             })
             //Row 16
             rows.push({
-                "row": column("Ingresos no Operacionales", data, 'nivel2', '2.1.1. INGRESOS NO OPERACIONALES',mesSelected[0].month)
+                "row": column("Ingresos no Operacionales", data, 'nivel2', '2.1.1.',mesSelected[0].month)
             })
             //Row 17
             rows.push({
-                "row": column("Impuesto a la Renta", data, 'nivel2', '2.2.3. IMPUESTO A LA RENTA',mesSelected[0].month)
+                "row": column("Impuesto a la Renta", data, 'nivel2', '2.2.3.',mesSelected[0].month)
             })
             //Row 18
             rows.push({
-                "row": column("Intereses", data, 'nivel2', '2.2.4. INTERERES',mesSelected[0].month)
+                "row": column("Intereses", data, 'nivel2', '2.2.4.',mesSelected[0].month)
             })
             //Row 19
             rows.push({
@@ -460,7 +348,7 @@ export default function PanelFinancieroAnual({data, anio, mes}){
             })            
             //Row 20
             rows.push({
-                "row": column("Resultadado No Operacional", data, 'resultado', '2. NO OPERACIONAL',mesSelected[0].month)
+                "row": column("Resultadado No Operacional", data, 'resultado', '2.',mesSelected[0].month)
             })
 
             //Actualizando Otros Gastos 19-15-16-17
@@ -526,27 +414,27 @@ export default function PanelFinancieroAnual({data, anio, mes}){
             const rows=[];
             //Row 1            
             rows.push({
-                "row": column("Ventas Nacionales", data, 'nivel2', '1.1.1. VENTAS NACIONALES', mes[0])
+                "row": column("Ventas Nacionales", data, 'nivel2', '1.1.1.', mes[0])
             })
             //Row 2     
             rows.push({
-                "row": column("Otros Ingresos", data, 'nivel2', '1.1.3. OTROS INGRESOS', mes[0])
+                "row": column("Otros Ingresos", data, 'nivel2', '1.1.3.', mes[0])
             })
             //Row 3   
             rows.push({
-                "row": column("Ingresos de Explotación", data, 'nivel1', '1.1. INGRESO DE EXPLOTACION', mes[0])
+                "row": column("Ingresos de Explotación", data, 'nivel1', '1.1.', mes[0])
             })            
             //Row 4
             rows.push({
-                "row": column("Costos Directos", data, 'nivel2', '1.2.1. COSTOS DIRECTOS', mes[0])
+                "row": column("Costos Directos", data, 'nivel2', '1.2.1.', mes[0])
             })
             //Row 5
             rows.push({
-                "row": column("Otros Costos", data, 'nivel2', '1.2.2. OTROS COSTOS EXPLOTACION', mes[0])
+                "row": column("Otros Costos", data, 'nivel2', '1.2.2.', mes[0])
             })
             //Row 6
             rows.push({
-                "row": column("Costos de Explotación", data, 'nivel1', '1.2. COSTOS DE EXPLOTACION', mes[0])
+                "row": column("Costos de Explotación", data, 'nivel1', '1.2.', mes[0])
             })
             //Row 7
             //Fila 2 - 5
@@ -560,15 +448,15 @@ export default function PanelFinancieroAnual({data, anio, mes}){
             })
             //Row 9
             rows.push({
-                "row": column("Gasto de Remuneraciones", data, 'nivel2', '1.3.1. REMUNERACION Y HONORARIOS', mes[0])
+                "row": column("Gasto de Remuneraciones", data, 'nivel2', '1.3.1.', mes[0])
             })
             //Row 10
             rows.push({
-                "row": column("Gasto Mantención", data, 'nivel2', '1.3.4. GASTOS MANTENCION', mes[0])
+                "row": column("Gasto Mantención", data, 'nivel2', '1.3.4.', mes[0])
             })
             //Row 11
             rows.push({
-                "row": column("Gastos Financieros", data, 'nivel2', '1.3.6. GASTOS FINANCIEROS', mes[0])
+                "row": column("Gastos Financieros", data, 'nivel2', '1.3.6.', mes[0])
             })
             //Row 12
             rows.push({
@@ -576,7 +464,7 @@ export default function PanelFinancieroAnual({data, anio, mes}){
             })
             //Row 13
             rows.push({
-                "row": column("Gastos de Administración y Ventas", data, 'nivel1', '1.3. GASTOS DE ADMINISTRACION Y VENTAS', mes[0])
+                "row": column("Gastos de Administración y Ventas", data, 'nivel1', '1.3.', mes[0])
             })      
             
             //Actualizando Otros Gastos 8-9-10-12
@@ -584,7 +472,7 @@ export default function PanelFinancieroAnual({data, anio, mes}){
 
             //Row 14
             rows.push({
-                "row": column("Resultado Operacional", data, 'resultado', '1. OPERACIONAL', mes[0])
+                "row": column("Resultado Operacional", data, 'resultado', '1.', mes[0])
             })
             //Row 15
             //Fila 2 - 13
@@ -593,15 +481,15 @@ export default function PanelFinancieroAnual({data, anio, mes}){
             })
             //Row 16
             rows.push({
-                "row": column("Ingresos no Operacionales", data, 'nivel2', '2.1.1. INGRESOS NO OPERACIONALES', mes[0])
+                "row": column("Ingresos no Operacionales", data, 'nivel2', '2.1.1.', mes[0])
             })
             //Row 17
             rows.push({
-                "row": column("Impuesto a la Renta", data, 'nivel2', '2.2.3. IMPUESTO A LA RENTA', mes[0])
+                "row": column("Impuesto a la Renta", data, 'nivel2', '2.2.3.', mes[0])
             })
             //Row 18
             rows.push({
-                "row": column("Intereses", data, 'nivel2', '2.2.4. INTERERES', mes[0])
+                "row": column("Intereses", data, 'nivel2', '2.2.4.', mes[0])
             })
             //Row 19
             rows.push({
@@ -609,7 +497,7 @@ export default function PanelFinancieroAnual({data, anio, mes}){
             })            
             //Row 20
             rows.push({
-                "row": column("Resultadado No Operacional", data, 'resultado', '2. NO OPERACIONAL', mes[0])
+                "row": column("Resultadado No Operacional", data, 'resultado', '2.', mes[0])
             })
 
             //Actualizando Otros Gastos 19-15-16-17
