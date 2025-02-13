@@ -11,7 +11,7 @@ function MultipleChart({ chartData, title }) {
                         display: false,
                         text: title,
                     },
-                    /*tooltip: {
+                    tooltip: {
                         callbacks: {
                             label: function(context) {
                                 var label = context.dataset.label || '';
@@ -19,12 +19,17 @@ function MultipleChart({ chartData, title }) {
                                     label += ': ';
                                 }
                                 if (context.parsed.y !== null) {
-                                    label += '$ ' + context.parsed.y;
+                                    label += new Intl.NumberFormat('en-US', {
+                                        style: 'currency',
+                                        currency: 'USD',
+                                        minimumFractionDigits: 0,
+                                        maximumFractionDigits: 0
+                                    }).format(context.parsed.y).replaceAll(',', '.');
                                 }                                
                                 return label;
                             }
                         }
-                    }*/
+                    },
                 },
                 responsive: true,
                 scales:{

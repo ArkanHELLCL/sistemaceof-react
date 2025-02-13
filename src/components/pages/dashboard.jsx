@@ -162,7 +162,10 @@ export default function DashBoard({data, mes, user, empresas, graficos, setGrafi
                     ((user?.PER_Id === 1 && empresa?.tipografico === 2) || (user?.PER_Id > 1 && user?.EMP_TipoGrafico === 2))  &&
                       <>
                         <Grid item xs={12} xl={12}>                    
-                            <UtilidadMes2 anio={[anioSelected[0]?.year]} mes={mes} data={sumaNivelesFitrado}/>
+                          <UtilidadMes2 anio={[anioSelected[0]?.year]} mes={mes} data={sumaNivelesFitrado}/>
+                        </Grid>
+                        <Grid item xs={12} xl={12}>
+                          <VentasAnual data={sumaNiveles} anios={Anios}/>
                         </Grid>
                       </>
                     }

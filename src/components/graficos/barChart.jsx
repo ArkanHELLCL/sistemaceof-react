@@ -10,7 +10,26 @@ function BarChart({ chartData, title }) {
                     title: {
                         display: false,
                         text: title,
-                    }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                var label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += new Intl.NumberFormat('en-US', {
+                                        style: 'currency',
+                                        currency: 'USD',
+                                        minimumFractionDigits: 0,
+                                        maximumFractionDigits: 0
+                                    }).format(context.parsed.y).replaceAll(',', '.');
+                                }                                
+                                return label;
+                            }
+                        }
+                    },
                 },
                 responsive: true,
                 scales:{
@@ -27,7 +46,7 @@ function BarChart({ chartData, title }) {
                         ticks: {
                             callback: function(value, index, values) {
                                 //return '$ ' + value;
-                                return new Intl.NumberFormat('en-ES', { style: 'currency', currency: 'USD', maximumFractionDigits:0 }).format(value);
+                                return new Intl.NumberFormat('en-ES', { style: 'currency', currency: 'USD', maximumFractionDigits:0 }).format((value));
                             }
                         }
                     }
