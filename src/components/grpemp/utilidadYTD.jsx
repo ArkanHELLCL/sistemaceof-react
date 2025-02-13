@@ -11,37 +11,37 @@ export default function UtilidadYTD({data, anio}){
     useEffect(() => {
         if(data?.length>0 && anio.length === 1){
             const col=[];
-            let valor = parseInt(data[0]["nivel1"]['1.1.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
+            let valor = parseFloat(data[0]["nivel1"]['1.1.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
             valor = valor ? valor : 0;
             col.push({"cuenta" : "Ingresos","valor" : valor ? valor : 0});
 
-            valor = parseInt(data[0]["nivel1"]['1.2.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
+            valor = parseFloat(data[0]["nivel1"]['1.2.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
             valor = valor ? valor : 0;
             col.push({"cuenta" : "Costos de Explotación","valor" : valor ? valor : 0});
 
-            valor = parseInt(data[0]["nivel2"]['1.3.1.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
+            valor = parseFloat(data[0]["nivel2"]['1.3.1.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
             valor = valor ? valor : 0;
             col.push({"cuenta" : "Remuneraciones","valor" : valor ? valor : 0});
 
-            valor = parseInt(data[0]["nivel1"]['1.3.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) 
-            let valor2 = parseInt(data[0]["nivel2"]['1.3.1.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
+            valor = parseFloat(data[0]["nivel1"]['1.3.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) 
+            let valor2 = parseFloat(data[0]["nivel2"]['1.3.1.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
             valor = valor ? valor : 0;
             valor2 = valor2 ? valor2 : 0;
             valor = valor - valor2;
             col.push({"cuenta" : "Gastos Operacionales","valor" : valor ? valor : 0});
 
-            valor =  parseInt(data[0]["nivel1"]['2.1.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
+            valor =  parseFloat(data[0]["nivel1"]['2.1.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
             valor = valor ? valor : 0;
             col.push({"cuenta" : "Ingresos No Oper.","valor" : valor ? valor : 0});
 
-            valor = parseInt(data[0]["nivel1"]['2.2.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) 
-            valor2 = parseInt(data[0]["nivel1"]['2.1.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
+            valor = parseFloat(data[0]["nivel1"]['2.2.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) 
+            valor2 = parseFloat(data[0]["nivel1"]['2.1.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0))
             valor = valor ? valor : 0;
             valor2 = valor2 ? valor2 : 0;
             valor = valor - valor2;
             col.push({"cuenta" : "Costos No Oper.","valor" : valor ? valor : 0});        
 
-            col.push({"cuenta" : "Utilidad", "valor" : col.reduce((acc, item) => acc + parseInt(item.valor), 0)});
+            col.push({"cuenta" : "Utilidad", "valor" : col.reduce((acc, item) => acc + parseFloat(item.valor), 0)});
 
             setGrpconfig({
                 labels: col?.map(item => item.cuenta),

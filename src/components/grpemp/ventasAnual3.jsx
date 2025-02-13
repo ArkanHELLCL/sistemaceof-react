@@ -29,7 +29,7 @@ const bdcolor = [
     'rgb(233, 180, 257)'
 ]
 
-export default function VentasAnual({data, anios}){
+export default function VentasAnual3({data, anios}){
     const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico
     const fixedOptions = [];
     const [aniosSelected, setAniosSelected] = useState([anios[anios.length-1]]);
@@ -39,11 +39,11 @@ export default function VentasAnual({data, anios}){
         const yearArray = aniosSelected?.map(item => item?.year);
         let labels = [];
         let dataset = [];
-        const filteredArray = data?.filter(item => 
+        let filteredArray = data?.filter(item => 
             yearArray?.includes(item.year)).map(item => {
                 const year = item.year;
                 return (
-                    item["nivel1"]['1.1.'].months.slice(0,12).map((item, idx) => {
+                    item["nivel1"]['1.1.']?.months.slice(0,12).map((item, idx) => {
                         const mes = idx+1;
                         return {
                             month: year + '-' + mes,
@@ -54,23 +54,74 @@ export default function VentasAnual({data, anios}){
             }
         )
 
-        const result = filteredArray.flatMap(item => item);
+        let result = filteredArray.flatMap(item => item);
         labels = result.map(data => data.month)
         dataset = [
             {
-                label: "Ventas Mensuales",
+                label: "Ventas Totales",
                 data: result?.map(data => data.venta),
-                borderColor: bdcolor,
-                backgroundColor: bgcolor,
-                fill: {
-                    target: 'origin',
-                    above: 'rgba(238, 237, 248, 0.5)',
-                    below: 'rgba(238, 237, 248, 0.5)'
-                },
+                borderColor: "#6aa1d7",
+                backgroundColor: "6aa1d7",                
                 borderWidth: 1,
                 tension: 0.5
-            }]
-                   
+            }
+        ]
+
+        filteredArray = data?.filter(item => 
+            yearArray?.includes(item.year)).map(item => {
+                const year = item.year;
+                return (
+                    item["nivel2"]['1.1.1.']?.months.slice(0,12).map((item, idx) => {
+                        const mes = idx+1;
+                        return {
+                            month: year + '-' + mes,
+                            venta: item
+                        }
+                    })
+                )
+            }
+        )
+
+        result = filteredArray.flatMap(item => item);
+        labels = result.map(data => data.month)
+        dataset.push(
+            {
+                label: "Ventas Nacionales",
+                data: result?.map(data => data.venta),
+                borderColor: "#3f3088",
+                backgroundColor: "#3f3088",                
+                borderWidth: 1,
+                tension: 0.5
+            }
+        )
+
+        filteredArray = data?.filter(item => 
+            yearArray?.includes(item.year)).map(item => {
+                const year = item.year;
+                return (
+                    item["nivel2"]['1.1.2.']?.months.slice(0,12).map((item, idx) => {
+                        const mes = idx+1;
+                        return {
+                            month: year + '-' + mes,
+                            venta: item
+                        }
+                    })
+                )
+            }
+        )
+
+        result = filteredArray.flatMap(item => item);
+        labels = result.map(data => data.month)
+        dataset.push(
+            {
+                label: "Ventas Paypal",
+                data: result?.map(data => data.venta),
+                borderColor: "#39bbd2",
+                backgroundColor: "#39bbd2",                
+                borderWidth: 1,
+                tension: 0.5
+            }
+        )
 
         if(dataset.length>0){
             setGrpconfig({

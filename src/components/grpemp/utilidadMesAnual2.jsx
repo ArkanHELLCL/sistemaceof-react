@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import FloatingBarChart from '../graficos/floatingBarChart.jsx';
 
-export default function UtilidadMesAnual({data, anio}){
+export default function UtilidadMesAnual2({data, anio}){
     const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico
     const [title, setTitle] = useState('Gráfico de Utilidades');
 
@@ -14,19 +14,12 @@ export default function UtilidadMesAnual({data, anio}){
             let valor = parseFloat(data[0]["nivel1"]['1.1.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) || 0;
             let result = [0,valor];
             let valorAnt = valor;
-            col.push({"cuenta" : "Ingresos","valor" : result});
+            col.push({"cuenta" : "Ingresos de Explotación","valor" : result});
             
-            valor = parseFloat(data[0]["nivel1"]['1.2.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) || 0;
-            if(valor !== 0){
-                valor = valorAnt + valor;
-                result = [valor, valorAnt]
-                valorAnt = valor;
-            }else{
-                result = [valorAnt, valorAnt]
-            }
-            col.push({"cuenta" : "Costos de Explotación","valor" : result});
-
-            valor = parseFloat(data[0]["nivel2"]['1.3.1.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) || 0;
+            valor = parseFloat(data[0]["nivel2"]['1.2.2.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) || 0;
+            let valor2 = parseFloat(data[0]["nivel2"]['1.2.3.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) || 0;
+            let valor3 = parseFloat(data[0]["nivel2"]['1.2.4.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) || 0;
+            valor = valor + valor2 + valor3
             if(valor !== 0){
                 valor = valorAnt + valor;
                 result = [valor, valorAnt]
@@ -36,8 +29,21 @@ export default function UtilidadMesAnual({data, anio}){
             }
             col.push({"cuenta" : "Remuneraciones","valor" : result});
 
+            valor = parseFloat(data[0]["nivel2"]['1.2.1.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) || 0;
+            valor2 = parseFloat(data[0]["nivel2"]['1.2.5.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) || 0;
+            valor3 = parseFloat(data[0]["nivel2"]['1.2.6.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) || 0;
+            valor = valor + valor2 + valor3
+            if(valor !== 0){
+                valor = valorAnt + valor;
+                result = [valor, valorAnt]
+                valorAnt = valor;
+            }else{
+                result = [valorAnt, valorAnt]
+            }
+            col.push({"cuenta" : "Otros Costos","valor" : result});
+
             valor = parseFloat(data[0]["nivel1"]['1.3.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) || 0;
-            let valor2 = parseFloat(data[0]["nivel2"]['1.3.1.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) || 0;
+            valor2 = parseFloat(data[0]["nivel2"]['1.3.1.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) || 0;
             valor = valor ? valor : 0;
             valor2 = valor2 ? valor2 : 0;
             valor = valor - valor2;
@@ -60,11 +66,11 @@ export default function UtilidadMesAnual({data, anio}){
             }
             col.push({"cuenta" : "Ingresos No Oper.","valor" : result});
 
-            valor = parseFloat(data[0]["nivel1"]['2.2.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) || 0;
+            valor = parseFloat(data[0]["resultado"]['2.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) || 0;
             valor2 = parseFloat(data[0]["nivel1"]['2.1.']?.months?.slice(0,12).reduce((acc, val) => acc + val, 0)) || 0;
             valor = valor ? valor : 0;
             valor2 = valor2 ? valor2 : 0;
-            valor = valor + valor2;
+            valor = valor - valor2;
             if(valor !== 0){
                 valor = valorAnt + valor;
                 result = [valor, valorAnt]
@@ -72,7 +78,7 @@ export default function UtilidadMesAnual({data, anio}){
             }else{
                 result = [valorAnt, valorAnt]
             }
-            col.push({"cuenta" : "Costos No Oper.","valor" : result});  
+            col.push({"cuenta" : "Otros No Oper","valor" : result});  
             
             col.push({"cuenta" : "Utilidad", "valor" : col.slice(1).reduce((acc, item) => acc + (parseFloat(item.valor[0] - item.valor[1])), 0) + col[0].valor[1]});
 

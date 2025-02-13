@@ -10,6 +10,11 @@
             "id": 2,
             "label": "Empresa 2",
             "tipografico": 2
+        },
+        {
+            "id": 3,
+            "label": "Empresa 3",
+            "tipografico": 3
         }
     ]
 }
