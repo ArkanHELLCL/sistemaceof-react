@@ -98,7 +98,7 @@ function FloatingBarChart({ chartData, title }) {
                                 val = context.dataset.data[index][0] - context.dataset.data[index][1] || 0;
                             }
                             var glyph = val > 0 ? '▲' : val < 0 ? '▼' : '◆';
-                            return glyph + ' ' + new Intl.NumberFormat('en-ES', { style: 'currency', currency: 'USD', maximumFractionDigits:0 }).format(val);
+                            return glyph + ' ' + new Intl.NumberFormat('en-ES', { style: 'currency', currency: 'USD', maximumFractionDigits:0 }).format(val).replaceAll(',', '.');
                         },
                         padding: 6
                       }
@@ -118,7 +118,7 @@ function FloatingBarChart({ chartData, title }) {
                         ticks: {
                             callback: function(value, index, values) {
                                 //return '$ ' + value;
-                                return new Intl.NumberFormat('en-ES', { style: 'currency', currency: 'USD', maximumFractionDigits:0 }).format(value);
+                                return new Intl.NumberFormat('en-ES', { style: 'currency', currency: 'USD', maximumFractionDigits:0 }).format(value).replaceAll(',', '.');
                             }
                         }
                     }

@@ -118,26 +118,18 @@ export default function UtilidadMes({data, anio, mes}){
                 {
                     label: "Gráfico de Utilidades por Mes",
                     data: col?.map(item => item.valor),
-                    backgroundColor: [
-                        'rgb(255, 99, 132)',
-                        'rgb(255, 159, 64)',
-                        'rgb(255, 205, 86)',
-                        'rgb(75, 192, 192)',
-                        'rgb(54, 162, 235)',
-                        'rgb(153, 102, 255)',
-                        'rgb(201, 203, 207)',
-                        'rgb(233, 180, 257)'
-                    ],
-                    borderColor: [
-                        'rgb(255, 99, 132)',
-                        'rgb(255, 159, 64)',
-                        'rgb(255, 205, 86)',
-                        'rgb(75, 192, 192)',
-                        'rgb(54, 162, 235)',
-                        'rgb(153, 102, 255)',
-                        'rgb(201, 203, 207)',
-                        'rgb(233, 180, 257)'
-                    ],
+                    backgroundColor: col.map((item, index) => {
+                        if (index === 0 || index === col.length - 1) {
+                            return '#6aa1d7';
+                        }
+                        return item.valor[0] > item.valor[1] ? '#3f3088' : '#39bbd2'; 
+                    }),
+                    borderColor: col.map((item, index) => {
+                        if (index === 0 || index === col.length - 1) {
+                            return '#6aa1d7';
+                        }
+                        return item.valor[0] > item.valor[1] ? '#3f3088' : '#39bbd2'; 
+                    }),
                     borderWidth: 1,
                     minBarLength: 5
                 }

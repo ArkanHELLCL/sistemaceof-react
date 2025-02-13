@@ -12,22 +12,22 @@ export default function Main ({data, mes, user, menu, empresas, graficos, setGra
     <section className="main bg-white w-full px-10 pt-4 pb-20 relative">
       {
         menu.Dashboard &&
-          <DashBoard data={data} mes={mes} user={user} empresas={empresas} graficos={graficos} setGraficos={setGraficos} empresa={empresa} setEmpresa={setEmpresa}/>
+          <DashBoard data={data} mes={mes} user={user} empresas={empresas} graficos={graficos} setGraficos={setGraficos} empresa={empresa} setEmpresa={setEmpresa} menu={menu}/>
       }{
         menu.Download &&
-          <Download data={data} mes={mes} user={user}/>
+          <Download data={data} mes={mes} user={user} menu={menu}/>
       }{
         menu.Upload &&
-          <Upload data={data} mes={mes} user={user}/>
+          <Upload data={data} mes={mes} user={user} menu={menu}/>
       }{
         menu.Contacto &&
-          <Contact data={data} mes={mes} user={user}/>
+          <Contact data={data} mes={mes} user={user} menu={menu}/>
       }{
         menu.Empresas &&
-          <Enterprise data={data} mes={mes} user={user}/>
+          <Enterprise data={data} mes={mes} user={user} menu={menu}/>
       }{
         menu.Usuarios &&
-          <User data={data} mes={mes} user={user}/>
+          <User data={data} mes={mes} user={user} menu={menu}/>
       }
     </section>
   );

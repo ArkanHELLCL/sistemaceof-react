@@ -78,21 +78,16 @@ const processData = (data) => {
     return result;
 };
 
-export default function DashBoard({data, mes, user, empresas, graficos, setGraficos, empresa, setEmpresa}){
-    const fixedOptions = [];
+export default function DashBoard({data, mes, user, empresas, graficos, setGraficos, empresa, setEmpresa, menu}){
+    //const fixedOptions = [];
     const [datosFiltrados, setDatosFiltrados] = useState([]);
     const [sumaNiveles, setSumaNiveles] = useState([]);
     const [sumaNivelesFitrado, setSumaNivelesFiltrado] = useState([]);
-    const [anios, setAnios] = useState([]); 
-    const [anioSelected, setAnioSelected] = useState([]);
-    
-    useEffect(() => {
-      const Anios = data?.data?.map(item => (
-          { label: `${item.anio}`, year: item.anio }
-      ))
-      setAnios(Anios); 
-      setAnioSelected([anios[anios?.length - 1]]);
-    }, [data]);
+    const Anios = data?.data?.map(item => (
+        { label: `${item.anio}`, year: item.anio }
+    ))
+    //const [anios, setAnios] = useState(Anios); 
+    const [anioSelected, setAnioSelected] = useState([Anios[Anios?.length - 1]]);
 
     useEffect(() => {
         const DatosFiltrados = data?.data?.filter(item => item.anio === anioSelected[0]?.year)[0]?.data || []; 
@@ -101,10 +96,10 @@ export default function DashBoard({data, mes, user, empresas, graficos, setGrafi
         setSumaNiveles(result);
         const resultFiltrado = result.filter(item => item.year === anioSelected[0]?.year) || [];
         setSumaNivelesFiltrado(resultFiltrado);
-    }, [data, anios, anioSelected, empresas]);
-    
+    }, [data, anioSelected, empresa, menu]);
+
     return ( 
-        sumaNiveles && anios && sumaNivelesFitrado && anioSelected[0] &&
+        sumaNiveles && sumaNivelesFitrado && anioSelected[0] &&
         <>
           {            
             user?.PER_Id === 1 ?
@@ -138,7 +133,7 @@ export default function DashBoard({data, mes, user, empresas, graficos, setGrafi
                         disableClearable={true}
                         id="graficos-anios"
                         value={anioSelected[0]}
-                        options={anios}
+                        options={Anios}
                         sx={{ width: "100%"}}
                         onChange={(event, newValue) => {
                             setAnioSelected([
@@ -157,7 +152,7 @@ export default function DashBoard({data, mes, user, empresas, graficos, setGrafi
                           <UtilidadMes anio={[anioSelected[0]?.year]} mes={mes} data={sumaNivelesFitrado}/>
                       </Grid>
                       <Grid item xs={12} xl={12}>
-                          <VentasAnual data={sumaNiveles} anios={anios}/>
+                          <VentasAnual data={sumaNiveles} anios={Anios}/>
                       </Grid>
                       <Grid item xs={12} xl={8}>
                           <UtilidadMesAnual anio={[anioSelected[0]?.year]} data={sumaNivelesFitrado}/>
