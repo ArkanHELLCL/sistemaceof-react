@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
-import PanelFinancieroTable from '../graficos/panelfinancieroTable';
+import PanelFinancieroTable2 from '../graficos/panelfinancieroTable2';
 
 const meses = [
     { "label": "Enero", "month": 1 },
@@ -21,7 +21,39 @@ const meses = [
     { "label": "Diciembre", "month": 12 }
 ]
 
-export default function PanelFinancieroAnual({data, anio, mes}){
+const sumaRemuneraciones = (data) => {
+    const filteredArray1 = [data["nivel2"]['1.2.2.']?.months?.slice(0,12) || Array(12).fill(0)];
+    filteredArray1.push(data["nivel2"]['1.2.3.']?.months?.slice(0,12) || Array(12).fill(0));
+    filteredArray1.push(data["nivel2"]['1.2.4.']?.months?.slice(0,12) || Array(12).fill(0));
+
+    const filteredArray = filteredArray1?.reduce((acc, val) => {
+                return acc.map((item, idx) => item + val[idx]);
+            }, Array(12).fill(0));
+    return filteredArray;
+};
+
+const sumaOtrosExplotacion = (data) => {
+    const filteredArray1 = [data["nivel2"]['1.2.5.']?.months?.slice(0,12) || Array(12).fill(0)];
+    filteredArray1.push(data["nivel2"]['1.2.6.']?.months?.slice(0,12) || Array(12).fill(0));
+
+    const filteredArray = filteredArray1?.reduce((acc, val) => {
+                return acc.map((item, idx) => item + val[idx]);
+            }, Array(12).fill(0));
+    return filteredArray;
+};
+
+const sumaOtrosGastos = (data) => {
+    const filteredArray1 = [data["nivel2"]['1.3.2.']?.months?.slice(0,12) || Array(12).fill(0)];
+    filteredArray1.push(data["nivel2"]['1.3.3.']?.months?.slice(0,12) || Array(12).fill(0));
+    filteredArray1.push(data["nivel2"]['1.3.6.']?.months?.slice(0,12) || Array(12).fill(0));
+
+    const filteredArray = filteredArray1?.reduce((acc, val) => {
+                return acc.map((item, idx) => item + val[idx]);
+            }, Array(12).fill(0));
+    return filteredArray;
+};
+
+export default function PanelFinancieroAnual2({data, anio, mes}){
     const selectdMes = meses?.filter(item => item.month === mes[0])
     const [mesSelected, setMesSelected] = useState(selectdMes);
     const [title, setTitle] = useState('Panel Financiero');
@@ -97,12 +129,174 @@ export default function PanelFinancieroAnual({data, anio, mes}){
         col.push({"id" : 9, "valor" : valor});
 
         return col
-    }
+    };
 
-    const sumarColumnas = (label, array1, array2) => {
-        if (array1.length !== array2.length) {
-          throw new Error('Los arrays deben tener la misma longitud');
-        }
+    const columnRem = (label, data, mes) =>{
+        const col = [];
+        const year = data.filter(item => item.year === anio[0])[0]
+        const yearant = data.filter(item => item.year === anio[0]-1)[0]
+
+        col.push({"id" : 1, "valor" : label});
+
+        let valor = year ? parseFloat(sumaRemuneraciones(year).slice(0,12).filter((item, idx) => idx === mes-1)[0]) : 0
+        valor = valor ? valor : 0;
+        col.push({"id" : 2, "valor" : valor ? valor : 0});
+
+        valor = year ? parseFloat(sumaRemuneraciones(year).slice(0,12).filter((item, idx) => idx === mes-2)[0]) : 0
+        valor = valor ? valor : 0;
+        col.push({"id" : 3, "valor" : valor ? valor : 0});
+
+        if(col[2].valor === 0)
+            valor = 0
+        else
+            valor = (col[1].valor-col[2].valor) / Math.abs(col[2].valor) 
+        
+        valor = valor ? valor : 0;
+        col.push({"id" : 4, "valor" : valor});
+
+        valor = yearant ? parseFloat(sumaRemuneraciones(yearant).slice(0,12).filter((item, idx) => idx === mes-1)[0]) : 0
+        valor = valor ? valor : 0;
+        col.push({"id" : 5, "valor" : valor ? valor : 0});
+
+        if(col[4].valor === 0)
+            valor = 0
+        else
+            valor = ((col[1].valor-col[4].valor) / Math.abs(col[4].valor )) 
+
+        valor = valor ? valor : 0;
+        col.push({"id" : 6, "valor" : valor});
+
+        //Acumular por el maximo de meses cargados actualmente - todo
+        valor = year ? parseFloat(sumaRemuneraciones(year).slice(0,mes).reduce((acc, val) => acc + val, 0)) : 0
+        valor = valor ? valor : 0
+        col.push({"id" : 7, "valor" : valor ? valor : 0});
+
+        valor = yearant ? parseFloat(sumaRemuneraciones(yearant)?.slice(0,mes).reduce((acc, val) => acc + val, 0)) : 0
+        valor = valor ? valor : 0
+        col.push({"id" : 8, "valor" : valor ? valor : 0});
+
+        if(col[7].valor === 0)
+            valor = 0
+        else
+            valor = ((col[6].valor-col[7].valor) / Math.abs(col[7].valor)) 
+                
+        valor = valor ? valor : 0;
+        col.push({"id" : 9, "valor" : valor});
+
+        return col
+    };
+
+    const columnOtrosExplotacion = (label, data, mes) =>{
+        const col = [];
+        const year = data.filter(item => item.year === anio[0])[0]
+        const yearant = data.filter(item => item.year === anio[0]-1)[0]
+
+        col.push({"id" : 1, "valor" : label});
+
+        let valor = year ? parseFloat(sumaOtrosExplotacion(year).slice(0,12).filter((item, idx) => idx === mes-1)[0]) : 0
+        valor = valor ? valor : 0;
+        col.push({"id" : 2, "valor" : valor ? valor : 0});
+
+        valor = year ? parseFloat(sumaOtrosExplotacion(year).slice(0,12).filter((item, idx) => idx === mes-2)[0]) : 0
+        valor = valor ? valor : 0;
+        col.push({"id" : 3, "valor" : valor ? valor : 0});
+
+        if(col[2].valor === 0)
+            valor = 0
+        else
+            valor = (col[1].valor-col[2].valor) / Math.abs(col[2].valor) 
+        
+        valor = valor ? valor : 0;
+        col.push({"id" : 4, "valor" : valor});
+
+        valor = yearant ? parseFloat(sumaOtrosExplotacion(yearant).slice(0,12).filter((item, idx) => idx === mes-1)[0]) : 0
+        valor = valor ? valor : 0;
+        col.push({"id" : 5, "valor" : valor ? valor : 0});
+
+        if(col[4].valor === 0)
+            valor = 0
+        else
+            valor = ((col[1].valor-col[4].valor) / Math.abs(col[4].valor )) 
+
+        valor = valor ? valor : 0;
+        col.push({"id" : 6, "valor" : valor});
+
+        //Acumular por el maximo de meses cargados actualmente - todo
+        valor = year ? parseFloat(sumaOtrosExplotacion(year).slice(0,mes).reduce((acc, val) => acc + val, 0)) : 0
+        valor = valor ? valor : 0
+        col.push({"id" : 7, "valor" : valor ? valor : 0});
+
+        valor = yearant ? parseFloat(sumaOtrosExplotacion(yearant)?.slice(0,mes).reduce((acc, val) => acc + val, 0)) : 0
+        valor = valor ? valor : 0
+        col.push({"id" : 8, "valor" : valor ? valor : 0});
+
+        if(col[7].valor === 0)
+            valor = 0
+        else
+            valor = ((col[6].valor-col[7].valor) / Math.abs(col[7].valor)) 
+                
+        valor = valor ? valor : 0;
+        col.push({"id" : 9, "valor" : valor});
+
+        return col
+    };
+
+    const columnOtrosGastos = (label, data, mes) =>{
+        const col = [];
+        const year = data.filter(item => item.year === anio[0])[0]
+        const yearant = data.filter(item => item.year === anio[0]-1)[0]
+
+        col.push({"id" : 1, "valor" : label});
+
+        let valor = year ? parseFloat(sumaOtrosGastos(year).slice(0,12).filter((item, idx) => idx === mes-1)[0]) : 0
+        valor = valor ? valor : 0;
+        col.push({"id" : 2, "valor" : valor ? valor : 0});
+
+        valor = year ? parseFloat(sumaOtrosGastos(year).slice(0,12).filter((item, idx) => idx === mes-2)[0]) : 0
+        valor = valor ? valor : 0;
+        col.push({"id" : 3, "valor" : valor ? valor : 0});
+
+        if(col[2].valor === 0)
+            valor = 0
+        else
+            valor = (col[1].valor-col[2].valor) / Math.abs(col[2].valor) 
+        
+        valor = valor ? valor : 0;
+        col.push({"id" : 4, "valor" : valor});
+
+        valor = yearant ? parseFloat(sumaOtrosGastos(yearant).slice(0,12).filter((item, idx) => idx === mes-1)[0]) : 0
+        valor = valor ? valor : 0;
+        col.push({"id" : 5, "valor" : valor ? valor : 0});
+
+        if(col[4].valor === 0)
+            valor = 0
+        else
+            valor = ((col[1].valor-col[4].valor) / Math.abs(col[4].valor )) 
+
+        valor = valor ? valor : 0;
+        col.push({"id" : 6, "valor" : valor});
+
+        //Acumular por el maximo de meses cargados actualmente - todo
+        valor = year ? parseFloat(sumaOtrosGastos(year).slice(0,mes).reduce((acc, val) => acc + val, 0)) : 0
+        valor = valor ? valor : 0
+        col.push({"id" : 7, "valor" : valor ? valor : 0});
+
+        valor = yearant ? parseFloat(sumaOtrosGastos(yearant)?.slice(0,mes).reduce((acc, val) => acc + val, 0)) : 0
+        valor = valor ? valor : 0
+        col.push({"id" : 8, "valor" : valor ? valor : 0});
+
+        if(col[7].valor === 0)
+            valor = 0
+        else
+            valor = ((col[6].valor-col[7].valor) / Math.abs(col[7].valor)) 
+                
+        valor = valor ? valor : 0;
+        col.push({"id" : 9, "valor" : valor});
+
+        return col
+    };
+
+    const sumarColumnas = (label, array1, array2) => {        
         let valor = 0;
         const col = [];
         col.push({"id" : 1, "valor" : label});
@@ -204,7 +398,7 @@ export default function PanelFinancieroAnual({data, anio, mes}){
         if(array1[1].valor === 0)
             valor = 0
         else
-            valor = ((array2[1].valor / array1[1].valor )  );
+            valor = ((array2[1].valor / array1[1].valor ));
         
         valor = negativo ? valor * - 1 : valor ;
         col.push({"id" : 2, "valor" : valor});
@@ -212,7 +406,7 @@ export default function PanelFinancieroAnual({data, anio, mes}){
         if(array1[2].valor === 0)
             valor = 0
         else
-            valor = ((array2[2].valor / array1[2].valor )  );
+            valor = ((array2[2].valor / array1[2].valor ));
         valor = negativo ? valor * - 1 : valor ;
         col.push({"id" : 3, "valor" : valor});
 
@@ -258,72 +452,132 @@ export default function PanelFinancieroAnual({data, anio, mes}){
         col.push({"id" : 6, "valor" : valor});
 
         return col;
-    }
+    };
+    
+    const percentajeColumns2 = (label, array1, array2, array3, negativo) => {
+        let valor = 0;
+        const col = [];
+        col.push({"id" : 1, "valor" : label});
+
+        if(array3[1].valor === 0)
+            valor = 0
+        else
+            valor = ((array1[1].valor + array2[1].valor) / array3[1].valor );        
+        valor = negativo ? valor * - 1 : valor ;
+        col.push({"id" : 2, "valor" : valor});
+
+        if(array3[2].valor === 0)
+            valor = 0
+        else
+            valor = ((array1[2].valor + array2[2].valor) / array3[2].valor );
+        valor = negativo ? valor * - 1 : valor ;
+        col.push({"id" : 3, "valor" : valor});
+
+        if(parseFloat(col[2].valor) === 0)
+            valor = 0
+        else
+            valor = (((parseFloat(col[1].valor)-parseFloat(col[2].valor)) / Math.abs((parseFloat(col[2].valor)))  ));
+        //valor = negativo ? valor * - 1 : valor ;
+        col.push({"id" : 4, "valor" : valor});
+        if(array3[4].valor === 0)
+            valor = 0
+        else
+            valor = ((array1[4].valor + array2[4].valor) / array3[4].valor );
+        valor = negativo ? valor * - 1 : valor ;
+        col.push({"id" : 5, "valor" : valor});
+
+        if(parseFloat(col[4].valor) === 0)
+            valor = 0
+        else
+            valor = (((parseFloat(col[1].valor)-parseFloat(col[4].valor)) / Math.abs((parseFloat(col[4].valor)))  ));
+        //valor = negativo ? valor * - 1 : valor ;
+        col.push({"id" : 6, "valor" : valor});
+
+        if(array3[6].valor === 0)
+            valor = 0
+        else
+            valor = ((array1[6].valor + array2[6].valor) / array3[6].valor );
+        valor = negativo ? valor * - 1 : valor ;
+        col.push({"id" : 7, "valor" :valor});
+
+        if(array3[7].valor === 0)
+            valor = 0
+        else
+            valor = ((array1[7].valor + array2[7].valor) / array3[7].valor );
+        valor = negativo ? valor * - 1 : valor ;
+        col.push({"id" : 8, "valor" : valor});
+
+        if(parseFloat(col[7].valor) === 0)
+            valor = 0
+        else
+            valor = ((parseFloat(col[6].valor)-parseFloat(col[7].valor)) / Math.abs((parseFloat(col[7].valor)))  );
+        //valor = negativo ? valor * - 1 : valor ;
+        col.push({"id" : 9, "valor" : valor});
+
+        return col;
+    };
 
     const tabla = (mes) => {
         const rows=[];
         //Row 1            
         rows.push({
-            "row": column("Ventas Nacionales", data, 'nivel2', '1.1.1.', mes)
+            "row": column("Ventas Nacionales", data, 'nivel2', '1.1.1.',mes)
         })
-        //Row 2     
-        rows.push({
-            "row": column("Otros Ingresos", data, 'nivel2', '1.1.3.', mes)
+        //Row 2          
+            rows.push({
+            "row": column("Ventas Internacionales", data, 'nivel2', '1.1.2.',mes)
         })
-        //Row 3   
+        //Row 3     
         rows.push({
-            "row": column("Ingresos de Explotación", data, 'nivel1', '1.1.', mes)
-        })            
+            "row": column("Ingresos de Explotación", data, 'nivel1', '1.1.',mes)
+        })
         //Row 4
         rows.push({
-            "row": column("Costos Directos", data, 'nivel2', '1.2.1.', mes)
+            "row": column("Costos Directos", data, 'nivel2', '1.2.1.',mes)
         })
-        //Row 5
+        //Row 5   
         rows.push({
-            "row": column("Otros Costos", data, 'nivel2', '1.2.2.', mes)
-        })
+            "row": columnRem("Costos Remunaraciones", data,mes)
+        })                        
         //Row 6
         rows.push({
-            "row": column("Costos de Explotación", data, 'nivel1', '1.2.', mes)
+            "row": columnOtrosExplotacion("Otros Explotación", data,mes)
         })
         //Row 7
-        //Fila 2 - 5
         rows.push({
-            "row": sumarColumnas("Margen de Explotación",rows[2].row, rows[5].row)
+            "row": column("Costos de Explotación", data, 'nivel1', '1.2.',mes)
         })
         //Row 8
-        //Fila 2 - 6
+        //Fila 3 - 7
         rows.push({
-            "row": percentajeColumns("% Margen de Explotación",rows[2].row, rows[6].row,0)
+            "row": sumarColumnas("Margen de Explotación",rows[2].row, rows[6].row)
         })
         //Row 9
+        //Fila 2 - 7
         rows.push({
-            "row": column("Gasto de Remuneraciones", data, 'nivel2', '1.3.1.', mes)
+            "row": percentajeColumns("% Margen de Explotación",rows[2].row, rows[7].row,0)
         })
+        
         //Row 10
         rows.push({
-            "row": column("Gasto Mantención", data, 'nivel2', '1.3.4.', mes)
+            "row": column("Gasto de Remuneraciones", data, 'nivel2', '1.3.1.',mes)
         })
         //Row 11
         rows.push({
-            "row": column("Gastos Financieros", data, 'nivel2', '1.3.6.', mes)
-        })
+            "row": column("Gasto Mantención", data, 'nivel2', '1.3.5.',mes)
+        })           
         //Row 12
         rows.push({
-            "row" : emptyColumn("Otros Gastos")
-        })
+            "row" : columnOtrosGastos("Otros Gastos", data,mes)
+        })            
         //Row 13
         rows.push({
-            "row": column("Gastos de Administración y Ventas", data, 'nivel1', '1.3.', mes)
-        })      
-        
-        //Actualizando Otros Gastos 8-9-10-12
-        rows[11].row = restar4Columnas("Otros Gastos", rows[12].row, rows[10].row, rows[9].row, rows[8].row)
-
+            "row": column("Gastos de Administración y Ventas", data, 'nivel1', '1.3.',mes)
+        })
         //Row 14
         rows.push({
-            "row": column("Resultado Operacional", data, 'resultado', '1.', mes)
-        })
+            "row": column("Resultado Operacional", data, 'resultado', '1.',mes)
+        })            
         //Row 15
         //Fila 2 - 13
         rows.push({
@@ -331,23 +585,23 @@ export default function PanelFinancieroAnual({data, anio, mes}){
         })
         //Row 16
         rows.push({
-            "row": column("Ingresos no Operacionales", data, 'nivel2', '2.1.1.', mes)
+            "row": column("Ingresos no Operacionales", data, 'nivel1', '2.1.',mes)
         })
         //Row 17
         rows.push({
-            "row": column("Impuesto a la Renta", data, 'nivel2', '2.2.3.', mes)
+            "row": column("Depreciaciones", data, 'nivel2', '2.2.1.',mes)
         })
         //Row 18
         rows.push({
-            "row": column("Intereses", data, 'nivel2', '2.2.4.', mes)
-        })
+            "row": column("Impuesto a la Renta", data, 'nivel2', '2.2.5.',mes)
+        })            
         //Row 19
         rows.push({
             "row" : emptyColumn("Otros No Operacional")
         })            
         //Row 20
         rows.push({
-            "row": column("Resultadado No Operacional", data, 'resultado', '2.', mes)
+            "row": column("Resultadado No Operacional", data, 'resultado', '2.',mes)
         })
 
         //Actualizando Otros Gastos 19-15-16-17
@@ -366,12 +620,12 @@ export default function PanelFinancieroAnual({data, anio, mes}){
         //Row 23
         //Fila 2 - 5
         rows.push({
-            "row": percentajeColumns("Ratio Costos Expl.",rows[2].row, rows[5].row,0,true)
+            "row": percentajeColumns2("Ratio Mano de Obra.",rows[4].row, rows[9].row, rows[2].row, false)
         })
         //Row 24
-        //Fila 2 - 8
+        //Fila 6 / 2
         rows.push({
-            "row": percentajeColumns("Ratio M.O. Total.",rows[2].row, rows[8].row,0,true)
+            "row": percentajeColumns("Ratio Costos Expl",rows[2].row, rows[6].row, false)
         })
         //Row 25
         //Fila 2 - 12
@@ -382,7 +636,7 @@ export default function PanelFinancieroAnual({data, anio, mes}){
                 if((index === 24 || index === 23 || index === 22 || index === 21) && (idx > 0)) return parseFloat(item.valor * -1).toLocaleString?.('en-EN', {
                     style: 'percent'                           
                     }).replaceAll(',', '.')
-                if((index === 14 || index === 7) && (idx > 0)) return parseFloat(item.valor).toLocaleString?.('en-EN', {
+                if((index === 14 || index === 8) && (idx > 0)) return parseFloat(item.valor).toLocaleString?.('en-EN', {
                 style: 'percent'                           
                 }).replaceAll(',', '.')
                 if(idx === 0) return item.valor
@@ -408,15 +662,14 @@ export default function PanelFinancieroAnual({data, anio, mes}){
 
     useEffect(() => {
         if(data?.length>0 && anio.length === 1 && mesSelected[0].month > 0){
-            tabla(mesSelected[0].month);
+            tabla(mesSelected[0].month)
         }
     }, [mesSelected, anio]);
     
     useEffect(() => {
         if(data?.length>0 && anio.length === 1 && mes[0] > 0){
-            tabla(mes[0]);
-        }
-        
+            tabla(mes[0])
+        }        
     }, [data, anio, mes]);
 
     useEffect(() => {
@@ -455,7 +708,7 @@ export default function PanelFinancieroAnual({data, anio, mes}){
                     />
                 </Grid>            
                 <Grid item xs={12}>
-                    <PanelFinancieroTable anio={anio[0]} mes={mesSelected[0].label} anioant={anioant} mesant={mesant} rangomes={rangoMes} data={resultData} />
+                    <PanelFinancieroTable2 anio={anio[0]} mes={mesSelected[0].label} anioant={anioant} mesant={mesant} rangomes={rangoMes} data={resultData} />
                 </Grid>
             </Grid>            
         </>
