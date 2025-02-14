@@ -4,17 +4,9 @@ import { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
-import VentasAnual  from '../grpemp/ventasAnual.jsx';
-import UtilidadMesAnual from '../grpemp/utilidadMesAnual.jsx';
-import UtilidadMes from '../grpemp/utilidadMes.jsx';
-import UtilidadYTD from '../grpemp/utilidadYTD.jsx';
-import RemuneracionesAnual from '../grpemp/remuneracionesAnual.jsx';
-import GoaAnual from '../grpemp/goaAnual.jsx';
-import PanelFinancieroAnual from '../grpemp/panelfinancieroAnual.jsx';
-import CuboAnual from '../grpemp/cuboAnual.jsx';
-import UtilidadMes2 from '../grpemp/utilidadMes2.jsx';
-import UtilidadMesAnual2 from '../grpemp/utilidadMesAnual2.jsx';
-import VentasAnual3 from '../grpemp/ventasAnual3.jsx';
+import Graphtype1 from './dashboard/graphtype1.jsx';
+import Graphtype2 from './dashboard/graphtype2.jsx';
+import Graphtype3 from './dashboard/graphtype3.jsx';
 
 const processData = (data) => {
     const result = [];
@@ -118,87 +110,30 @@ export default function DashBoard({data, mes, user, empresas, graficos, setGrafi
                         renderInput={(params) => <TextField {...params} label="Año a visualizar" variant="standard"/>}
                     />
               </Grid>{  
-                  user?.PER_Id === 1 ?
-                    <Grid item xl={6} xs={12} className='sticky !-top-3 bg-white z-10 opacity-85 !pt-2'>
-                        <Autocomplete
-                            disablePortal
-                            disableClearable={true}
-                            id="empresas"
-                            value={empresa}
-                            options={empresas}
-                            onChange={(event, newValue) => {setEmpresa(newValue)}}
-                            sx={{ width: "100%"}}
-                            renderInput={(params) => <TextField {...params} label="Empresa" variant="standard" />}
-                        />
-                    </Grid>
-                  : <Grid item xl={6} xs={12}/>
+                user?.PER_Id === 1 ?
+                  <Grid item xl={6} xs={12} className='sticky !-top-3 bg-white z-10 opacity-85 !pt-2'>
+                      <Autocomplete
+                          disablePortal
+                          disableClearable={true}
+                          id="empresas"
+                          value={empresa}
+                          options={empresas}
+                          onChange={(event, newValue) => {setEmpresa(newValue)}}
+                          sx={{ width: "100%"}}
+                          renderInput={(params) => <TextField {...params} label="Empresa" variant="standard" />}
+                      />
+                  </Grid>
+                : <Grid item xl={6} xs={12}/>
                 }{
                   ((user?.PER_Id === 1 && empresa?.tipografico === 1) || (user?.PER_Id > 1 && user?.EMP_TipoGrafico === 1))  &&
-                    <>
-                      <Grid item xs={12} xl={6}>                    
-                        <UtilidadMes anio={[anioSelected[0]?.year]} mes={mes} data={sumaNivelesFitrado}/>
-                      </Grid>
-                      <Grid item xs={12} xl={6}>
-                        <UtilidadMesAnual anio={[anioSelected[0]?.year]} data={sumaNivelesFitrado}/>
-                      </Grid> 
-                      <Grid item xs={12} xl={12}>
-                        <VentasAnual data={sumaNiveles} anios={Anios}/>
-                      </Grid>                                           
-                      <Grid item xs={12} xl={12}>                    
-                        <RemuneracionesAnual anio={[anioSelected[0]?.year]} data={sumaNivelesFitrado}/>
-                      </Grid>
-                      <Grid item xs={12} xl={12}>                    
-                        <GoaAnual anio={[anioSelected[0]?.year]} data={sumaNivelesFitrado}/>
-                      </Grid>
-                      <Grid item xs={12} xl={12}>                    
-                        <PanelFinancieroAnual anio={[anioSelected[0]?.year]} mes={mes} data={sumaNiveles}/>
-                      </Grid>
-                      <Grid item lg={12} xs={12}>
-                        <CuboAnual anio={[anioSelected[0]?.year]} data={datosFiltrados} sumaNiveles={sumaNivelesFitrado}/>
-                      </Grid>
-                    </>
-                  }{
-                    ((user?.PER_Id === 1 && empresa?.tipografico === 2) || (user?.PER_Id > 1 && user?.EMP_TipoGrafico === 2))  &&
-                      <>
-                        <Grid item xs={12} xl={6}>                    
-                          <UtilidadMes2 anio={[anioSelected[0]?.year]} mes={mes} data={sumaNivelesFitrado}/>
-                        </Grid>
-                        <Grid item xs={12} xl={6}>
-                          <UtilidadMesAnual2 anio={[anioSelected[0]?.year]} data={sumaNivelesFitrado}/>
-                        </Grid>
-                        <Grid item xs={12} xl={12}>
-                          <VentasAnual data={sumaNiveles} anios={Anios}/>
-                        </Grid>                        
-                        <Grid item lg={12} xs={12}>
-                          <CuboAnual anio={[anioSelected[0]?.year]} data={datosFiltrados} sumaNiveles={sumaNivelesFitrado}/>
-                        </Grid>
-                      </>
-                    }{
-                      ((user?.PER_Id === 1 && empresa?.tipografico === 3) || (user?.PER_Id > 1 && user?.EMP_TipoGrafico === 3))  &&
-                        <>
-                          <Grid item xs={12} xl={6}>                    
-                            <UtilidadMes anio={[anioSelected[0]?.year]} mes={mes} data={sumaNivelesFitrado}/>
-                          </Grid>
-                          <Grid item xs={12} xl={6}>
-                            <UtilidadMesAnual anio={[anioSelected[0]?.year]} data={sumaNivelesFitrado}/>
-                          </Grid> 
-                          <Grid item xs={12} xl={12}>
-                            <VentasAnual3 data={sumaNiveles} anios={Anios}/>
-                          </Grid>                                           
-                          <Grid item xs={12} xl={12}>                    
-                            <RemuneracionesAnual anio={[anioSelected[0]?.year]} data={sumaNivelesFitrado}/>
-                          </Grid>
-                          <Grid item xs={12} xl={12}>                    
-                            <GoaAnual anio={[anioSelected[0]?.year]} data={sumaNivelesFitrado}/>
-                          </Grid>
-                          <Grid item xs={12} xl={12}>                    
-                            <PanelFinancieroAnual anio={[anioSelected[0]?.year]} mes={mes} data={sumaNiveles}/>
-                          </Grid>
-                          <Grid item lg={12} xs={12}>
-                            <CuboAnual anio={[anioSelected[0]?.year]} data={datosFiltrados} sumaNiveles={sumaNivelesFitrado}/>
-                          </Grid>
-                        </>
-                      }
+                    <Graphtype1 anioSelected={anioSelected} mes={mes} datosFiltrados={datosFiltrados} sumaNiveles={sumaNiveles} sumaNivelesFitrado={sumaNivelesFitrado} Anios={Anios}/>
+                }{
+                  ((user?.PER_Id === 1 && empresa?.tipografico === 2) || (user?.PER_Id > 1 && user?.EMP_TipoGrafico === 2))  &&
+                    <Graphtype2 anioSelected={anioSelected} mes={mes} datosFiltrados={datosFiltrados} sumaNiveles={sumaNiveles} sumaNivelesFitrado={sumaNivelesFitrado} Anios={Anios}/>
+                }{
+                  ((user?.PER_Id === 1 && empresa?.tipografico === 3) || (user?.PER_Id > 1 && user?.EMP_TipoGrafico === 3))  &&
+                    <Graphtype3 anioSelected={anioSelected} mes={mes} datosFiltrados={datosFiltrados} sumaNiveles={sumaNiveles} sumaNivelesFitrado={sumaNivelesFitrado} Anios={Anios}/>
+                }
             </Grid>                    
           </>
     );

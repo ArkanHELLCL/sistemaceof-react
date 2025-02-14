@@ -19,12 +19,18 @@ function MultipleChart({ chartData, title }) {
                                     label += ': ';
                                 }
                                 if (context.parsed.y !== null) {
-                                    label += new Intl.NumberFormat('en-US', {
-                                        style: 'currency',
-                                        currency: 'USD',
-                                        minimumFractionDigits: 0,
-                                        maximumFractionDigits: 0
-                                    }).format(context.parsed.y).replaceAll(',', '.');
+                                    if (context.dataset.yAxisID === 'currency') {
+                                        label += new Intl.NumberFormat('en-US', {
+                                            style: 'currency',
+                                            currency: 'USD',
+                                            minimumFractionDigits: 0,
+                                            maximumFractionDigits: 0
+                                        }).format(context.parsed.y).replaceAll(',', '.');
+                                    } else if (context.dataset.yAxisID === 'percentage') {
+                                        label += Math.round(context.parsed.y) + '%';
+                                    } else {
+                                        label += context.parsed.y;
+                                    }
                                 }                                
                                 return label;
                             }
