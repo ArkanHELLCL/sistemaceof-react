@@ -191,7 +191,7 @@ useEffect(() => {
       // Convertir a JSON
       //const jsonResult = JSON.stringify(resultpivot, null, 4);
       setDataFormatted(resultpivot);     
-    }
+  }
 }, [data]);
 
   return (

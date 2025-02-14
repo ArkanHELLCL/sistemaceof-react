@@ -40,7 +40,7 @@ export default function UtilidadMes2({data, anio, mes}){
     const selectdMes = meses?.filter(item => item.month === mes[0]).sort((a, b) => a.month - b.month)
     const [mesSelected, setMesSelected] = useState(selectdMes);
     const [title, setTitle] = useState('Gráfico de Ventas');
-
+    
     useEffect(() => {
         if(data?.length>0 && anio.length === 1){
             const col=[];

@@ -2,7 +2,7 @@
     "data": [
         {
             "USR_Id": 1,
-            "PER_Id": 1,
+            "PER_Id": 3,
             "USR_Usuario": "lcastillo",
             "USR_Nombre": "Luis",
             "USR_Apellido": "Castillo",
@@ -10,8 +10,8 @@
             "PER_Descripcion": "Administrador",
             "EMP_Descripcion": "CEOF Consultores",
             "EMP_UrlLogo": "https:\/\/ceofconsultores.com\/wp-content\/uploads\/2025\/01\/logo-BLANCO-400px.png",
-            "EMP_Id": 1,
-            "EMP_TipoGrafico": 1
+            "EMP_Id": 9,
+            "EMP_TipoGrafico": 2
         }
     ]
 }
