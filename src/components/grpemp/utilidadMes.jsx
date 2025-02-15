@@ -5,7 +5,6 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
 import FloatingBarChart from '../graficos/floatingBarChart.jsx';
-import { borderColor } from '@mui/system';
 
 const meses = [
     { "label": "Enero", "month": 1 },
@@ -42,193 +41,109 @@ export default function UtilidadMes({data, anio, mes}){
     const [mesSelected, setMesSelected] = useState(selectdMes);
     const [title, setTitle] = useState('Gráfico de Ventas');
 
+    const tabla = (mes) => {
+        const col=[];
+        let valor = parseFloat(data[0]["nivel1"]['1.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes)[0]) || 0;
+        let result = [0,valor];
+        let valorAnt = valor;
+        col.push({"cuenta" : "Ingresos","valor" : result});
+        
+
+        valor = parseFloat(data[0]["nivel1"]['1.2.']?.months?.slice(0,12).filter((item, idx) => idx === mes)[0]) || 0;
+        if(valor !== 0){
+            valor = valorAnt + valor;
+            result = [valor, valorAnt]
+            valorAnt = valor;
+        }else{
+            result = [valorAnt, valorAnt]
+        }
+        col.push({"cuenta" : "Costos de Explotación","valor" : result});
+        
+
+        valor = parseFloat(data[0]["nivel2"]['1.3.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes)[0] || 0)
+        if(valor !== 0){
+            valor = valorAnt + valor;
+            result = [valor, valorAnt]
+            valorAnt = valor;
+        }else{
+            result = [valorAnt, valorAnt]
+        }
+        col.push({"cuenta" : "Remuneraciones","valor" : result});
+
+        valor = parseFloat(data[0]["nivel1"]['1.3.']?.months?.slice(0,12).filter((item, idx) => idx === mes)[0] || 0) 
+        let valor2 = parseFloat(data[0]["nivel2"]['1.3.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes)[0] || 0)
+        valor = valor ? valor : 0;
+        valor2 = valor2 ? valor2 : 0;
+        valor = valor - valor2;
+        if(valor !== 0){
+            valor = valorAnt + valor;
+            result = [valor, valorAnt]
+            valorAnt = valor;
+        }else{
+            result = [valorAnt, valorAnt]
+        }
+        col.push({"cuenta" : "Gastos Operacionales","valor" : result});
+
+        valor =  parseFloat(data[0]["nivel1"]['2.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes)[0] || 0)
+        if(valor !== 0){
+            valor = valorAnt + valor;
+            result = [valor, valorAnt]
+            valorAnt = valor;
+        }else{
+            result = [valorAnt, valorAnt]
+        }
+        col.push({"cuenta" : "Ingresos No Oper.","valor" : result});
+
+        valor = parseFloat(data[0]["nivel1"]['2.2.']?.months?.slice(0,12).filter((item, idx) => idx === mes)[0] || 0) 
+        valor2 = parseFloat(data[0]["nivel1"]['2.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes)[0] || 0)
+        valor = valor ? valor : 0;
+        valor2 = valor2 ? valor2 : 0;
+        valor = valor + valor2;
+        if(valor !== 0){
+            valor = valorAnt + valor;
+            result = [valor, valorAnt]
+            valorAnt = valor;
+        }else{
+            result = [valorAnt, valorAnt]
+        }
+        col.push({"cuenta" : "Costos No Oper.","valor" : result});  
+                
+        col.push({"cuenta" : "Utilidad", "valor" : col.slice(1).reduce((acc, item) => acc + (parseFloat(item.valor[0] - item.valor[1])), 0) + col[0].valor[1]} || 0);
+
+        setGrpconfig({
+            labels: col?.map(item => item.cuenta),
+            datasets: [
+            {
+                label: "Gráfico de Utilidades por Mes",
+                data: col?.map(item => item.valor),
+                backgroundColor: col.map((item, index) => {
+                    if (index === 0 || index === col.length - 1) {
+                        return '#6aa1d7';
+                    }
+                    return item.valor[0] > item.valor[1] ? '#3f3088' : '#39bbd2'; 
+                }),
+                borderColor: col.map((item, index) => {
+                    if (index === 0 || index === col.length - 1) {
+                        return '#6aa1d7';
+                    }
+                    return item.valor[0] > item.valor[1] ? '#3f3088' : '#39bbd2'; 
+                }),
+                borderWidth: 1,
+                minBarLength: 5
+            }
+            ]
+        })
+    }
+
     useEffect(() => {
         if(data.length>0 && anio.length === 1){
-            const col=[];
-            let valor = parseFloat(data[0]["nivel1"]['1.1.']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0]) || 0;
-            let result = [0,valor];
-            let valorAnt = valor;
-            col.push({"cuenta" : "Ingresos","valor" : result});
-            
-
-            valor = parseFloat(data[0]["nivel1"]['1.2.']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0]) || 0;
-            if(valor !== 0){
-                valor = valorAnt + valor;
-                result = [valor, valorAnt]
-                valorAnt = valor;
-            }else{
-                result = [valorAnt, valorAnt]
-            }
-            col.push({"cuenta" : "Costos de Explotación","valor" : result});
-            
-
-            valor = parseFloat(data[0]["nivel2"]['1.3.1.']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0] || 0)
-            if(valor !== 0){
-                valor = valorAnt + valor;
-                result = [valor, valorAnt]
-                valorAnt = valor;
-            }else{
-                result = [valorAnt, valorAnt]
-            }
-            col.push({"cuenta" : "Remuneraciones","valor" : result});
-
-            valor = parseFloat(data[0]["nivel1"]['1.3.']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0] || 0) 
-            let valor2 = parseFloat(data[0]["nivel2"]['1.3.1.']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0] || 0)
-            valor = valor ? valor : 0;
-            valor2 = valor2 ? valor2 : 0;
-            valor = valor - valor2;
-            if(valor !== 0){
-                valor = valorAnt + valor;
-                result = [valor, valorAnt]
-                valorAnt = valor;
-            }else{
-                result = [valorAnt, valorAnt]
-            }
-            col.push({"cuenta" : "Gastos Operacionales","valor" : result});
-
-            valor =  parseFloat(data[0]["nivel1"]['2.1.']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0] || 0)
-            if(valor !== 0){
-                valor = valorAnt + valor;
-                result = [valor, valorAnt]
-                valorAnt = valor;
-            }else{
-                result = [valorAnt, valorAnt]
-            }
-            col.push({"cuenta" : "Ingresos No Oper.","valor" : result});
-
-            valor = parseFloat(data[0]["nivel1"]['2.2.']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0] || 0) 
-            valor2 = parseFloat(data[0]["nivel1"]['2.1.']?.months?.slice(0,12).filter((item, idx) => idx === mesSelected[0].month-1)[0] || 0)
-            valor = valor ? valor : 0;
-            valor2 = valor2 ? valor2 : 0;
-            valor = valor + valor2;
-            if(valor !== 0){
-                valor = valorAnt + valor;
-                result = [valor, valorAnt]
-                valorAnt = valor;
-            }else{
-                result = [valorAnt, valorAnt]
-            }
-            col.push({"cuenta" : "Costos No Oper.","valor" : result});  
-                  
-            col.push({"cuenta" : "Utilidad", "valor" : col.slice(1).reduce((acc, item) => acc + (parseFloat(item.valor[0] - item.valor[1])), 0) + col[0].valor[1]} || 0);
-
-            setGrpconfig({
-                labels: col?.map(item => item.cuenta),
-                datasets: [
-                {
-                    label: "Gráfico de Utilidades por Mes",
-                    data: col?.map(item => item.valor),
-                    backgroundColor: col.map((item, index) => {
-                        if (index === 0 || index === col.length - 1) {
-                            return '#6aa1d7';
-                        }
-                        return item.valor[0] > item.valor[1] ? '#3f3088' : '#39bbd2'; 
-                    }),
-                    borderColor: col.map((item, index) => {
-                        if (index === 0 || index === col.length - 1) {
-                            return '#6aa1d7';
-                        }
-                        return item.valor[0] > item.valor[1] ? '#3f3088' : '#39bbd2'; 
-                    }),
-                    borderWidth: 1,
-                    minBarLength: 5
-                }
-                ]
-            })
+            tabla(mesSelected[0].month-1)
         }
     }, [mesSelected]);
 
     useEffect(() => {
         if(data?.length>0 && anio.length === 1){
-            const col=[];
-            let valor = parseFloat(data[0]["nivel1"]['1.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0]) || 0;
-            let result = [0,valor];
-            let valorAnt = valor;
-            col.push({"cuenta" : "Ingresos","valor" : result});
-            
-            valor = parseFloat(data[0]["nivel1"]['1.2.']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0]) || 0;
-            if(valor !== 0){
-                valor = valorAnt + valor;
-                result = [valor, valorAnt]
-                valorAnt = valor;
-            }else{
-                result = [valorAnt, valorAnt]
-            }
-            col.push({"cuenta" : "Costos de Explotación","valor" : result});            
-
-            valor = parseFloat(data[0]["nivel2"]['1.3.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0] || 0)
-            if(valor !== 0){
-                valor = valorAnt + valor;
-                result = [valor, valorAnt]
-                valorAnt = valor;
-            }else{
-                result = [valorAnt, valorAnt]
-            }
-            col.push({"cuenta" : "Remuneraciones","valor" : result});
-
-            valor = parseFloat(data[0]["nivel1"]['1.3.']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0] || 0) 
-            let valor2 = parseFloat(data[0]["nivel2"]['1.3.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0] || 0)
-            valor = valor ? valor : 0;
-            valor2 = valor2 ? valor2 : 0;
-            valor = valor - valor2;
-            if(valor !== 0){
-                valor = valorAnt + valor;
-                result = [valor, valorAnt]
-                valorAnt = valor;
-            }else{
-                result = [valorAnt, valorAnt]
-            }
-            col.push({"cuenta" : "Gastos Operacionales","valor" : result});
-
-            valor =  parseFloat(data[0]["nivel1"]['2.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0] || 0)
-            if(valor !== 0){
-                valor = valorAnt + valor;
-                result = [valor, valorAnt]
-                valorAnt = valor;
-            }else{
-                result = [valorAnt, valorAnt]
-            }
-            col.push({"cuenta" : "Ingresos No Oper.","valor" : result});
-
-            valor = parseFloat(data[0]["nivel1"]['2.2.']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0] || 0) 
-            valor2 = parseFloat(data[0]["nivel1"]['2.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes[0]-1)[0] || 0)
-            valor = valor ? valor : 0;
-            valor2 = valor2 ? valor2 : 0;
-            valor = valor + valor2;
-            if(valor !== 0){
-                valor = valorAnt + valor;
-                result = [valor, valorAnt]
-                valorAnt = valor;
-            }else{
-                result = [valorAnt, valorAnt]
-            }
-            col.push({"cuenta" : "Costos No Oper.","valor" : result});  
-
-            col.push({"cuenta" : "Utilidad", "valor" : col.slice(1).reduce((acc, item) => acc + (parseFloat(item.valor[0] - item.valor[1])), 0) + col[0].valor[1]} || 0);
-
-            setGrpconfig({
-                labels: col?.map(item => item.cuenta),
-                datasets: [
-                {
-                    label: "Gráfico de Utilidades por Mes",
-                    data: col?.map(item => item.valor),
-                    backgroundColor: col.map((item, index) => {
-                        if (index === 0 || index === col.length - 1) {
-                            return '#6aa1d7';
-                        }
-                        return item.valor[0] > item.valor[1] ? '#3f3088' : '#39bbd2'; 
-                    }),
-                    borderColor: col.map((item, index) => {
-                        if (index === 0 || index === col.length - 1) {
-                            return '#6aa1d7';
-                        }
-                        return item.valor[0] > item.valor[1] ? '#3f3088' : '#39bbd2'; 
-                    }),
-                    borderWidth: 1,
-                    minBarLength: 5
-                }
-                ]
-            })
+            tabla(mes[0]-1)
         }
     }, [data,  mes]);
 

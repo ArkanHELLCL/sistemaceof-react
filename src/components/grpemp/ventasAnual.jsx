@@ -7,6 +7,10 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
 import LineChart from '../graficos/lineChart.jsx';
 
+const meses = [
+    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio','Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+]
+
 const bgcolor = [
     'rgba(238, 237, 248, 0.8)',
     'rgba(255, 159, 64, 0.2)',
@@ -46,8 +50,12 @@ export default function VentasAnual({data, anios}){
                     item["nivel1"]['1.1.'].months.slice(0,12).map((item, idx) => {
                         const mes = idx+1;
                         return {
-                            month: year + '-' + mes,
+                            month: meses[mes-1].slice(0,3) + '-' + year,
+                            //month: year + '-' + mes,
+                            //month: year + '-' + mes + '-01',
                             venta: item
+                            /*x: {year: year, month: idx, day: 1, hour: 23},
+                            y: item*/
                         }
                     })
                 )
@@ -60,6 +68,7 @@ export default function VentasAnual({data, anios}){
             {
                 label: "Ventas Mensuales",
                 data: result?.map(data => data.venta),
+                //data: result,
                 borderColor: bdcolor,
                 backgroundColor: bgcolor,
                 fill: {

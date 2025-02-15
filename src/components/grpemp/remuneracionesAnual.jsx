@@ -4,6 +4,10 @@ import { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import MultipleChart from '../graficos/mutipleChart.jsx';
 
+const meses = [
+    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio','Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+]
+
 export default function RemuneracionesAnual({data, anio}){
     const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico
     const [title, setTitle] = useState('Gráfico de Ventas');
@@ -15,7 +19,8 @@ export default function RemuneracionesAnual({data, anio}){
             let result = filteredArray.slice(0,12).map((item,idx) => {
                 const mes = idx+1;
                 return {
-                    month: anio[0] + '-' + mes,
+                    //month: anio[0] + '-' + mes,
+                    month: meses[mes-1],
                     venta: item
                 }
             });

@@ -25,6 +25,7 @@
     "@react-spring/web": "9.7.5",
     "chart.js": "4.4.7",
     "chartjs-plugin-datalabels": "2.2.0",
+    "chartjs-plugin-deferred": "2.0.0",
     "material-react-table": "3.1.0",
     "notistack": "3.0.1",
     "papaparse": "5.5.2",

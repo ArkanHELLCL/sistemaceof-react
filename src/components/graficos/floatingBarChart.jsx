@@ -2,6 +2,8 @@
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import ChartDeferred from 'chartjs-plugin-deferred';
+ChartJS.register(ChartDeferred);
 
 function FloatingBarChart({ chartData, title }) {
     return chartData.datasets !== undefined ? <Bar 
@@ -101,7 +103,12 @@ function FloatingBarChart({ chartData, title }) {
                             return glyph + ' ' + new Intl.NumberFormat('en-ES', { style: 'currency', currency: 'USD', maximumFractionDigits:0 }).format(val).replaceAll(',', '.');
                         },
                         padding: 6
-                      }
+                    },
+                    deferred: {
+                        xOffset: 150,   // defer until 150px of the canvas width are inside the viewport
+                        yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
+                        delay: 0      // delay of 500 ms after the canvas is considered inside the viewport
+                    }
                 },
                 responsive: true,
                 scales:{
