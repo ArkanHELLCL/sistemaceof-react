@@ -46,3 +46,12 @@
 main{
   background: linear-gradient(-135deg, #424685, #68488a);
 }
+
+@keyframes moveUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes moveDown {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
