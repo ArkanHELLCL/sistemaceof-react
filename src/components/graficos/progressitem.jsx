@@ -35,12 +35,12 @@ const ProgressItem = ({ title, percentage, index, color }) => {
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', mb: 1 }}>
             <Typography variant="subtitle2" component="div" className={`${color === 'mo' ? '!text-gray-400' : '!text-gray-200'} !font-bold !text-xs pl-2`}>
-                {title}
+                {`${percentage > 0 ? '▲' : percentage < 0 ? '▼' : '◆'}`} {title}
             </Typography>
             <Typography variant="body2" component="div" sx={{ minWidth: 35 }} className={`text-white font-bold !text-xl pl-2`}>
                 {Math.round(displayPercentage)}%
             </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>                
                 <Box sx={{ width: '100%', ml: 1 }}>
                     <LinearProgress
                         variant="determinate"
@@ -48,7 +48,10 @@ const ProgressItem = ({ title, percentage, index, color }) => {
                         sx={{
                             height: 5,
                             borderRadius: 5,
-                            background: getColor(index),
+                            background: color === 'mo' ? 'rgb(36, 16, 79)' : color === 've' ? 'rgb(116, 143, 142)' : getColor(index),                            
+                            '& .MuiLinearProgress-bar': {
+                                backgroundColor: color === 'mo' ? 'primary' : color === 've' ? '#00fff3' : 'iinfo'
+                            }                              
                         }}
                     />
                 </Box>

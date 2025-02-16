@@ -9,6 +9,8 @@ import GoaAnual from '../../grpemp/goaAnual.jsx';
 import PanelFinancieroAnual from '../../grpemp/panelfinancieroAnual.jsx';
 import CuboAnual from '../../grpemp/cuboAnual.jsx';
 import ProgressList from '../../graficos/progressitem.jsx';
+import LineChartSimple from '../../graficos/lineChartSimple.jsx';
+import BarChartSimple from '../../graficos/barChartSimple.jsx';
 
 const items = [
     { title: 'Ventas', percentage: 75 },
@@ -21,7 +23,34 @@ const items = [
 
 const ListItemAnimated = ({ titulo, subtitulo, color, valor }) => {
     const [displayValue, setDisplayValue] = useState(0);
+    //const [displayValue2, setDisplayValue2] = useState(0);
     const isPositive = valor >= 0;
+    const labels = [
+        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    ]
+
+    const data = [
+        {
+            label: "Ventas Mensuales",
+            data:[10,40,50,13,60,-5],
+            pointStyle: false,
+            //backgroundColor: 'transparent',
+            //data: result,
+            //borderColor: bdcolor,
+            //backgroundColor: bgcolor,
+            /*fill: {
+                target: 'origin',
+                above: 'rgba(238, 237, 248, 0.5)',
+                below: 'rgba(238, 237, 248, 0.5)'
+            },*/
+            borderWidth: 1,
+            tension: 0.5
+        }]
+
+    const dataset = {
+        labels: labels,
+        datasets: data
+    }
 
     useEffect(() => {
         let start = 0;
@@ -63,10 +92,40 @@ const ListItemAnimated = ({ titulo, subtitulo, color, valor }) => {
                 <div className='leading-none pl-5 mb-0 pb-0'>
                     <span className={`${color === 'mo' ? 'text-gray-400' : 'text-gray-300'} font-bold text-xs`}>{subtitulo}</span>
                 </div>
-                <div className={`${color === 'mo' ? 'border-gray-500' : 'border-gray-300'} py-4 broder border-b-0 border-l-0 border-r-0 border-t-2 w-full mt-3`}></div>
+                <div className={`${color === 'mo' ? 'border-gray-500' : 'border-gray-300'} pt-4 broder border-b-0 border-l-0 border-r-0 border-t-2 w-full mt-3`}></div>
                 <img src='/images/img-1.svg' alt='personas' className='w-auti h-24 absolute top-1 right-1' />
 
                 <ProgressList items={items} color={color}/>
+                <Grid container spacing={0} className='mt-4'>
+                    <Grid item xs={6} xl={6} className='items-start flex justify-start'>
+                        <div>
+                            <h2 className={`${color === 'mo' ? 'text-gray-400' : 'text-gray-300'} font-bold text-xs`}>Ventas Nacionales Noviembre</h2>
+                            <h2 className='text-white font-bold text-2xl pb-0 mb-0'>
+                                {new Intl.NumberFormat('en-ES', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(displayValue).replaceAll(',', '.')}
+                            </h2>
+                            <div className='leading-none pl-0 mb-0 pb-0'>
+                                <span className={`${color === 'mo' ? 'text-gray-400' : 'text-gray-300'} font-bold text-xs`}>{`${valor > 0 ? '▲' : valor < 0 ? '▼' : '◆'}`} 25% respecto al mes pasado</span>
+                            </div>
+                        </div>                        
+                    </Grid>
+                    <Grid item xs={6} xl={6} sx={{height: '100px'}}>
+                        <LineChartSimple chartData={dataset} title={''}/>
+                    </Grid>
+                    <Grid item xs={6} xl={6} className='items-start flex justify-start'>
+                        <div>
+                            <h2 className={`${color === 'mo' ? 'text-gray-400' : 'text-gray-300'} font-bold text-xs`}>Ventas Nacionales</h2>
+                            <h2 className='text-white font-bold text-2xl pb-0 mb-0'>
+                                {new Intl.NumberFormat('en-ES', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(displayValue).replaceAll(',', '.')}
+                            </h2>
+                            <div className='leading-none pl-0 mb-0 pb-0'>
+                                <span className={`${color === 'mo' ? 'text-gray-400' : 'text-gray-300'} font-bold text-xs`}>{`${valor > 0 ? '▲' : valor < 0 ? '▼' : '◆'}`} 25% respecto al mes pasado</span>
+                            </div>
+                        </div>
+                    </Grid>
+                    <Grid item xs={6} xl={6} sx={{height: '100px'}}>
+                        <BarChartSimple chartData={dataset} title={''}/>
+                    </Grid>                    
+                </Grid>                
             </div>            
             <style>
                 {`
@@ -94,7 +153,7 @@ export default function Graphtype1({anioSelected, mes, datosFiltrados, sumaNivel
                 <ListItemAnimated titulo={'TOTAL INGRESOS NOVIEMBRE'} subtitulo={'-15% respecto al mes pasado'} color={'mo'} valor={23434135}/>
             </Grid>            
             <Grid item xs={12} xl={4}>
-                <ListItemAnimated titulo={'TOTAL INGRESOS 2024'} subtitulo={'-15% respecto al mes pasado'} color={'ve'} valor={-354600}/>
+                <ListItemAnimated titulo={'TOTAL INGRESOS 2024'} subtitulo={'-15% respecto al mes pasado'} color={'mo'} valor={-354600}/>
             </Grid>
             <Grid item xs={12} xl={8}>
                 <UtilidadMesAnual anio={[anioSelected[0]?.year]} data={sumaNivelesFitrado}/>

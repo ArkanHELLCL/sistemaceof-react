@@ -114,7 +114,7 @@ export default function RemuneracionesAnual2({data, anio}){
         <>
             <Grid container spacing={2} className='pb-4'>
                 <Grid item xs={12} className='pb-4'>
-                    <div className="flex justify-center rounded-xl bg-[#5d4889] text-white shadow-md py-4 align-middle">
+                    <div className="flex justify-center rounded-xl bg-[#4cbab5] text-white shadow-md py-4 align-middle">
                         <h2 className="text-2xl font-light text-center">{title}</h2>
                     </div>
                 </Grid>                            
