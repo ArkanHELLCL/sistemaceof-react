@@ -4,15 +4,13 @@ import ProgressList from './progressitem.jsx';
 import LineChartSimple from './lineChartSimple.jsx';
 import BarChartSimple from './barChartSimple.jsx';
 import { useEffect, useState } from 'react';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 
 export default function ListItemAnimated({ data, color }) {
     const [displayValue1, setDisplayValue1] = useState(0);
     const [displayValue2, setDisplayValue2] = useState(0);
     const [displayValue3, setDisplayValue3] = useState(0);
-    const isPositive1 = data?.data[0]?.valor >= 0;
-    const isPositive2 = data?.data[1]?.valor >= 0;
-    const isPositive3 = data?.data[2]?.valor >= 0;
+    const isPositive1 = data?.data[0]?.valor >= 0;    
 
     const easeOutQuad = (t) => t * (2 - t);
 
@@ -123,7 +121,7 @@ export default function ListItemAnimated({ data, color }) {
 
                 <ProgressList items={data?.items} color={color} />
                 <Grid container spacing={0} className='mt-4'>
-                    <Grid item xs={6} xl={6} className='items-start flex justify-start'>
+                    <Grid size={{ xs: 6, xl: 6 }} className='items-start flex justify-start'>
                         <div>
                             <h2 className={`${color === 'mo' ? 'text-gray-400' : 'text-gray-300'} font-bold text-xs`}>{data?.data[1]?.titulo}</h2>
                             <h2 className='text-white font-bold text-2xl pb-0 mb-0'>
@@ -134,10 +132,10 @@ export default function ListItemAnimated({ data, color }) {
                             </div>
                         </div>
                     </Grid>
-                    <Grid item xs={6} xl={6} sx={{ height: '100px' }}>
+                    <Grid size={{ xs: 6, xl: 6 }} sx={{ height: '100px' }}>
                         <LineChartSimple chartData={data?.dataset[0]} />
                     </Grid>
-                    <Grid item xs={6} xl={6} className='items-start flex justify-start'>
+                    <Grid size={{ xs: 6, xl: 6 }} className='items-start flex justify-start'>
                         <div>
                             <h2 className={`${color === 'mo' ? 'text-gray-400' : 'text-gray-300'} font-bold text-xs`}>{data?.data[2]?.titulo}</h2>
                             <h2 className='text-white font-bold text-2xl pb-0 mb-0'>
@@ -148,7 +146,7 @@ export default function ListItemAnimated({ data, color }) {
                             </div>
                         </div>
                     </Grid>
-                    <Grid item xs={6} xl={6} sx={{ height: '100px' }}>
+                    <Grid size={{ xs: 6, xl: 6 }} sx={{ height: '100px' }}>
                         <BarChartSimple chartData={data?.dataset[1]} />
                     </Grid>
                 </Grid>

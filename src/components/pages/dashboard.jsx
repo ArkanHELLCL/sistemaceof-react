@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import Graphtype1 from './dashboard/graphtype1.jsx';
 import Graphtype2 from './dashboard/graphtype2.jsx';
 import Graphtype3 from './dashboard/graphtype3.jsx';
@@ -93,7 +93,7 @@ export default function DashBoard({data, mes, user, empresas, graficos, setGrafi
         sumaNiveles && sumaNivelesFitrado && anioSelected[0] &&
         <>            
             <Grid container spacing={4}>
-              <Grid item xl={6} xs={12} className='sticky !-top-3 bg-white z-10 opacity-85 !pt-2'>
+              <Grid size={{ xs: 12, xl: 6 }} className='sticky !-top-3 bg-white z-10 opacity-85 !pt-2'>
                     <Autocomplete
                         disablePortal
                         disableClearable={true}
@@ -111,7 +111,7 @@ export default function DashBoard({data, mes, user, empresas, graficos, setGrafi
                     />
               </Grid>{  
                 user?.PER_Id === 1 ?
-                  <Grid item xl={6} xs={12} className='sticky !-top-3 bg-white z-10 opacity-85 !pt-2'>
+                  <Grid size={{ xs: 12, xl: 6 }} className='sticky !-top-3 bg-white z-10 opacity-85 !pt-2'>
                       <Autocomplete
                           disablePortal
                           disableClearable={true}
@@ -123,7 +123,7 @@ export default function DashBoard({data, mes, user, empresas, graficos, setGrafi
                           renderInput={(params) => <TextField {...params} label="Empresa" variant="standard" />}
                       />
                   </Grid>
-                : <Grid item xl={6} xs={12}/>
+                : <Grid size={{ xs: 12, xl: 6 }}/>
                 }{
                   ((user?.PER_Id === 1 && empresa?.tipografico === 1) || (user?.PER_Id > 1 && user?.EMP_TipoGrafico === 1))  &&
                     <Graphtype1 anioSelected={anioSelected} mes={mes} datosFiltrados={datosFiltrados} sumaNiveles={sumaNiveles} sumaNivelesFitrado={sumaNivelesFitrado} Anios={Anios}/>
@@ -140,7 +140,7 @@ export default function DashBoard({data, mes, user, empresas, graficos, setGrafi
 }
 
 /*
-<Grid item xs={12} xl={4}>                    
+<Grid size={{ xs: 12, xl: 8 }}>                    
                           <UtilidadYTD anio={[anioSelected[0]?.year]} mes={mes} data={sumaNivelesFitrado}/>
                       </Grid>
 <Grid item xl={5} xs={12}>

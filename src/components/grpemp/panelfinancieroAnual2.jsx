@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import PanelFinancieroTable2 from '../graficos/panelfinancieroTable2';
 
 const meses = [
@@ -685,7 +685,7 @@ export default function PanelFinancieroAnual2({data, anio, mes}){
         resultData && rangoMes && anioant && mesant &&
         <>
             <Grid container spacing={2} className='pb-20'>
-                <Grid item xs={12} className='pb-4'>
+                <Grid size={{ xs: 12, xl: 12 }} className='pb-4'>
                     <div className="flex justify-center rounded-xl bg-[#4cbab5] text-white shadow-md py-4 align-middle">
                         <h2 className="text-2xl font-light text-center">{title}</h2>
                     </div>
@@ -707,7 +707,7 @@ export default function PanelFinancieroAnual2({data, anio, mes}){
                         renderInput={(params) => <TextField {...params} label="Mes" variant="standard"/>}
                     />
                 </Grid>            
-                <Grid item xs={12}>
+                <Grid size={{ xs: 12, xl: 12 }}>
                     <PanelFinancieroTable2 anio={anio[0]} mes={mesSelected[0].label} anioant={anioant} mesant={mesant} rangomes={rangoMes} data={resultData} />
                 </Grid>
             </Grid>            

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import MultipleChart from '../graficos/mutipleChart.jsx';
 
 const meses = [
@@ -102,12 +102,12 @@ export default function GoaAnual({data, anio}){
     return grpconfig ? 
         <>
             <Grid container spacing={2} className='pb-4'>
-                <Grid item xs={12} className='pb-4'>
+                <Grid size={{ xs: 12, xl: 12 }} className='pb-4'>
                     <div className="flex justify-center rounded-xl bg-[#06a7d7] text-white shadow-md py-4 align-middle">
                         <h2 className="text-2xl font-light text-center">{title}</h2>
                     </div>
                 </Grid>                    
-                <Grid item xs={12} sx={{height: '400px'}}> 
+                <Grid size={{ xs: 12, xl: 12 }} sx={{height: '400px'}}> 
                     <MultipleChart chartData={grpconfig} title={title}/> 
                 </Grid>
             </Grid>

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import FloatingBarChart from '../graficos/floatingBarChart.jsx';
 
 const meses = [
@@ -162,16 +162,16 @@ export default function UtilidadMes2({data, anio, mes}){
     return grpconfig ? 
         <>
             <Grid container spacing={2} className='pb-4'>
-                <Grid item xs={12} className='pb-4'>
+                <Grid size={{ xs: 12, xl: 12 }} className='pb-4'>
                     <div className="flex justify-center rounded-xl bg-[#5d4889] text-white shadow-md py-4 align-middle">
                         <h2 className="text-2xl font-light text-center">{title}</h2>
                     </div>
                 </Grid>                
-                <Grid item xs={12} sx={{height: '400px'}}> 
+                <Grid size={{ xs: 12, xl: 12 }} sx={{height: '400px'}}> 
                     <FloatingBarChart chartData={grpconfig} title={title}/> 
                 </Grid>
-                <Grid item xs={12} className='flex justify-center mt-4'>
-                    <Grid item xs={12} xl={6} className='flex justify-center'>
+                <Grid size={{ xs: 12, xl: 12 }} className='flex justify-center mt-4'>
+                    <Grid size={{ xs: 12, xl: 12 }} xl={6} className='flex justify-center'>
                         <Autocomplete
                             disablePortal
                             disableClearable={true}
@@ -188,7 +188,7 @@ export default function UtilidadMes2({data, anio, mes}){
                             renderInput={(params) => <TextField {...params} label="Mes" variant="standard"/>}
                         />
                     </Grid>
-                    <Grid item xs={12} xl={6} className='flex justify-center'>
+                    <Grid size={{ xs: 12, xl: 12 }} xl={6} className='flex justify-center'>
                         <div className='flex items-center mr-4'>
                             <div className='w-4 h-4 bg-[#6aa1d7] mr-2'></div>
                             <span>Total</span>

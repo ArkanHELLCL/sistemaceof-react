@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import FloatingBarChart from '../graficos/floatingBarChart.jsx';
 
 export default function UtilidadMesAnual2({data, anio}){
@@ -120,15 +120,15 @@ export default function UtilidadMesAnual2({data, anio}){
     return grpconfig ? 
         <>
             <Grid container spacing={2} className='pb-4'>
-                <Grid item xs={12} className='pb-4'>
+                <Grid size={{ xs: 12, xl: 12 }} className='pb-4'>
                     <div className="flex justify-center rounded-xl bg-[#5D4889] text-white shadow-md py-4 align-middle">
                         <h2 className="text-2xl font-light text-center">{title}</h2>
                     </div>
                 </Grid>                            
-                <Grid item xs={12} sx={{height: '400px'}}> 
+                <Grid size={{ xs: 12, xl: 12 }} sx={{height: '400px'}}> 
                     <FloatingBarChart chartData={grpconfig} title={title}/> 
                 </Grid>
-                <Grid item xs={12} className='flex justify-center mt-4'>
+                <Grid size={{ xs: 12, xl: 12 }} className='flex justify-center mt-4'>
                     <div className='flex items-center mr-4'>
                         <div className='w-4 h-4 bg-[#6aa1d7] mr-2'></div>
                         <span>Total</span>
