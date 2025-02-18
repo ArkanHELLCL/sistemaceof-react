@@ -10,12 +10,14 @@ export default function ListItemAnimated({ data, color }) {
     const [displayValue1, setDisplayValue1] = useState(0);
     const [displayValue2, setDisplayValue2] = useState(0);
     const [displayValue3, setDisplayValue3] = useState(0);
-    const isPositive1 = data?.data[0]?.valor >= 0;    
+    const [showArrow1, setShowArrow1] = useState(false);
+    const isPositive1 = data?.data[0]?.variacion >= 0;    
 
     const easeOutQuad = (t) => t * (2 - t);
 
     useEffect(() => {
         const startAnimation = () => {
+            setShowArrow1(true);
             let start = 0;
             const end = data?.data[0]?.valor;
             const duration = 2000;
@@ -37,7 +39,7 @@ export default function ListItemAnimated({ data, color }) {
             requestAnimationFrame(animateValue1);
         };
 
-        const timer = setTimeout(startAnimation, 1000);
+        const timer = setTimeout(startAnimation, 500);
         return () => clearTimeout(timer);
     }, [data?.data[0]?.valor]);
 
@@ -100,15 +102,17 @@ export default function ListItemAnimated({ data, color }) {
             <div>
                 <h3 className={`${color === 'mo' ? 'text-gray-400' : 'text-gray-300'} font-bold text-base pb-3`}>{data?.data[0]?.titulo}</h3>
                 <div className='flex gap-2 items-center align-middle'>
-                    <span
-                        className={`${data?.data[0]?.valor > 0 ? 'text-green-500' : data?.data[0]?.valor < 0 ? 'text-red-600' : 'text-white'} font-bold text-sm`}
-                        style={{
-                            position: 'relative',
-                            animation: `${isPositive1 ? 'moveUp' : 'moveDown'} 2s forwards`,
-                        }}
-                    >
-                        {`${data?.data[0]?.valor > 0 ? '▲' : data?.data[0]?.valor < 0 ? '▼' : '◆'}`}
-                    </span>
+                    {showArrow1 && (
+                        <span
+                            className={`${data?.data[0]?.variacion > 0 ? 'text-green-500' : data?.data[0]?.variacion < 0 ? 'text-red-600' : 'text-white'} font-bold text-sm`}
+                            style={{
+                                position: 'relative',
+                                animation: `${isPositive1 ? 'moveUp' : 'moveDown'} 2s forwards`,
+                            }}
+                        >
+                            {`${data?.data[0]?.variacion > 0 ? '▲' : data?.data[0]?.variacion < 0 ? '▼' : '◆'}`}
+                        </span>
+                    )}
                     <h2 className='text-white font-bold text-2xl pb-0 mb-0'>
                         {new Intl.NumberFormat('en-ES', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(displayValue1).replaceAll(',', '.')}
                     </h2>
@@ -128,7 +132,7 @@ export default function ListItemAnimated({ data, color }) {
                                 {new Intl.NumberFormat('en-ES', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(displayValue2).replaceAll(',', '.')}
                             </h2>
                             <div className='leading-none pl-0 mb-0 pb-0'>
-                                <span className={`${color === 'mo' ? 'text-gray-400' : 'text-gray-300'} font-bold text-xs`}>{`${data?.data[1]?.valor > 0 ? '▲' : data?.data[1]?.valor < 0 ? '▼' : '◆'}`} {data?.data[1]?.subtitulo}</span>
+                                <span className={`${color === 'mo' ? 'text-gray-400' : 'text-gray-300'} font-bold text-xs`}>{`${data?.data[1]?.variacion > 0 ? '▲' : data?.data[1]?.variacion < 0 ? '▼' : '◆'}`} {data?.data[1]?.subtitulo}</span>
                             </div>
                         </div>
                     </Grid>
@@ -142,7 +146,7 @@ export default function ListItemAnimated({ data, color }) {
                                 {new Intl.NumberFormat('en-ES', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(displayValue3).replaceAll(',', '.')}
                             </h2>
                             <div className='leading-none pl-0 mb-0 pb-0'>
-                                <span className={`${color === 'mo' ? 'text-gray-400' : 'text-gray-300'} font-bold text-xs`}>{`${data?.data[2]?.valor > 0 ? '▲' : data?.data[2]?.valor < 0 ? '▼' : '◆'}`} {data?.data[2]?.subtitulo}</span>
+                                <span className={`${color === 'mo' ? 'text-gray-400' : 'text-gray-300'} font-bold text-xs`}>{`${data?.data[2]?.variacion > 0 ? '▲' : data?.data[2]?.variacion < 0 ? '▼' : '◆'}`} {data?.data[2]?.subtitulo}</span>
                             </div>
                         </div>
                     </Grid>
