@@ -38,12 +38,12 @@ export default function ResumenPanel({anio, mes, data, type}) {
             {
                 titulo: 'TOTAL INGRESOS 2024',
                 subtitulo: '35% respecto al mes pasado',
-                valor: 23434135
+                valor: -5678000
             },
             {
                 titulo: 'Ventas Nacionales Noviembre',
                 subtitulo: '25% respecto al mes pasado',
-                valor: 23434135
+                valor: 250000
             }
         ],
         items : [
@@ -56,12 +56,13 @@ export default function ResumenPanel({anio, mes, data, type}) {
         ]
     }
     return (
-        type === 1 ?
-            <ListItemAnimated data={dataItem} color={'mo'} />
-        :
-        type === 2 ?
-            <ListItemAnimated data={dataItem} color={'mo'} />
-        :
-            null        
+        data && anio && mes &&
+            type === 1 ?
+                <ListItemAnimated data={dataItem} color={'mo'} />
+            :
+            type === 2 ?
+                <ListItemAnimated data={dataItem} color={'mo'} />
+            :
+                null        
     );
 }
