@@ -6,10 +6,11 @@ import LinearProgress from '@mui/material/LinearProgress';
 
 const ProgressItem = ({ title, percentage, index, color }) => {
     const [displayPercentage, setDisplayPercentage] = useState(0);
+    const isPositive = percentage >= 0 ? true : false;
 
     useEffect(() => {
         let start = 0;
-        const end = percentage;
+        const end = Math.abs(percentage); // Use absolute value for animation
         const duration = 1000;
         const increment = end / (duration / 16);
 
@@ -38,9 +39,9 @@ const ProgressItem = ({ title, percentage, index, color }) => {
                 {`${percentage > 0 ? '▲' : percentage < 0 ? '▼' : '◆'}`} {title}
             </Typography>
             <Typography variant="body2" component="div" sx={{ minWidth: 35 }} className={`text-white font-bold !text-xl pl-2`}>
-                {Math.round(displayPercentage)}%
+                {isPositive ? Math.round(displayPercentage) : Math.round(displayPercentage) * -1 }%
             </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>                
+            <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
                 <Box sx={{ width: '100%', ml: 1 }}>
                     <LinearProgress
                         variant="determinate"
@@ -48,10 +49,12 @@ const ProgressItem = ({ title, percentage, index, color }) => {
                         sx={{
                             height: 5,
                             borderRadius: 5,
-                            background: color === 'mo' ? 'rgb(36, 16, 79)' : color === 've' ? 'rgb(116, 143, 142)' : getColor(index),                            
+                            background: color === 'mo' ? 'rgb(36, 16, 79)' : color === 've' ? 'rgb(116, 143, 142)' : getColor(index),
                             '& .MuiLinearProgress-bar': {
-                                backgroundColor: color === 'mo' ? 'primary' : color === 've' ? '#00fff3' : 'iinfo'
-                            }                              
+                                backgroundColor: percentage < 0 ? 'red' : color === 'mo' ? 'primary' : color === 've' ? '#00fff3' : 'info',
+                                //transform: percentage < 0 ? 'scaleX(-1)' : 'none', // Flip the bar for negative values
+                                //transformOrigin: 'left', // Ensure the bar grows from the left
+                            }
                         }}
                     />
                 </Box>
@@ -64,7 +67,7 @@ const ProgressList = ({ items, color }) => {
     return (
         <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 0 }}>
             {items.map((item, index) => (
-                <ProgressItem key={index} title={item.title} percentage={item.percentage} index={index} color={color}/>
+                <ProgressItem key={index} title={item.title} percentage={item.percentage} index={index} color={color} />
             ))}
         </Box>
     );
