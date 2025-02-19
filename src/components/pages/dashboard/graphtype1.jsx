@@ -16,10 +16,10 @@ export default function Graphtype1({anioSelected, mes, datosFiltrados, sumaNivel
                 <UtilidadMes anio={[anioSelected[0]?.year]} mes={mes} data={sumaNivelesFitrado}/>
             </Grid>
             <Grid size={{ xs: 12, xl: 4 }}>
-                <ResumenPanel anio={[anioSelected[0]?.year]} mes={mes} data={sumaNiveles} type={1}/>
+                <ResumenPanel anio={[anioSelected[0]?.year]} mes={mes} data={sumaNiveles} type={1} anios={Anios}/>
             </Grid>            
             <Grid size={{ xs: 12, xl: 4 }}>
-                <ResumenPanel anio={[anioSelected[0]?.year]} mes={mes} data={sumaNiveles} type={2}/>
+                <ResumenPanel anio={[anioSelected[0]?.year]} mes={mes} data={sumaNiveles} type={2} anios={Anios}/>
             </Grid>
             <Grid size={{ xs: 12, xl: 8 }}>
                 <UtilidadMesAnual anio={[anioSelected[0]?.year]} data={sumaNivelesFitrado}/>

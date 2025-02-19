@@ -68,7 +68,6 @@ export default function VentasAnual({data, anios}){
             {
                 label: "Ventas Mensuales",
                 data: result?.map(data => data.venta),
-                //data: result,
                 borderColor: bdcolor,
                 backgroundColor: bgcolor,
                 fill: {

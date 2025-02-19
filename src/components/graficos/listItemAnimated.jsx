@@ -5,8 +5,11 @@ import LineChartSimple from './lineChartSimple.jsx';
 import BarChartSimple from './barChartSimple.jsx';
 import { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid2';
+import BarChartVerticalSimple from './barChartVerticalSimple.jsx';
+import DoughnutChart from './doughnutChart.jsx';
+import DoughnutChartSimple from './doughnutChartSimple.jsx';
 
-export default function ListItemAnimated({ data, color }) {
+export default function ListItemAnimated({ data, color, type }) {
     const [displayValue1, setDisplayValue1] = useState(0);
     const [displayValue2, setDisplayValue2] = useState(0);
     const [displayValue3, setDisplayValue3] = useState(0);
@@ -124,7 +127,7 @@ export default function ListItemAnimated({ data, color }) {
                 <img src='/images/img-1.svg' alt='personas' className='w-auti h-24 absolute top-1 right-1' />
 
                 <ProgressList items={data?.items} color={color} />
-                <Grid container spacing={0} className='mt-4'>
+                <Grid container spacing={1} className='mt-4'>
                     <Grid size={{ xs: 6, xl: 6 }} className='items-start flex justify-start'>
                         <div>
                             <h2 className={`${color === 'mo' ? 'text-gray-400' : 'text-gray-300'} font-bold text-xs`}>{data?.data[1]?.titulo}</h2>
@@ -136,8 +139,13 @@ export default function ListItemAnimated({ data, color }) {
                             </div>
                         </div>
                     </Grid>
-                    <Grid size={{ xs: 6, xl: 6 }} sx={{ height: '100px' }}>
-                        <LineChartSimple chartData={data?.dataset[0]} />
+                    <Grid size={{ xs: 6, xl: 6 }} sx={{ height: '100px' }}>{
+                        type === 1 && 
+                            <LineChartSimple chartData={data?.dataset[0]} />
+                    }{
+                        type === 2 && 
+                            <DoughnutChartSimple chartData={data?.dataset[0]} />
+                    }
                     </Grid>
                     <Grid size={{ xs: 6, xl: 6 }} className='items-start flex justify-start'>
                         <div>
@@ -150,8 +158,13 @@ export default function ListItemAnimated({ data, color }) {
                             </div>
                         </div>
                     </Grid>
-                    <Grid size={{ xs: 6, xl: 6 }} sx={{ height: '100px' }}>
-                        <BarChartSimple chartData={data?.dataset[1]} />
+                    <Grid size={{ xs: 6, xl: 6 }} sx={{ height: '100px' }}>{
+                        type === 1 && 
+                            <BarChartSimple chartData={data?.dataset[1]} />
+                        }{
+                        type === 2 && 
+                            <BarChartVerticalSimple chartData={data?.dataset[1]} />
+                        }
                     </Grid>
                 </Grid>
             </div>            

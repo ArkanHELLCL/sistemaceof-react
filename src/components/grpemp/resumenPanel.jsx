@@ -62,6 +62,13 @@ const DataItemMes = (anio, mes, data) => {
 
     otrosCostosVariacion = otrosCostosVariacion ? otrosCostosVariacion : 0;
 
+    /*const labels = meses.slice(0).slice(-6).map(item => item.label);
+    //Costos Directos serie 6 ultimos meses    
+    const costosMesSeries = year ? year['nivel2']['1.2.1.']?.months?.slice(0).slice(-7) : Array(6).fill(0);
+
+    //Otros Costos seria 6 ultimos meses
+    const otrosCostosMesSeries = year ? year['nivel2']['1.2.2.']?.months?.slice(0).slice(-7) : Array(6).fill(0);*/
+
     //Costos Directos serie 6 ultimos meses
     let totalMeses = mes - 6;
     totalMeses = totalMeses < 0 ? mes : totalMeses;
@@ -70,6 +77,7 @@ const DataItemMes = (anio, mes, data) => {
 
     //Otros Costos seria 6 ultimos meses
     const otrosCostosMesSeries = year ? year['nivel2']['1.2.2.']?.months?.slice(totalMeses, mes) : Array(totalMeses).fill(0);
+
 
     //Porcentajes
     //% Margen de explotacion=
@@ -195,7 +203,7 @@ const DataItemMes = (anio, mes, data) => {
     }
 }
 
-const DataItemAcumulado = (anio, mes, data) => {
+const DataItemAcumulado = (anio, mes, data, anios) => {
     const year = data.filter(item => item.year === anio[0])[0]
     const yearant = data.filter(item => item.year === anio[0]-1)[0]
     //Ingresos acumulado
@@ -227,6 +235,19 @@ const DataItemAcumulado = (anio, mes, data) => {
 
     costosVariacionAcumulado = costosVariacionAcumulado ? costosVariacionAcumulado : 0;
 
+    //Costs Directos Serie ultimos 6 años
+    const yearArray = anios.slice(0).slice(-6).map(item => item.year)
+    const costosDirectosSerie = data?.filter(item => 
+        yearArray?.includes(item.year)).map(item => {
+            const year = item.year;
+            const valor = parseFloat(item['nivel2']['1.2.1.']?.months?.slice(0,mes).reduce((acc, val) => acc + val, 0)) || 0
+            return {
+                label: year,
+                value: valor
+            }
+        }
+    )
+
     //Otros Costos Acumulado
     let otrosCostosAcumulado = year ? parseFloat(year['nivel2']['1.2.2.']?.months?.slice(0,mes).reduce((acc, val) => acc + val, 0)) : 0
     otrosCostosAcumulado = otrosCostosAcumulado ? otrosCostosAcumulado : 0;
@@ -242,6 +263,19 @@ const DataItemAcumulado = (anio, mes, data) => {
 
     otrosCostosVariacionAcumulado = otrosCostosVariacionAcumulado ? otrosCostosVariacionAcumulado : 0;
 
+    //Otros Costos Serie ultimos 6 años
+        //Costs Directos Serie ultimos 6 años
+        const otrosCostosSerie = data?.filter(item => 
+            yearArray?.includes(item.year)).map(item => {
+                const year = item.year;
+                const valor = parseFloat(item['nivel2']['1.2.2.']?.months?.slice(0,mes).reduce((acc, val) => acc + val, 0)) || 0
+                return {
+                    label: year,
+                    value: valor
+                }
+            }
+        )
+    
     //Porcentajes
     //% Margen de explotacion=
     //Ingresos de explotacion / Margen de explotacion
@@ -303,32 +337,36 @@ const DataItemAcumulado = (anio, mes, data) => {
     if(ingresoExplotacionAcumulado === 0)
         ratioGOAAcumulado = 0
     else
-        ratioGOAAcumulado = (gastosAdministracionAcumulado / ingresoExplotacionAcumulado) * -100
+        ratioGOAAcumulado = (gastosAdministracionAcumulado / ingresoExplotacionAcumulado) * -100    
 
     return {
         dataset: [
             {
-                labels : [
-                    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-                ],
+                labels : costosDirectosSerie?.map(item => item.label),
                 datasets : [
                     {
-                        label: "Ventas Mensuales",
-                        data:[10,40,50,13,60,-5],
-                        pointStyle: false,                        
-                        borderWidth: 1,
-                        tension: 0.5
-                    }]
+                        type: 'doughnut',
+                        label: "Otros Costos",
+                        data: costosDirectosSerie?.map(item => item.value),
+                        backgroundColor: [                            
+                            'rgb(255, 205, 86)',
+                            'rgb(75, 192, 192)',
+                            'rgb(54, 162, 235)',
+                            'rgb(153, 102, 255)',
+                            'rgb(201, 203, 207)',
+                            'rgb(233, 180, 257)'
+                        ],
+                        hoverOffset: 4        
+                    }],                  
             },
             {
-                labels : [
-                    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-                ],
+                labels : otrosCostosSerie?.map(item => item.label),
                 datasets : [
                     {
-                        label: "Costoa Mensuales",
-                        data:[70,20,-4,20,10,30],
-                        borderWidth: 1,                        
+                        label: "Otros Costos",
+                        data: otrosCostosSerie?.map(item => item.value),
+                        borderWidth: 1,
+                        minBarLength: 5
                     }]
             }
         ],
@@ -369,17 +407,16 @@ const DataItemAcumulado = (anio, mes, data) => {
     }
 }
 
-export default function ResumenPanel({anio, mes, data, type}) {
-        
+export default function ResumenPanel({anio, mes, data, type, anios}) {
     const dataitemMes = DataItemMes(anio, mes, data);
-    const dataItemAcumulado = DataItemAcumulado(anio, mes, data);
+    const dataItemAcumulado = DataItemAcumulado(anio, mes, data, anios);
     return (
         data && anio && mes &&
             type === 1 ?
-                <ListItemAnimated data={dataitemMes} color={'mo'} />
+                <ListItemAnimated data={dataitemMes} color={'mo'} type={type} />
             :
             type === 2 ?
-                <ListItemAnimated data={dataItemAcumulado} color={'mo'} />
+                <ListItemAnimated data={dataItemAcumulado} color={'mo'} type={type} />
             :
                 null        
     );

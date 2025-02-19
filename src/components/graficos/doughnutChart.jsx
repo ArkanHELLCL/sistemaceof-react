@@ -13,18 +13,6 @@ function DoughnutChart({ chartData, title }) {
                         display: false,
                         text: title,
                     },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                               const dataset = context.dataset;
-                                const total = dataset.data.reduce((previousValue, currentValue) => previousValue + currentValue, 0);
-                                console.log(total);
-                                const currentValue = dataset.data[context.dataIndex];
-                                const percentage = Math.floor(((currentValue / total) * 100) + 0.5);         
-                                return `${context.label}: ${percentage}%`;                              
-                            }
-                        }
-                    },
                     deferred: {
                         xOffset: 150,   // defer until 150px of the canvas width are inside the viewport
                         yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
