@@ -6,7 +6,7 @@ import UtilidadMesAnual from '../../grpemp/utilidadMesAnual.jsx';
 import VentasAnual3 from '../../grpemp/ventasAnual3.jsx';
 import RemuneracionesAnual from '../../grpemp/remuneracionesAnual.jsx';
 import GoaAnual from '../../grpemp/goaAnual.jsx';
-import PanelFinancieroAnual from '../../grpemp/panelfinancieroAnual.jsx';
+import PanelFinancieroAnual3 from '../../grpemp/panelfinancieroAnual3.jsx';
 
 export default function Graphtype3({anioSelected, mes, datosFiltrados, sumaNiveles, sumaNivelesFitrado, Anios}){
     return (
@@ -27,7 +27,7 @@ export default function Graphtype3({anioSelected, mes, datosFiltrados, sumaNivel
             <GoaAnual anio={[anioSelected[0]?.year]} data={sumaNivelesFitrado}/>
         </Grid>
         <Grid size={{ xs: 12, xl: 12 }}>                    
-            <PanelFinancieroAnual anio={[anioSelected[0]?.year]} mes={mes} data={sumaNiveles}/>
+            <PanelFinancieroAnual3 anio={[anioSelected[0]?.year]} mes={mes} data={sumaNiveles}/>
         </Grid>
         <Grid size={{ xs: 12, xl: 12 }}>
             <CuboAnual anio={[anioSelected[0]?.year]} data={datosFiltrados} sumaNiveles={sumaNivelesFitrado}/>

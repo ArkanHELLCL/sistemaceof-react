@@ -111,11 +111,11 @@ export default function VentasAnual3({data, anios}){
         )
 
         result = filteredArray.flatMap(item => item);
-        labels = result.map(data => data.month)
+        labels = result?.map(data => data?.month)
         dataset.push(
             {
                 label: "Ventas Paypal",
-                data: result?.map(data => data.venta),
+                data: result?.map(data => data?.venta),
                 borderColor: "#39bbd2",
                 backgroundColor: "#39bbd2",                
                 borderWidth: 1,
@@ -123,7 +123,7 @@ export default function VentasAnual3({data, anios}){
             }
         )
 
-        if(dataset.length>0){
+        if(dataset.length==3){
             setGrpconfig({
                 labels: labels,
                 datasets: dataset
