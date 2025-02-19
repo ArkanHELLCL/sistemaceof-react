@@ -37,8 +37,6 @@ backgroundColor: [
 
 export default function UtilidadMes({data, anio, mes}){
     const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico
-    const selectdMes = meses?.filter(item => item.month === mes[0]).sort((a, b) => a.month - b.month)
-    const [mesSelected, setMesSelected] = useState(selectdMes);
     const [title, setTitle] = useState('Gráfico de Ventas');
 
     const tabla = (mes) => {
@@ -137,9 +135,9 @@ export default function UtilidadMes({data, anio, mes}){
 
     useEffect(() => {
         if(data.length>0 && anio.length === 1){
-            tabla(mesSelected[0].month-1)
+            tabla(mes[0].month-1)
         }
-    }, [mesSelected]);
+    }, [mes]);
 
     useEffect(() => {
         if(data?.length>0 && anio.length === 1){
@@ -149,16 +147,16 @@ export default function UtilidadMes({data, anio, mes}){
 
     useEffect(() => {
         if(anio.length === 1){
-            setTitle('Gráfico de Utilidades Mes ' + mesSelected[0].label + ' año ' + anio[0] );
+            setTitle('Gráfico de Utilidades Mes ' + meses[mes[0]-1].label + ' año ' + anio[0] );
         }        
         else{
            setTitle('Gráfico de Utilidades Mes');
         }
-    }, [anio, mesSelected]);
+    }, [anio, mes]);
 
     return grpconfig ? 
         <>
-                <Grid container spacing={2} className='pb-4'>
+            <Grid container spacing={2} className='pb-4'>
                 <Grid size={{ xs: 12, xl: 12 }} className='pb-4'>
                     <div className="flex justify-center rounded-xl bg-[#5d4889] text-white shadow-md py-4 align-middle">
                         <h2 className="text-2xl font-light text-center">{title}</h2>
@@ -167,38 +165,19 @@ export default function UtilidadMes({data, anio, mes}){
                 <Grid size={{ xs: 12, xl: 12 }} sx={{height: '400px'}}> 
                     <FloatingBarChart chartData={grpconfig} title={title}/> 
                 </Grid>
-                <Grid size={{ xs: 12, xl: 12 }} className='flex justify-center mt-4'>
-                    <Grid size={{ xs: 12, xl: 12 }} xl={6} className='flex justify-center'>
-                        <Autocomplete
-                            disablePortal
-                            disableClearable={true}
-                            id="utilidad-meses"
-                            value={mesSelected[0].label}
-                            options={meses}
-                            sx={{ width: "100%"}}
-                            onChange={(event, newValue) => {
-                                setMesSelected([
-                                    newValue,
-                                ]);
-                            }}
-
-                            renderInput={(params) => <TextField {...params} label="Mes" variant="standard"/>}
-                        />
-                    </Grid>
-                    <Grid size={{ xs: 12, xl: 12 }} xl={6} className='flex justify-center'>
-                        <div className='flex items-center mr-4'>
-                            <div className='w-4 h-4 bg-[#6aa1d7] mr-2'></div>
-                            <span>Total</span>
-                        </div>
-                        <div className='flex items-center mr-4'>
-                            <div className='w-4 h-4 bg-[#3f3088] mr-2'></div>
-                            <span>Aumento</span>
-                        </div>
-                        <div className='flex items-center'>
-                            <div className='w-4 h-4 bg-[#39bbd2] mr-2'></div>
-                            <span>Disminución</span>
-                        </div>
-                    </Grid>                    
+                <Grid size={{ xs: 12, xl: 12 }} className='flex justify-center mt-4'>                    
+                    <div className='flex items-center mr-4'>
+                        <div className='w-4 h-4 bg-[#6aa1d7] mr-2'></div>
+                        <span>Total</span>
+                    </div>
+                    <div className='flex items-center mr-4'>
+                        <div className='w-4 h-4 bg-[#3f3088] mr-2'></div>
+                        <span>Aumento</span>
+                    </div>
+                    <div className='flex items-center'>
+                        <div className='w-4 h-4 bg-[#39bbd2] mr-2'></div>
+                        <span>Disminución</span>
+                    </div>                                   
                 </Grid>
             </Grid> 
         </> : null

@@ -71,6 +71,21 @@ const processData = (data) => {
     return result;
 };
 
+const meses = [
+  { "label": "Enero", "month": 1 },
+  { "label": "Febrero", "month": 2 },
+  { "label": "Marzo", "month": 3 },
+  { "label": "Abril", "month": 4 },
+  { "label": "Mayo", "month": 5 },
+  { "label": "Junio", "month": 6 },
+  { "label": "Julio", "month": 7 },
+  { "label": "Agosto", "month": 8 },
+  { "label": "Septiembre", "month": 9 },
+  { "label": "Octubre", "month": 10 },
+  { "label": "Noviembre", "month": 11 },
+  { "label": "Diciembre", "month": 12 }
+]
+
 export default function DashBoard({data, mes, user, empresas, graficos, setGraficos, empresa, setEmpresa, menu}){
     const [datosFiltrados, setDatosFiltrados] = useState([]);
     const [sumaNiveles, setSumaNiveles] = useState([]);
@@ -79,6 +94,8 @@ export default function DashBoard({data, mes, user, empresas, graficos, setGrafi
         { label: `${item.anio}`, year: item.anio }
     ))
     const [anioSelected, setAnioSelected] = useState([Anios[Anios?.length - 1]]);
+    const selectdMes = meses?.filter(item => item.month === mes[0]).sort((a, b) => a.month - b.month)
+    const [mesSelected, setMesSelected] = useState(selectdMes);
 
     useEffect(() => {
         const DatosFiltrados = data?.data?.filter(item => item.anio === anioSelected[0]?.year)[0]?.data || []; 
@@ -92,8 +109,8 @@ export default function DashBoard({data, mes, user, empresas, graficos, setGrafi
     return ( 
         sumaNiveles && sumaNivelesFitrado && anioSelected[0] &&
         <>            
-            <Grid container spacing={4}>
-              <Grid size={{ xs: 12, xl: 6 }} className='sticky !-top-3 bg-white z-10 opacity-85 !pt-2'>
+            <Grid container spacing={1}>
+              <Grid size={{ xs: 12, xl: 4 }} className='sticky !-top-3 bg-white z-10 opacity-85 !pt-2'>
                     <Autocomplete
                         disablePortal
                         disableClearable={true}
@@ -109,9 +126,26 @@ export default function DashBoard({data, mes, user, empresas, graficos, setGrafi
 
                         renderInput={(params) => <TextField {...params} label="Año a visualizar" variant="standard"/>}
                     />
+              </Grid>
+              <Grid size={{ xs: 12, xl: 4 }} className='sticky !-top-3 bg-white z-10 opacity-85 !pt-2'>
+                    <Autocomplete
+                        disablePortal
+                        disableClearable={true}
+                        id="graficos-meses"
+                        value={mesSelected[0].label}
+                        options={meses}
+                        sx={{ width: "100%"}}
+                        onChange={(event, newValue) => {
+                            setMesSelected([
+                                newValue,
+                            ]);
+                        }}
+
+                        renderInput={(params) => <TextField {...params} label="Mes" variant="standard"/>}
+                    />
               </Grid>{  
                 user?.PER_Id === 1 ?
-                  <Grid size={{ xs: 12, xl: 6 }} className='sticky !-top-3 bg-white z-10 opacity-85 !pt-2'>
+                  <Grid size={{ xs: 12, xl: 4 }} className='sticky !-top-3 bg-white z-10 opacity-85 !pt-2'>
                       <Autocomplete
                           disablePortal
                           disableClearable={true}
@@ -123,16 +157,16 @@ export default function DashBoard({data, mes, user, empresas, graficos, setGrafi
                           renderInput={(params) => <TextField {...params} label="Empresa" variant="standard" />}
                       />
                   </Grid>
-                : <Grid size={{ xs: 12, xl: 6 }}/>
+                : <Grid size={{ xs: 12, xl: 4 }}/>
                 }{
                   ((user?.PER_Id === 1 && empresa?.tipografico === 1) || (user?.PER_Id > 1 && user?.EMP_TipoGrafico === 1))  &&
-                    <Graphtype1 anioSelected={anioSelected} mes={mes} datosFiltrados={datosFiltrados} sumaNiveles={sumaNiveles} sumaNivelesFitrado={sumaNivelesFitrado} Anios={Anios}/>
+                    <Graphtype1 anioSelected={anioSelected} mes={[mesSelected[0].month]} datosFiltrados={datosFiltrados} sumaNiveles={sumaNiveles} sumaNivelesFitrado={sumaNivelesFitrado} Anios={Anios}/>
                 }{
                   ((user?.PER_Id === 1 && empresa?.tipografico === 2) || (user?.PER_Id > 1 && user?.EMP_TipoGrafico === 2))  &&
-                    <Graphtype2 anioSelected={anioSelected} mes={mes} datosFiltrados={datosFiltrados} sumaNiveles={sumaNiveles} sumaNivelesFitrado={sumaNivelesFitrado} Anios={Anios}/>
+                    <Graphtype2 anioSelected={anioSelected} mes={[mesSelected[0].month]} datosFiltrados={datosFiltrados} sumaNiveles={sumaNiveles} sumaNivelesFitrado={sumaNivelesFitrado} Anios={Anios}/>
                 }{
                   ((user?.PER_Id === 1 && empresa?.tipografico === 3) || (user?.PER_Id > 1 && user?.EMP_TipoGrafico === 3))  &&
-                    <Graphtype3 anioSelected={anioSelected} mes={mes} datosFiltrados={datosFiltrados} sumaNiveles={sumaNiveles} sumaNivelesFitrado={sumaNivelesFitrado} Anios={Anios}/>
+                    <Graphtype3 anioSelected={anioSelected} mes={[mesSelected[0].month]} datosFiltrados={datosFiltrados} sumaNiveles={sumaNiveles} sumaNivelesFitrado={sumaNivelesFitrado} Anios={Anios}/>
                 }
             </Grid>                    
           </>

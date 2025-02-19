@@ -62,16 +62,10 @@ const DataItemMes = (anio, mes, data) => {
 
     otrosCostosVariacion = otrosCostosVariacion ? otrosCostosVariacion : 0;
 
-    /*const labels = meses.slice(0).slice(-6).map(item => item.label);
-    //Costos Directos serie 6 ultimos meses    
-    const costosMesSeries = year ? year['nivel2']['1.2.1.']?.months?.slice(0).slice(-7) : Array(6).fill(0);
-
-    //Otros Costos seria 6 ultimos meses
-    const otrosCostosMesSeries = year ? year['nivel2']['1.2.2.']?.months?.slice(0).slice(-7) : Array(6).fill(0);*/
-
     //Costos Directos serie 6 ultimos meses
     let totalMeses = mes - 6;
-    totalMeses = totalMeses < 0 ? mes : totalMeses;
+    totalMeses = mes < 6 ? 0 : totalMeses;
+    console.log(totalMeses, mes)
     const costosMesSeries = year ? year['nivel2']['1.2.1.']?.months?.slice(totalMeses, mes) : Array(totalMeses).fill(0);
     const labels = meses.slice(totalMeses, mes).map(item => item.label);
 
@@ -264,17 +258,17 @@ const DataItemAcumulado = (anio, mes, data, anios) => {
     otrosCostosVariacionAcumulado = otrosCostosVariacionAcumulado ? otrosCostosVariacionAcumulado : 0;
 
     //Otros Costos Serie ultimos 6 años
-        //Costs Directos Serie ultimos 6 años
-        const otrosCostosSerie = data?.filter(item => 
-            yearArray?.includes(item.year)).map(item => {
-                const year = item.year;
-                const valor = parseFloat(item['nivel2']['1.2.2.']?.months?.slice(0,mes).reduce((acc, val) => acc + val, 0)) || 0
-                return {
-                    label: year,
-                    value: valor
-                }
+    //Costs Directos Serie ultimos 6 años
+    const otrosCostosSerie = data?.filter(item => 
+        yearArray?.includes(item.year)).map(item => {
+            const year = item.year;
+            const valor = parseFloat(item['nivel2']['1.2.2.']?.months?.slice(0,mes).reduce((acc, val) => acc + val, 0)) || 0
+            return {
+                label: year,
+                value: valor
             }
-        )
+        }
+    )
     
     //Porcentajes
     //% Margen de explotacion=
@@ -408,8 +402,8 @@ const DataItemAcumulado = (anio, mes, data, anios) => {
 }
 
 export default function ResumenPanel({anio, mes, data, type, anios}) {
-    const dataitemMes = DataItemMes(anio, mes, data);
-    const dataItemAcumulado = DataItemAcumulado(anio, mes, data, anios);
+    const dataitemMes = DataItemMes(anio, mes[0], data);
+    const dataItemAcumulado = DataItemAcumulado(anio, mes[0], data, anios);
     return (
         data && anio && mes &&
             type === 1 ?

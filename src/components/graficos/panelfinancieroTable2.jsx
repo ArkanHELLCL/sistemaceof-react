@@ -1,17 +1,32 @@
 /* eslint-disable react/prop-types */
-export default function PanelFinancieroTable2({anio, mes, anioant, mesant, rangomes, data}) {
+const meses = [
+    { "label": "Enero", "month": 1 },
+    { "label": "Febrero", "month": 2 },
+    { "label": "Marzo", "month": 3 },
+    { "label": "Abril", "month": 4 },
+    { "label": "Mayo", "month": 5 },
+    { "label": "Junio", "month": 6 },
+    { "label": "Julio", "month": 7 },
+    { "label": "Agosto", "month": 8 },
+    { "label": "Septiembre", "month": 9 },
+    { "label": "Octubre", "month": 10 },
+    { "label": "Noviembre", "month": 11 },
+    { "label": "Diciembre", "month": 12 }
+]
+export default function PanelFinancieroTable2({anio, mes, anioant, rangomes, data}) {
+    const mesant = mes[0] === 1 ? 12 : mes[0] - 1;
     const Tablehead = ({anio, mes, anioant, mesant}) => {
         return (
             <thead>
                 <tr>
                     <th rowSpan="2" className="bg-[#4cbab5] rounded-tl-xl">Panel de Finanzas</th>
-                    <th colSpan="5" className="bg-[#4cbab5]">RESULTADO DE {mes.toUpperCase()}</th>
-                    <th colSpan="3" className="bg-[#4cbab5] rounded-tr-xl">YTD_{mes.toUpperCase().slice(0,3)}</th>
+                    <th colSpan="5" className="bg-[#4cbab5]">RESULTADO DE {meses[[mes]-1].label.toUpperCase()}</th>
+                    <th colSpan="3" className="bg-[#4cbab5] rounded-tr-xl">YTD_{meses[mesant-1].label.toUpperCase().slice(0,3)}</th>
                 </tr>
                 <tr>
                     
                     <th rowSpan="2" className="bg-[#4cbab5]">Real {anio}</th>
-                    <th rowSpan="2" className="bg-[#4cbab5]">Mes Ant. {mesant.toUpperCase()}</th>
+                    <th rowSpan="2" className="bg-[#4cbab5]">Mes Ant. {meses[mesant-1].label.toUpperCase()}</th>
                     <th rowSpan="2" className="bg-[#4cbab5]">Crec. Mes Ant.</th>
                     <th rowSpan="2" className="bg-[#4cbab5]">Real {anioant}</th>
                     <th rowSpan="2" className="bg-[#4cbab5]">Crec. Año Ant.</th>
