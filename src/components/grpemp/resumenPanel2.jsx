@@ -15,6 +15,19 @@ const meses = [
     { value: 12, label: 'Diciembre' }
 ];
 
+const sumaRemuneraciones = (data) => {
+    console.log(data)
+    const filteredArray1 = [data["nivel2"]['1.2.2.']?.months?.slice(0,12) || Array(12).fill(0)];
+    filteredArray1.push(data["nivel2"]['1.2.3.']?.months?.slice(0,12) || Array(12).fill(0));
+    filteredArray1.push(data["nivel2"]['1.2.4.']?.months?.slice(0,12) || Array(12).fill(0));
+
+    const filteredArray = filteredArray1?.reduce((acc, val) => {
+                return acc.map((item, idx) => item + val[idx]);
+            }, Array(12).fill(0));
+    console.log(filteredArray)
+    return filteredArray;
+};
+
 const DataItemMes = (anio, mes, data) => {
     const year = data.filter(item => item.year === anio[0])[0]
     const yearant = data.filter(item => item.year === anio[0]-1)[0]
@@ -60,15 +73,15 @@ const DataItemMes = (anio, mes, data) => {
 
     costosVariacion = costosVariacion ? costosVariacion : 0;
 
-    //Otros Costos mes
-    let otrosCostosMesActual = year ? parseFloat(year['nivel2']['1.2.2.']?.months?.slice(0,12).filter((item, idx) => idx === mes-1)[0]) : 0
+    //Costos Exploación mes
+    let otrosCostosMesActual = year ? parseFloat(year['nivel1']['1.2.']?.months?.slice(0,12).filter((item, idx) => idx === mes-1)[0]) : 0
     otrosCostosMesActual = otrosCostosMesActual ? otrosCostosMesActual : 0;
-    //Otros Costos mes anterior
+    //Costos Explotación mes anterior
     let otrosCostosMesAnterior = 0;
     if(mes === 1){
-        otrosCostosMesAnterior = yearant ? parseFloat(yearant['nivel2']['1.2.2.']?.months?.slice(0,12).filter((item, idx) => idx === 11)[0]) : 0
+        otrosCostosMesAnterior = yearant ? parseFloat(yearant['nivel1']['1.2.']?.months?.slice(0,12).filter((item, idx) => idx === 11)[0]) : 0
     }else{
-        otrosCostosMesAnterior = year ? parseFloat(year['nivel2']['1.2.2.']?.months?.slice(0,12).filter((item, idx) => idx === mes-2)[0]) : 0
+        otrosCostosMesAnterior = year ? parseFloat(year['nivel1']['1.2.']?.months?.slice(0,12).filter((item, idx) => idx === mes-2)[0]) : 0
     }
     
     otrosCostosMesAnterior = otrosCostosMesAnterior ? otrosCostosMesAnterior : 0;
@@ -87,8 +100,8 @@ const DataItemMes = (anio, mes, data) => {
     const costosMesSeries = year ? year['nivel2']['1.2.1.']?.months?.slice(totalMeses, mes) : Array(totalMeses).fill(0);
     const labels = meses.slice(totalMeses, mes).map(item => item.label);
 
-    //Otros Costos seria 6 ultimos meses
-    const otrosCostosMesSeries = year ? year['nivel2']['1.2.2.']?.months?.slice(totalMeses, mes) : Array(totalMeses).fill(0);
+    //Costos Explotación seria 6 ultimos meses
+    const otrosCostosMesSeries = year ? year['nivel1']['1.2.']?.months?.slice(totalMeses, mes) : Array(totalMeses).fill(0);
 
 
     //Porcentajes
@@ -126,22 +139,25 @@ const DataItemMes = (anio, mes, data) => {
         utilidadPorcentajeMesActual = 0
     else
         utilidadPorcentajeMesActual = (utilidadMesActual/ingresoExplotacionMesActual) * 100
-    //Ratio Costos de Explotacion =
-    //Ingresos de explotacion / Costos de explotacion
+    //Ratio M.O.Total =
+    //1 Costos Remuneraciones		calculo
+    //2 Gasto de Remuneraciones	1.3.5.
+    //3 Ingreso de Explotación 	1.2.
+    //1 + 2 / 3
+    let gastosRemuneracionesMesActual = year ? parseFloat(year['nivel2']['1.3.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes-1)[0]) : 0
     let ratioCostosExplotacionMesActual = 0;
     if(ingresoExplotacionMesActual === 0)
         ratioCostosExplotacionMesActual = 0
     else
-        ratioCostosExplotacionMesActual = (costosExplotacionMesActual / ingresoExplotacionMesActual) * -100
-
-    //Ratio M.O.Total =
+        ratioCostosExplotacionMesActual = ((Math.abs(parseFloat(sumaRemuneraciones(year).slice(0,12).filter((item, idx) => idx === mes-1)[0]) || 0) + Math.abs(gastosRemuneracionesMesActual)) / ingresoExplotacionMesActual) * 100 
+    //Ratio Costos de Explotacion =
     //Ingresos de explotacion / Gastos de remuneraciones
-    let gastosRemuneracionesMesActual = year ? parseFloat(year['nivel2']['1.3.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes-1)[0]) || 0  : 0
+    //let gastosRemuneracionesMesActual = year ? parseFloat(year['nivel2']['1.3.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes-1)[0]) || 0  : 0
     let ratioMOTotalMesActual = 0;
     if(ingresoExplotacionMesActual === 0)
         ratioMOTotalMesActual = 0
     else
-        ratioMOTotalMesActual = (gastosRemuneracionesMesActual / ingresoExplotacionMesActual) * -100
+        ratioMOTotalMesActual = (costosExplotacionMesActual / ingresoExplotacionMesActual) * -100
 
     //Ratio GOA =
     //Ingresos de explotacion / gastos de administracion
@@ -196,7 +212,7 @@ const DataItemMes = (anio, mes, data) => {
                 variacion: costosVariacion
             },
             {
-                titulo: 'OTROS COSTOS ' + meses[mes-1].label.toUpperCase(),
+                titulo: 'COSTOS EXPLOTACIÓN ' + meses[mes-1].label.toUpperCase(),
                 subtitulo: parseFloat(otrosCostosVariacion).toLocaleString?.('en-EN', {
                     style: 'percent'                           
                     }).replaceAll(',', '.') + ' respecto al mes pasado',
@@ -208,8 +224,8 @@ const DataItemMes = (anio, mes, data) => {
             { title: 'Margen Explotación', percentage: porcentageMargenExplotacionMesActual },
             { title: 'ROP', percentage: ropMesActual },
             { title: 'Utilidad', percentage: utilidadPorcentajeMesActual },
-            { title: 'Ratio Cost. Explotación', percentage: ratioCostosExplotacionMesActual },
-            { title: 'Ratio M.O. Total', percentage: ratioMOTotalMesActual },
+            { title: 'Ratio M.O. Total', percentage: ratioCostosExplotacionMesActual },
+            { title: 'Ratio Cost. Explotación', percentage: ratioMOTotalMesActual },
             { title: 'Ratio GOA', percentage: ratioGOAMesActual },
         ]
     }
