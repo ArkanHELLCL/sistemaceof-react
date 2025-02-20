@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid2';
 import FloatingBarChart from '../graficos/floatingBarChart.jsx';
 
@@ -36,9 +34,7 @@ backgroundColor: [
 */
 
 export default function UtilidadMes2({data, anio, mes}){
-    const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico
-    const selectdMes = meses?.filter(item => item.month === mes[0]).sort((a, b) => a.month - b.month)
-    const [mesSelected, setMesSelected] = useState(selectdMes);
+    const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico    
     const [title, setTitle] = useState('Gráfico de Ventas');
 
     const tabla = (mes) => {
@@ -140,9 +136,9 @@ export default function UtilidadMes2({data, anio, mes}){
     
     useEffect(() => {
         if(data?.length>0 && anio.length === 1){
-            tabla(mesSelected[0].month-1)
+            tabla(mes[0]-1)
         }
-    }, [mesSelected]);
+    }, [mes]);
 
     useEffect(() => {
         if(data?.length>0 && anio.length === 1){
@@ -152,12 +148,12 @@ export default function UtilidadMes2({data, anio, mes}){
 
     useEffect(() => {
         if(anio.length === 1){
-            setTitle('Gráfico de Utilidades Mes ' + mesSelected[0].label + ' año ' + anio[0] );
+            setTitle('Gráfico de Utilidades Mes ' + meses[mes[0]-1].label + ' año ' + anio[0] );
         }        
         else{
            setTitle('Gráfico de Utilidades Mes');
         }
-    }, [anio, mesSelected]);
+    }, [anio, mes]);
 
     return grpconfig ? 
         <>
@@ -170,24 +166,7 @@ export default function UtilidadMes2({data, anio, mes}){
                 <Grid size={{ xs: 12, xl: 12 }} sx={{height: '400px'}}> 
                     <FloatingBarChart chartData={grpconfig} title={title}/> 
                 </Grid>
-                <Grid size={{ xs: 12, xl: 12 }} className='flex justify-center mt-4'>
-                    <Grid size={{ xs: 12, xl: 12 }} xl={6} className='flex justify-center'>
-                        <Autocomplete
-                            disablePortal
-                            disableClearable={true}
-                            id="utilidad-meses"
-                            value={mesSelected[0].label}
-                            options={meses}
-                            sx={{ width: "100%"}}
-                            onChange={(event, newValue) => {
-                                setMesSelected([
-                                    newValue,
-                                ]);
-                            }}
-
-                            renderInput={(params) => <TextField {...params} label="Mes" variant="standard"/>}
-                        />
-                    </Grid>
+                <Grid size={{ xs: 12, xl: 12 }} className='flex justify-center mt-4'>                    
                     <Grid size={{ xs: 12, xl: 12 }} xl={6} className='flex justify-center'>
                         <div className='flex items-center mr-4'>
                             <div className='w-4 h-4 bg-[#6aa1d7] mr-2'></div>
