@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid2';
 import PanelFinancieroTable2 from '../graficos/panelfinancieroTable2';
 
@@ -53,9 +51,7 @@ const sumaOtrosGastos = (data) => {
     return filteredArray;
 };
 
-export default function PanelFinancieroAnual2({data, anio, mes}){
-    const selectdMes = meses?.filter(item => item.month === mes[0])
-    const [mesSelected, setMesSelected] = useState(selectdMes);
+export default function PanelFinancieroAnual2({data, anio, mes}){    
     const [title, setTitle] = useState('Panel Financiero');
     const [resultData, setResultData] = useState([]);
     const [rangoMes, setRangoMes] = useState([]);
@@ -665,10 +661,10 @@ export default function PanelFinancieroAnual2({data, anio, mes}){
     }
 
     useEffect(() => {
-        if(data?.length>0 && anio.length === 1 && mesSelected[0].month > 0){
-            tabla(mesSelected[0].month)
+        if(data?.length>0 && anio.length === 1 && mes[0] > 0){
+            tabla(mes[0])
         }
-    }, [mesSelected, anio]);
+    }, [mes, anio]);
     
     useEffect(() => {
         if(data?.length>0 && anio.length === 1 && mes[0] > 0){
@@ -678,12 +674,12 @@ export default function PanelFinancieroAnual2({data, anio, mes}){
 
     useEffect(() => {
         if(anio.length === 1){
-            setTitle('Panel Financiero ' + ' mes ' + mesSelected[0].label + ' año ' + anio[0]  );
+            setTitle('Panel Financiero ' + ' mes ' + meses[mes[0]-1].label + ' año ' + anio[0]  );
         }        
         else{
            setTitle('Panel Financiero');
         }
-    }, [anio, mesSelected]);
+    }, [anio, mes]);
 
     return (
         resultData && rangoMes && anioant && mesant &&
@@ -693,24 +689,7 @@ export default function PanelFinancieroAnual2({data, anio, mes}){
                     <div className="flex justify-center rounded-xl bg-[#4cbab5] text-white shadow-md py-4 align-middle">
                         <h2 className="text-2xl font-light text-center">{title}</h2>
                     </div>
-                </Grid>
-                <Grid item xs={3}>
-                    <Autocomplete
-                        disablePortal
-                        disableClearable={true}
-                        id="utilidad-meses"
-                        value={mesSelected[0].label}
-                        options={meses}
-                        sx={{ width: "100%"}}
-                        onChange={(event, newValue) => {
-                            setMesSelected([
-                                newValue,
-                            ]);
-                        }}
-
-                        renderInput={(params) => <TextField {...params} label="Mes" variant="standard"/>}
-                    />
-                </Grid>            
+                </Grid>                           
                 <Grid size={{ xs: 12, xl: 12 }}>
                     <PanelFinancieroTable2 anio={anio[0]} mes={mes} anioant={anioant} mesant={mesant} rangomes={rangoMes} data={resultData} />
                 </Grid>
