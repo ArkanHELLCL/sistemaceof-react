@@ -712,7 +712,7 @@ export default function PanelFinancieroAnual2({data, anio, mes}){
                     />
                 </Grid>            
                 <Grid size={{ xs: 12, xl: 12 }}>
-                    <PanelFinancieroTable2 anio={anio[0]} mes={mesSelected[0].label} anioant={anioant} mesant={mesant} rangomes={rangoMes} data={resultData} />
+                    <PanelFinancieroTable2 anio={anio[0]} mes={mes} anioant={anioant} mesant={mesant} rangomes={rangoMes} data={resultData} />
                 </Grid>
             </Grid>            
         </>

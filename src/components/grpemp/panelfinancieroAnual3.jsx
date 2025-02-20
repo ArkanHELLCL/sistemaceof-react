@@ -507,7 +507,7 @@ export default function PanelFinancieroAnual3({data, anio, mes}){
                     />
                 </Grid>            
                 <Grid size={{ xs: 12, xl: 12 }}>
-                    <PanelFinancieroTable3 anio={anio[0]} mes={mesSelected[0].label} anioant={anioant} mesant={mesant} rangomes={rangoMes} data={resultData} />
+                    <PanelFinancieroTable3 anio={anio[0]} mes={mes} anioant={anioant} mesant={mesant} rangomes={rangoMes} data={resultData} />
                 </Grid>
             </Grid>            
         </>

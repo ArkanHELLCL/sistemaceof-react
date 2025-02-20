@@ -14,13 +14,14 @@ const meses = [
     { "label": "Diciembre", "month": 12 }
 ]
 export default function PanelFinancieroTable2({anio, mes, anioant, rangomes, data}) {
+    console.log('PanelFinancieroTable2', data,mes)
     const mesant = mes[0] === 1 ? 12 : mes[0] - 1;
     const Tablehead = ({anio, mes, anioant, mesant}) => {
         return (
             <thead>
                 <tr>
                     <th rowSpan="2" className="bg-[#4cbab5] rounded-tl-xl">Panel de Finanzas</th>
-                    <th colSpan="5" className="bg-[#4cbab5]">RESULTADO DE {meses[[mes]-1].label.toUpperCase()}</th>
+                    <th colSpan="5" className="bg-[#4cbab5]">RESULTADO DE {meses[mes[0]-1].label.toUpperCase()}</th>
                     <th colSpan="3" className="bg-[#4cbab5] rounded-tr-xl">YTD_{meses[mesant-1].label.toUpperCase().slice(0,3)}</th>
                 </tr>
                 <tr>
