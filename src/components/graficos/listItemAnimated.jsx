@@ -124,8 +124,12 @@ export default function ListItemAnimated({ data, color, type }) {
                     <span className={`${color === 'mo' ? 'text-gray-400' : 'text-gray-300'} font-bold text-xs`}>{data?.data[0]?.subtitulo}</span>
                 </div>
                 <div className={`${color === 'mo' ? 'border-gray-500' : 'border-gray-300'} pt-4 broder border-b-0 border-l-0 border-r-0 border-t-2 w-full mt-3`}></div>
-                <img src='/images/img-1.svg' alt='personas' className='w-auti h-24 absolute top-1 right-1' />
-
+                { type === 1 &&
+                    <img src='/images/img-1.png' alt='personas' className='w-auti h-24 absolute top-1 right-1' />
+                }
+                { type === 2 &&
+                    <img src='/images/img-2.svg' alt='personas' className='w-auti h-24 absolute top-1 right-1' />
+                }
                 <ProgressList items={data?.items} color={color} />
                 <Grid container spacing={1} className='mt-4'>
                     <Grid size={{ xs: 6, xl: 6 }} className='items-start flex justify-start'>

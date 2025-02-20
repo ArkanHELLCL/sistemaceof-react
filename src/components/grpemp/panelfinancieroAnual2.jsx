@@ -87,7 +87,11 @@ export default function PanelFinancieroAnual2({data, anio, mes}){
         valor = valor ? valor : 0;
         col.push({"id" : 2, "valor" : valor ? valor : 0});
 
-        valor = year ? parseFloat(year[nivel][item]?.months?.slice(0,12).filter((item, idx) => idx === mes-2)[0]) : 0
+        if(mes === 1){
+            valor = yearant ? parseFloat(yearant[nivel][item]?.months?.slice(0,12).filter((item, idx) => idx === 11)[0]) || 0 : 0
+        }else{
+            valor = year ? parseFloat(year[nivel][item]?.months?.slice(0,12).filter((item, idx) => idx === mes-2)[0]) || 0 : 0
+        }            
         valor = valor ? valor : 0;
         col.push({"id" : 3, "valor" : valor ? valor : 0});
 

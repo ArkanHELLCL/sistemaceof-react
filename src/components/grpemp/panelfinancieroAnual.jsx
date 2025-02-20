@@ -42,16 +42,20 @@ export default function PanelFinancieroAnual({data, anio, mes}){
 
     const column = (label, data, nivel, item, mes) =>{
         const col = [];
-        const year = data.filter(item => item.year === anio[0])[0]
-        const yearant = data.filter(item => item.year === anio[0]-1)[0]
+        let year = data.filter(item => item.year === anio[0])[0]
+        let yearant = data.filter(item => item.year === anio[0]-1)[0]
 
         col.push({"id" : 1, "valor" : label});
 
         let valor = year ? parseFloat(year[nivel][item]?.months?.slice(0,12).filter((item, idx) => idx === mes-1)[0]) : 0
         valor = valor ? valor : 0;
         col.push({"id" : 2, "valor" : valor ? valor : 0});
-
-        valor = year ? parseFloat(year[nivel][item]?.months?.slice(0,12).filter((item, idx) => idx === mes-2)[0]) : 0
+                
+        if(mes === 1){
+            valor = yearant ? parseFloat(yearant[nivel][item]?.months?.slice(0,12).filter((item, idx) => idx === 11)[0]) || 0 : 0
+        }else{
+            valor = year ? parseFloat(year[nivel][item]?.months?.slice(0,12).filter((item, idx) => idx === mes-2)[0]) || 0 : 0
+        }
         valor = valor ? valor : 0;
         col.push({"id" : 3, "valor" : valor ? valor : 0});
 

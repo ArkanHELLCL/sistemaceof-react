@@ -17,11 +17,18 @@ const meses = [
 
 const DataItemMes = (anio, mes, data) => {
     const year = data.filter(item => item.year === anio[0])[0]
+    const yearant = data.filter(item => item.year === anio[0]-1)[0]
     //Ingresos mes
     let ingresosMesActual = year ? parseFloat(year['nivel1']['1.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes-1)[0]) : 0
     ingresosMesActual = ingresosMesActual ? ingresosMesActual : 0;
     //Ingresos mes anterior
-    let ingresosMesAnterior = year ? parseFloat(year['nivel1']['1.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes-2)[0]) : 0
+    let ingresosMesAnterior = 0;
+    if(mes === 1){
+        ingresosMesAnterior = yearant ? parseFloat(yearant['nivel1']['1.1.']?.months?.slice(0,12).filter((item, idx) => idx === 11)[0]) : 0
+    }else{
+        ingresosMesAnterior = year ? parseFloat(year['nivel1']['1.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes-2)[0]) : 0
+    }
+    
     ingresosMesAnterior = ingresosMesAnterior ? ingresosMesAnterior : 0;
     //Variacion
     let ingresosVariacion = 0;
@@ -36,7 +43,13 @@ const DataItemMes = (anio, mes, data) => {
     let costosMesActual = year ? parseFloat(year['nivel2']['1.2.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes-1)[0]) : 0
     costosMesActual = costosMesActual ? costosMesActual : 0;
     //Costos Directos mes anterior
-    let costosMesAnterior = year ? parseFloat(year['nivel2']['1.2.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes-2)[0]) : 0
+    let costosMesAnterior = 0;
+    if(mes === 1){
+        costosMesAnterior = yearant ? parseFloat(yearant['nivel2']['1.2.1.']?.months?.slice(0,12).filter((item, idx) => idx === 11)[0]) : 0
+    }else{
+        costosMesAnterior = year ? parseFloat(year['nivel2']['1.2.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes-2)[0]) : 0
+    }
+    
     costosMesAnterior = costosMesAnterior ? costosMesAnterior : 0;
     //Variacion
     let costosVariacion = 0;
@@ -51,7 +64,13 @@ const DataItemMes = (anio, mes, data) => {
     let otrosCostosMesActual = year ? parseFloat(year['nivel2']['1.2.2.']?.months?.slice(0,12).filter((item, idx) => idx === mes-1)[0]) : 0
     otrosCostosMesActual = otrosCostosMesActual ? otrosCostosMesActual : 0;
     //Otros Costos mes anterior
-    let otrosCostosMesAnterior = year ? parseFloat(year['nivel2']['1.2.2.']?.months?.slice(0,12).filter((item, idx) => idx === mes-2)[0]) : 0
+    let otrosCostosMesAnterior = 0;
+    if(mes === 1){
+        otrosCostosMesAnterior = yearant ? parseFloat(yearant['nivel2']['1.2.2.']?.months?.slice(0,12).filter((item, idx) => idx === 11)[0]) : 0
+    }else{
+        otrosCostosMesAnterior = year ? parseFloat(year['nivel2']['1.2.2.']?.months?.slice(0,12).filter((item, idx) => idx === mes-2)[0]) : 0
+    }
+    
     otrosCostosMesAnterior = otrosCostosMesAnterior ? otrosCostosMesAnterior : 0;
     //Variacion
     let otrosCostosVariacion = 0;
@@ -65,7 +84,6 @@ const DataItemMes = (anio, mes, data) => {
     //Costos Directos serie 6 ultimos meses
     let totalMeses = mes - 6;
     totalMeses = mes < 6 ? 0 : totalMeses;
-    console.log(totalMeses, mes)
     const costosMesSeries = year ? year['nivel2']['1.2.1.']?.months?.slice(totalMeses, mes) : Array(totalMeses).fill(0);
     const labels = meses.slice(totalMeses, mes).map(item => item.label);
 
@@ -118,7 +136,7 @@ const DataItemMes = (anio, mes, data) => {
 
     //Ratio M.O.Total =
     //Ingresos de explotacion / Gastos de remuneraciones
-    let gastosRemuneracionesMesActual = year ? parseFloat(year['nivel2']['1.3.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes-1)[0]) : 0
+    let gastosRemuneracionesMesActual = year ? parseFloat(year['nivel2']['1.3.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes-1)[0]) || 0  : 0
     let ratioMOTotalMesActual = 0;
     if(ingresoExplotacionMesActual === 0)
         ratioMOTotalMesActual = 0
@@ -212,6 +230,12 @@ const DataItemAcumulado = (anio, mes, data, anios) => {
         ingresosVariacionAcumulada = 0
     else
         ingresosVariacionAcumulada = (ingresosAcumulado-ingresosAcumuladoAnterior) / Math.abs(ingresosAcumuladoAnterior) 
+
+    if(ingresosAcumulado === 0)
+        ingresosVariacionAcumulada = 0
+    if(ingresosAcumulado !== 0 && ingresosAcumuladoAnterior === 0)
+        ingresosVariacionAcumulada = 1;
+    
     
     ingresosVariacionAcumulada = ingresosVariacionAcumulada ? ingresosVariacionAcumulada : 0;
     //Costos Directos acumulado
@@ -225,9 +249,13 @@ const DataItemAcumulado = (anio, mes, data, anios) => {
     if(costosAcumuladoAnterior === 0)
         costosVariacionAcumulado = 0
     else
-    costosVariacionAcumulado = (costosAcumulado-costosAcumuladoAnterior) / Math.abs(costosAcumuladoAnterior)
+        costosVariacionAcumulado = (costosAcumulado-costosAcumuladoAnterior) / Math.abs(costosAcumuladoAnterior)
 
-    costosVariacionAcumulado = costosVariacionAcumulado ? costosVariacionAcumulado : 0;
+    if(costosAcumulado === 0)
+        costosVariacionAcumulado = 0
+    if(costosAcumulado !== 0 && costosAcumuladoAnterior === 0)
+        costosVariacionAcumulado = 1;
+    
 
     //Costs Directos Serie ultimos 6 años
     const yearArray = anios.slice(0).slice(-6).map(item => item.year)
@@ -254,8 +282,10 @@ const DataItemAcumulado = (anio, mes, data, anios) => {
         otrosCostosVariacionAcumulado = 0
     else
         otrosCostosVariacionAcumulado = (otrosCostosAcumulado-otrosCostosAcumuladoAnterior) / Math.abs(otrosCostosAcumuladoAnterior)
-
-    otrosCostosVariacionAcumulado = otrosCostosVariacionAcumulado ? otrosCostosVariacionAcumulado : 0;
+    if(otrosCostosAcumulado === 0)
+        otrosCostosVariacionAcumulado = 0
+    if((otrosCostosAcumulado !== 0 && otrosCostosAcumuladoAnterior === 0))
+        otrosCostosVariacionAcumulado = 1;
 
     //Otros Costos Serie ultimos 6 años
     //Costs Directos Serie ultimos 6 años
@@ -305,7 +335,7 @@ const DataItemAcumulado = (anio, mes, data, anios) => {
     if(ingresoExplotacionAcumulado === 0)
         utilidadPorcentajeAcumulado = 0
     else
-        utilidadPorcentajeAcumulado = (utilidadAcumulado/ingresoExplotacionAcumulado) * 100
+        utilidadPorcentajeAcumulado = (utilidadAcumulado/ingresoExplotacionAcumulado) * 100 || 0
 
     //Ratio Costos de Explotacion =
     //Ingresos de explotacion / Costos de explotacion
@@ -313,16 +343,16 @@ const DataItemAcumulado = (anio, mes, data, anios) => {
     if(ingresoExplotacionAcumulado === 0)
         ratioCostosExplotacionAcumulado = 0
     else
-        ratioCostosExplotacionAcumulado = (costosExplotacionAcumulado / ingresoExplotacionAcumulado) * -100
+        ratioCostosExplotacionAcumulado = (costosExplotacionAcumulado / ingresoExplotacionAcumulado) * -100 || 0
 
     //Ratio M.O.Total =
     //Ingresos de explotacion / Gastos de remuneraciones
-    let gastosRemuneracionesAcumulado = year ? parseFloat(year['nivel2']['1.3.1.']?.months?.slice(0,mes).reduce((acc, val) => acc + val, 0)) : 0
+    let gastosRemuneracionesAcumulado = year ? parseFloat(year['nivel2']['1.3.1.']?.months?.slice(0,mes).reduce((acc, val) => acc + val, 0)) || Array(12).fill(0) : 0
     let ratioMOTotalAcumulado = 0;
     if(ingresoExplotacionAcumulado === 0)
         ratioMOTotalAcumulado = 0
     else
-        ratioMOTotalAcumulado = (gastosRemuneracionesAcumulado / ingresoExplotacionAcumulado) * -100
+        ratioMOTotalAcumulado = (gastosRemuneracionesAcumulado / ingresoExplotacionAcumulado) * -100 || 0
     
     //Ratio GOA =
     //Ingresos de explotacion / gastos de administracion
@@ -331,7 +361,7 @@ const DataItemAcumulado = (anio, mes, data, anios) => {
     if(ingresoExplotacionAcumulado === 0)
         ratioGOAAcumulado = 0
     else
-        ratioGOAAcumulado = (gastosAdministracionAcumulado / ingresoExplotacionAcumulado) * -100    
+        ratioGOAAcumulado = (gastosAdministracionAcumulado / ingresoExplotacionAcumulado) * -100 || 0
 
     return {
         dataset: [
@@ -366,7 +396,7 @@ const DataItemAcumulado = (anio, mes, data, anios) => {
         ],
         data: [
             {
-                titulo: 'INGRESOS ACUMULADO A ' + meses[mes-1].label.toUpperCase(),
+                titulo: 'INGRESOS A ' + meses[mes-1].label.toUpperCase(),
                 subtitulo: parseFloat(ingresosVariacionAcumulada).toLocaleString?.('en-EN', {
                     style: 'percent'                           
                     }).replaceAll(',', '.') + ' respecto al acumlado pasado',
