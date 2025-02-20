@@ -103,7 +103,6 @@ const DataItemMes = (anio, mes, data) => {
     //Costos Explotación seria 6 ultimos meses
     const otrosCostosMesSeries = year ? year['nivel1']['1.2.']?.months?.slice(totalMeses, mes) : Array(totalMeses).fill(0);
 
-
     //Porcentajes
     //% Margen de explotacion=
     //Ingresos de explotacion / Margen de explotacion
@@ -132,6 +131,7 @@ const DataItemMes = (anio, mes, data) => {
     //Resultado operacional + resultado no operacional
     const resultadoNoOperMesActual = year ? parseFloat(year['resultado']['2.']?.months?.slice(0,12).filter((item, idx) => idx === mes-1)[0]) : 0
     const utilidadMesActual = resultadoMesActual + resultadoNoOperMesActual
+
     //% Utilidad =
     //Ingresos de explotacion  + Utilidad
     let utilidadPorcentajeMesActual = 0;
@@ -139,6 +139,7 @@ const DataItemMes = (anio, mes, data) => {
         utilidadPorcentajeMesActual = 0
     else
         utilidadPorcentajeMesActual = (utilidadMesActual/ingresoExplotacionMesActual) * 100
+
     //Ratio M.O.Total =
     //1 Costos Remuneraciones		calculo
     //2 Gasto de Remuneraciones	1.3.5.
@@ -150,6 +151,7 @@ const DataItemMes = (anio, mes, data) => {
         ratioCostosExplotacionMesActual = 0
     else
         ratioCostosExplotacionMesActual = ((Math.abs(parseFloat(sumaRemuneraciones(year).slice(0,12).filter((item, idx) => idx === mes-1)[0]) || 0) + Math.abs(gastosRemuneracionesMesActual)) / ingresoExplotacionMesActual) * 100 
+
     //Ratio Costos de Explotacion =
     //Ingresos de explotacion / Gastos de remuneraciones
     //let gastosRemuneracionesMesActual = year ? parseFloat(year['nivel2']['1.3.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes-1)[0]) || 0  : 0
@@ -287,10 +289,10 @@ const DataItemAcumulado = (anio, mes, data, anios) => {
     )
 
     //Otros Costos Acumulado
-    let otrosCostosAcumulado = year ? parseFloat(year['nivel2']['1.2.2.']?.months?.slice(0,mes).reduce((acc, val) => acc + val, 0)) : 0
+    let otrosCostosAcumulado = year ? parseFloat(year['nivel1']['1.2.']?.months?.slice(0,mes).reduce((acc, val) => acc + val, 0)) : 0
     otrosCostosAcumulado = otrosCostosAcumulado ? otrosCostosAcumulado : 0;
     //Otros Costos Acumulado anterior
-    let otrosCostosAcumuladoAnterior = yearant ? parseFloat(yearant['nivel2']['1.2.2.']?.months?.slice(0,mes).reduce((acc, val) => acc + val, 0)) : 0
+    let otrosCostosAcumuladoAnterior = yearant ? parseFloat(yearant['nivel1']['1.2.']?.months?.slice(0,mes).reduce((acc, val) => acc + val, 0)) : 0
     otrosCostosAcumuladoAnterior = otrosCostosAcumuladoAnterior ? otrosCostosAcumuladoAnterior : 0;
     //Variacion Acumulado
     let otrosCostosVariacionAcumulado = 0;
@@ -308,7 +310,7 @@ const DataItemAcumulado = (anio, mes, data, anios) => {
     const otrosCostosSerie = data?.filter(item => 
         yearArray?.includes(item.year)).map(item => {
             const year = item.year;
-            const valor = parseFloat(item['nivel2']['1.2.2.']?.months?.slice(0,mes).reduce((acc, val) => acc + val, 0)) || 0
+            const valor = parseFloat(item['nivel1']['1.2.']?.months?.slice(0,mes).reduce((acc, val) => acc + val, 0)) || 0
             return {
                 label: year,
                 value: valor
@@ -339,12 +341,12 @@ const DataItemAcumulado = (anio, mes, data, anios) => {
         ropMesAcumulado = 0
     else
     ropMesAcumulado = (resultadoAcumulado/ingresoExplotacionAcumulado) * 100
-
     
     //Utilidad  = 
     //Resultado operacional + resultado no operacional
     const resultadoNoOperAcumulado = year ? parseFloat(year['resultado']['2.']?.months?.slice(0,mes).reduce((acc, val) => acc + val, 0)) : 0
     const utilidadAcumulado = resultadoAcumulado + resultadoNoOperAcumulado
+
     //% Utilidad =
     //Ingresos de explotacion  + Utilidad
     let utilidadPorcentajeAcumulado = 0;
@@ -362,14 +364,17 @@ const DataItemAcumulado = (anio, mes, data, anios) => {
         ratioCostosExplotacionAcumulado = (costosExplotacionAcumulado / ingresoExplotacionAcumulado) * -100 || 0
 
     //Ratio M.O.Total =
-    //Ingresos de explotacion / Gastos de remuneraciones
-    let gastosRemuneracionesAcumulado = year ? parseFloat(year['nivel2']['1.3.1.']?.months?.slice(0,mes).reduce((acc, val) => acc + val, 0)) || Array(12).fill(0) : 0
+    //1 Costos Remuneraciones		calculo
+    //2 Gasto de Remuneraciones	1.3.5.
+    //3 Ingreso de Explotación 	1.2.
+    //1 + 2 / 3
+    let gastosRemuneracionesAcumulado = year ? parseFloat(year['nivel2']['1.3.1.']?.months?.slice(0,mes).reduce((acc, val) => acc + val, 0)) || Array(mes).fill(0) : 0
     let ratioMOTotalAcumulado = 0;
     if(ingresoExplotacionAcumulado === 0)
         ratioMOTotalAcumulado = 0
     else
-        ratioMOTotalAcumulado = (gastosRemuneracionesAcumulado / ingresoExplotacionAcumulado) * -100 || 0
-    
+         ratioMOTotalAcumulado = ((Math.abs(parseFloat(sumaRemuneraciones(year).slice(0,mes).reduce((acc, val) => acc + val, 0)) || 0) + Math.abs(gastosRemuneracionesAcumulado)) / ingresoExplotacionAcumulado) * 100 || 0
+
     //Ratio GOA =
     //Ingresos de explotacion / gastos de administracion
     let gastosAdministracionAcumulado = year ? parseFloat(year['nivel1']['1.3.']?.months?.slice(0,mes).reduce((acc, val) => acc + val, 0)) : 0
@@ -428,7 +433,7 @@ const DataItemAcumulado = (anio, mes, data, anios) => {
                 variacion: costosVariacionAcumulado
             },
             {
-                titulo: 'OTROS COSTOS A ' + meses[mes-1].label.toUpperCase(),
+                titulo: 'COSTOS EXPLOTACIÓN A ' + meses[mes-1].label.toUpperCase(),
                 subtitulo: parseFloat(otrosCostosVariacionAcumulado).toLocaleString?.('en-EN', {
                     style: 'percent'                           
                     }).replaceAll(',', '.') + ' respecto al acumlado pasado',
@@ -439,9 +444,9 @@ const DataItemAcumulado = (anio, mes, data, anios) => {
         items : [
             { title: 'Margen Explotación', percentage: porcentageMargenExplotacionAcumulado },
             { title: 'ROP', percentage: ropMesAcumulado },
-            { title: 'Utilidad', percentage: utilidadPorcentajeAcumulado },
-            { title: 'Ratio Cost. Explotación', percentage: ratioCostosExplotacionAcumulado },
+            { title: 'Utilidad', percentage: utilidadPorcentajeAcumulado },            
             { title: 'Ratio M.O. Total', percentage: ratioMOTotalAcumulado },
+            { title: 'Ratio Cost. Explotación', percentage: ratioCostosExplotacionAcumulado },
             { title: 'Ratio GOA', percentage: ratioGOAAcumulado },
         ]
     }
