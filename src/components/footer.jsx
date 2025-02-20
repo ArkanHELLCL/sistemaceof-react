@@ -3,7 +3,6 @@ import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 const VITE_API_LOGOFF_URL = import.meta.env.VITE_API_LOGOFF_URL;
 
 const handlleLogOff = () => {
-  console.log('LogOff');  
   fetch(`${VITE_API_LOGOFF_URL}`)
   .then(response => response.json())
   .then(usr => {        

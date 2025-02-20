@@ -41,13 +41,7 @@ function FloatingBarChart({ chartData, title }) {
                             }
                         }
                     },
-                    datalabels: {
-                        /*align: function(context) {
-                            console.log(context);                           
-                            var index = context.dataIndex;
-                            var value = context.dataset.data[index][0] - context.dataset.data[index][1] || 0;
-                            return value > 0 ? 'topx' : 'bootm';
-                        },*/
+                    datalabels: {                        
                         anchor : function(context) {
                             var index = context.dataIndex;
                             var value

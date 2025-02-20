@@ -14,7 +14,6 @@ const meses = [
     { "label": "Diciembre", "month": 12 }
 ]
 export default function PanelFinancieroTable2({anio, mes, anioant, rangomes, data}) {
-    console.log('PanelFinancieroTable2', data,mes)
     const mesant = mes[0] === 1 ? 12 : mes[0] - 1;
     const Tablehead = ({anio, mes, anioant, mesant}) => {
         return (
