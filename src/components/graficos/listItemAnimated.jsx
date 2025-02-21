@@ -128,7 +128,7 @@ export default function ListItemAnimated({ data, color, type }) {
                     <img src='/images/img-1.png' alt='personas' className='w-auti h-24 absolute top-1 right-1' />
                 }
                 { type === 2 &&
-                    <img src='/images/img-2.svg' alt='personas' className='w-auti h-24 absolute top-1 right-1' />
+                    <img src='/images/img-2.png' alt='personas' className='w-auti h-24 absolute top-1 right-1' />
                 }
                 <ProgressList items={data?.items} color={color} />
                 <Grid container spacing={1} className='mt-4'>
