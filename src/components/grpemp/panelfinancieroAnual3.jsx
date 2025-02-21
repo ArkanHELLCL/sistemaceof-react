@@ -315,7 +315,7 @@ export default function PanelFinancieroAnual3({data, anio, mes}){
         })
         //Row 2     
         rows.push({
-            "row": column("VEntas PayPal", data, 'nivel2', '1.1.2.', mes)
+            "row": column("Ventas PayPal", data, 'nivel2', '1.1.2.', mes)
         })
         //Row 3   
         rows.push({

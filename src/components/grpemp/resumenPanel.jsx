@@ -233,8 +233,8 @@ const DataItemAcumulado = (anio, mes, data, anios) => {
 
     if(ingresosAcumulado === 0)
         ingresosVariacionAcumulada = 0
-    if(ingresosAcumulado !== 0 && ingresosAcumuladoAnterior === 0)
-        ingresosVariacionAcumulada = 1;
+    //if(ingresosAcumulado !== 0 && ingresosAcumuladoAnterior === 0)
+        //ingresosVariacionAcumulada = 1;
     
     
     ingresosVariacionAcumulada = ingresosVariacionAcumulada ? ingresosVariacionAcumulada : 0;
@@ -253,8 +253,8 @@ const DataItemAcumulado = (anio, mes, data, anios) => {
 
     if(costosAcumulado === 0)
         costosVariacionAcumulado = 0
-    if(costosAcumulado !== 0 && costosAcumuladoAnterior === 0)
-        costosVariacionAcumulado = 1;
+    //if(costosAcumulado !== 0 && costosAcumuladoAnterior === 0)
+        //costosVariacionAcumulado = 1;
     
 
     //Costs Directos Serie ultimos 6 años
