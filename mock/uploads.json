@@ -1,0 +1,14 @@
+{
+    "data": [
+        {
+            "UPD_Id": 1,
+            "UPD_Usuario": "lcastillo",
+            "UPD_Nombre": "Luis",
+            "UPD_Apellido": "Castillo",
+            "UPD_Estado": 1,
+            "UPD_Archivo": "base.csv",
+            "UPD_Fecha": "2021-01-01 00:00:00",
+            "UPD_Tamano": 1024
+        }
+    ]
+}
