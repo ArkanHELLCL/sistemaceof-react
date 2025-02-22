@@ -44,6 +44,7 @@ export default function Upload({ empresas }) {
 
   const handleChange = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     if (e.target.files && e.target.files.length > 0) {
       const selectedFiles = Array.from(e.target.files).filter(file => file.type === 'text/csv');
       if (selectedFiles.length > 0) {
@@ -54,7 +55,7 @@ export default function Upload({ empresas }) {
       }
     }
   };
-
+/*
   const simulateUpload = (files) => {
     const interval = setInterval(() => {
       setUploadProgress((prevProgress) => {
@@ -96,9 +97,13 @@ export default function Upload({ empresas }) {
         );
       }
     });
-  };
+  };*/
 
   const handleUpload = () => {
+    if (!empresa) {
+      setUploadStatus({ type: 'error', message: 'No hay empresa seleccionada.' });
+      return;
+    }
     if (files.length === 0) {
       setUploadStatus({ type: 'error', message: 'No hay archivos seleccionados para subir.' });
       return;
@@ -163,27 +168,17 @@ export default function Upload({ empresas }) {
       </div>
       <div className="flex flex-col items-center justify-start h-full p-8 w-full relative">
         <div
-          className={`border-4 border-dashed rounded-lg p-8 w-full text-center ${dragActive ? 'border-blue-500' : 'border-gray-300'}`}
+          className={`border-4 border-dashed rounded-lg p-8 mb-4 w-full text-center peer/hoverfile cursor-pointer text-[#5D4889] group ${dragActive ? 'border-blue-500' : 'border-gray-300'}`}
           onDragEnter={handleDrag}
           onDragOver={handleDrag}
           onDragLeave={handleDrag}
           onDrop={handleDrop}
           onClick={() => document.getElementById('file-upload').click()}
-          style={{ cursor: 'pointer', color: '#5D4889' }}
-        >
-          <input
-            type="file"
-            accept=".csv"
-            className="hidden"
-            id="file-upload"
-            onChange={handleChange}            
-          />
-          <label htmlFor="file-upload" className="cursor-pointer peer/uploadfile">
-            <IconButton component="span" className='!peer-hover/uploadfile:text-[#5D4889]'>
-              <CloudUpload fontSize="large" />
-            </IconButton>
-            <p className="mt-2">Arrastra tus archivos aquí o haz clic para subir</p>
-          </label>
+        >          
+          <IconButton component="span" className='group-hover:!text-[#5D4889] group-hover:!scale-125 transition-all duration-500'>
+            <CloudUpload fontSize="large" />
+          </IconButton>
+          <p className="mt-2">Arrastra tus archivos aquí o haz clic para subir</p>
           {files.length > 0 && (
             <div className="mt-4">
               {files.map((file, index) => (
@@ -195,6 +190,14 @@ export default function Upload({ empresas }) {
             </div>
           )}
         </div>
+        <input
+            type="file"
+            accept=".csv"
+            className="hidden"
+            id="file-upload"
+            name="file-upload"
+            onChange={handleChange}            
+          />
         {files.length > 0 && (
           <div className="w-full my-4">
             <LinearProgress variant="determinate" value={uploadProgress} className='mb-4' />
