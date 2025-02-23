@@ -16,7 +16,7 @@ export default function Upload({ empresas }) {
   const [uploadStatus, setUploadStatus] = useState(null);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [empresa, setEmpresa] = useState('');
-
+ 
   const handleDrag = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -120,23 +120,43 @@ export default function Upload({ empresas }) {
     }).then((result) => {
       if (result.isConfirmed) {
         const formData = new FormData();
-        for(let i = 0; i < files.length; i++) {
+        for (let i = 0; i < files.length; i++) {
           formData.append('file[]', files[i]);
-        } 
+        }
         formData.append('cliente_id', empresa?.id);
         formData.append('tipo', 1);
-        fetch(VITE_API_UPLOAD_URL, {
-          method: 'POST',
-          body: formData,
-        }).then(response => response.json())
-          .then(data => {
-            setUploadStatus({ type: 'success', message: 'Archivos subidos con éxito.' });
-          })
-          .catch(error => {
-            setUploadStatus({ type: 'error', message: 'Error al subir los archivos.' });
-          });
 
-        //simulateUpload(files);
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', VITE_API_UPLOAD_URL, true);
+
+        xhr.upload.addEventListener('progress', (event) => {
+          if (event.lengthComputable) {
+            setUploadProgress((event.loaded / event.total) * 100);
+          }
+        });
+
+        xhr.addEventListener('load', () => {
+          if (xhr.status === 200) {
+            setUploadStatus({ type: 'success', message: 'Archivos subidos con éxito.' });
+            const newFiles = files.map(file => ({
+              name: file.name,
+              size: (file.size / 1024).toFixed(2) + ' KB',
+              user: 'Usuario1', // Aquí puedes poner el nombre del usuario que subió el archivo
+              date: new Date().toLocaleString(),
+            }));
+            setUploadedFiles((prevFiles) => [...prevFiles, ...newFiles]);
+            setFiles([]); // Limpiar los archivos seleccionados
+            document.getElementById('file-upload').value = ''; // Limpiar el input file
+          } else {
+            setUploadStatus({ type: 'error', message: 'Error al subir los archivos.' });
+          }
+        });
+
+        xhr.addEventListener('error', () => {
+          setUploadStatus({ type: 'error', message: 'Error al subir los archivos.' });
+        });
+
+        xhr.send(formData);
       }
     });
   };
