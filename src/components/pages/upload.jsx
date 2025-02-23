@@ -1,13 +1,17 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid2';
 import { CloudUpload, InsertDriveFile, Delete, Description } from '@mui/icons-material';
 import { IconButton, LinearProgress, Snackbar, Alert, Button } from '@mui/material';
 import Swal from 'sweetalert2';
+import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const VITE_API_UPLOAD_URL = import.meta.env.VITE_API_UPLOAD_URL;
+const VITE_API_LISTFILES_URL = import.meta.env.VITE_API_LISTFILES_URL;
 
 export default function Upload({ empresas }) {
   const [files, setFiles] = useState([]);
@@ -17,6 +21,17 @@ export default function Upload({ empresas }) {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [empresa, setEmpresa] = useState('');
  
+  const getUploadedFiles = () => {
+    if (empresa) {
+      fetch(`${VITE_API_LISTFILES_URL}?tipo=1&cliente_id=${empresa?.id}`)
+        .then(response => response.json())
+        .then(files => {
+          setUploadedFiles(files.data);
+        })
+        .catch(error => console.log(error));
+    }
+  };
+  
   const handleDrag = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -55,29 +70,7 @@ export default function Upload({ empresas }) {
       }
     }
   };
-/*
-  const simulateUpload = (files) => {
-    const interval = setInterval(() => {
-      setUploadProgress((prevProgress) => {
-        if (prevProgress >= 100) {
-          clearInterval(interval);
-          setUploadStatus({ type: 'success', message: 'Archivos subidos con éxito.' });
-          const newFiles = files.map(file => ({
-            name: file.name,
-            size: (file.size / 1024).toFixed(2) + ' KB',
-            user: 'Usuario1', // Aquí puedes poner el nombre del usuario que subió el archivo
-            date: new Date().toLocaleString(),
-          }));
-          setUploadedFiles((prevFiles) => [...prevFiles, ...newFiles]);
-          setFiles([]); // Limpiar los archivos seleccionados
-          document.getElementById('file-upload').value = ''; // Limpiar el input file
-          return 100;
-        }
-        return prevProgress + 10;
-      });
-    }, 200);
-  };
-
+/* 
   const handleDelete = (fileName) => {
     Swal.fire({
       title: '¿Estás seguro?',
@@ -137,14 +130,8 @@ export default function Upload({ empresas }) {
 
         xhr.addEventListener('load', () => {
           if (xhr.status === 200) {
-            setUploadStatus({ type: 'success', message: 'Archivos subidos con éxito.' });
-            const newFiles = files.map(file => ({
-              name: file.name,
-              size: (file.size / 1024).toFixed(2) + ' KB',
-              user: 'Usuario1', // Aquí puedes poner el nombre del usuario que subió el archivo
-              date: new Date().toLocaleString(),
-            }));
-            setUploadedFiles((prevFiles) => [...prevFiles, ...newFiles]);
+            setUploadStatus({ type: 'success', message: 'Archivos subidos con éxito.' });            
+            getUploadedFiles();
             setFiles([]); // Limpiar los archivos seleccionados
             document.getElementById('file-upload').value = ''; // Limpiar el input file
           } else {
@@ -165,12 +152,84 @@ export default function Upload({ empresas }) {
     setUploadStatus(null);
   };
 
+  const columns = useMemo(
+    () => [
+      {
+        accessorKey: 'nombre',
+        header: 'Nombre',
+        size: 50, //small column
+        grow: false, //don't allow this column to grow (if layoutMode is grid)
+        muiTableHeadCellProps: {
+          sx: {
+            fontWeight: '100',
+            fontSize: '12px',
+          },
+        },
+      },
+      {
+        accessorKey: 'tamano',
+        header: 'Tamaño',
+        size: 50, //small column
+        muiTableHeadCellProps: {
+          sx: {
+            fontWeight: '100',
+            fontSize: '12px',
+          },
+        },
+      },
+      {
+        accessorKey: 'ultima_modificacion',
+        header: 'Fecha de Modificación',
+        size: 50, //small column
+        muiTableHeadCellProps: {
+          sx: {
+            fontWeight: '100',
+            fontSize: '12px',
+          },
+        },
+      },
+      {
+        accessorKey: 'acciones',
+        header: 'Acciones',
+        size: 50, //small column
+        muiTableHeadCellProps: {
+          sx: {
+            fontWeight: '100',
+            fontSize: '12px',
+          },
+        },
+      }    
+    ],
+    [],
+    //end
+  );
+
+  const table = useMaterialReactTable({
+    columns,
+    data: uploadedFiles,
+    enableDensityToggle: false,
+    enableFullScreenToggle: false,
+    enableHiding: false,
+    enableColumnActions: false,
+    enableExpanding: false,
+    localization: MRT_Localization_ES,
+    initialState: { 
+        density: 'compact'
+    },
+  });
+
+  useEffect(() => {
+    getUploadedFiles();
+  }, [empresa]);
+
   return (
     <section className=''>
       <div>
         <Grid container spacing={1}>
-          <Grid size={{ xs: 12, xl: 12 }} className=''>
-            <h1 className="text-4xl font-bold mb-0" style={{ color: '#5D4889' }}>Subir datos de empresa</h1>
+          <Grid size={{ xs: 12, xl: 12 }} className='pb-4'>
+              <div className="flex justify-center rounded-xl bg-[#5d4889] text-white shadow-md py-4 align-middle">
+                  <h2 className="text-2xl font-light text-center">{'Cargar Datos de Empresa'}</h2>
+              </div>
           </Grid>
           <Grid size={{ xs: 12, xl: 6 }} className=''>
             <Autocomplete
@@ -234,6 +293,16 @@ export default function Upload({ empresas }) {
           </Snackbar>
         )}        
       </div>
+      <Grid container spacing={2} className='pb-4'>
+          <Grid size={{ xs: 12, xl: 12 }} className='pb-4'>
+              <div className="flex justify-center rounded-xl bg-[#5d4889] text-white shadow-md py-4 align-middle">
+                  <h2 className="text-2xl font-light text-center">{'Archivos en la carpeta de la Empresa'}</h2>
+              </div>
+          </Grid>                          
+          <Grid size={{ xs: 12, xl: 12 }} sx={{height: '100%'}}> 
+            <MaterialReactTable table={table} />
+          </Grid>
+      </Grid>      
     </section>
   );
 }

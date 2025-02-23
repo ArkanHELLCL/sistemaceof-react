@@ -2,10 +2,8 @@
 /* eslint-disable react/prop-types */
 import { useMemo, useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid2';
-import {
-  MaterialReactTable,
-  useMaterialReactTable,
-} from 'material-react-table';
+import {MaterialReactTable, useMaterialReactTable} from 'material-react-table';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 export default function CuboAnual({anio, data, sumaNiveles}){
     const [title, setTitle] = useState('Gráfico de Ventas');
@@ -424,14 +422,6 @@ export default function CuboAnual({anio, data, sumaNiveles}){
 
       return dataC;
     }, [data]);
-    
-    /*const initialExpandedRootRows = useMemo(
-      () =>
-          dataCubo
-          .map((originalRow) => originalRow.id) //get all the root row ids, use recursion for additional levels
-          .reduce((a, v) => ({ ...a, [v]: true }), {}), //convert to an object with all the ids as keys and `true` as values
-      [],
-    );]*/
 
     const initialExpandedRootRows = [
       {0:true},
@@ -643,7 +633,7 @@ export default function CuboAnual({anio, data, sumaNiveles}){
           fontSize: '12px',
         },
       },
-
+      localization: MRT_Localization_ES
     });
 
     useEffect(() => {
