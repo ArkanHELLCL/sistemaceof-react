@@ -6,7 +6,6 @@ import BarChartSimple from './barChartSimple.jsx';
 import { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid2';
 import BarChartVerticalSimple from './barChartVerticalSimple.jsx';
-import DoughnutChart from './doughnutChart.jsx';
 import DoughnutChartSimple from './doughnutChartSimple.jsx';
 
 export default function ListItemAnimated({ data, color, type }) {
@@ -125,10 +124,10 @@ export default function ListItemAnimated({ data, color, type }) {
                 </div>
                 <div className={`${color === 'mo' ? 'border-gray-500' : 'border-gray-300'} pt-4 broder border-b-0 border-l-0 border-r-0 border-t-2 w-full mt-3`}></div>
                 { type === 1 &&
-                    <img src='/images/img-1.png' alt='personas' className='w-auti h-24 absolute top-1 right-1' />
+                    <img src='/images/img-1.png' alt='personas' className='w-auto h-24 absolute top-1 right-1' />
                 }
                 { type === 2 &&
-                    <img src='/images/img-2.png' alt='personas' className='w-auti h-24 absolute top-1 right-1' />
+                    <img src='/images/img-2.png' alt='personas' className='w-auto h-24 absolute top-1 right-1' />
                 }
                 <ProgressList items={data?.items} color={color} />
                 <Grid container spacing={1} className='mt-4'>

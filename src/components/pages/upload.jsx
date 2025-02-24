@@ -6,8 +6,9 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid2';
 import { CloudUpload, InsertDriveFile, Delete, Description } from '@mui/icons-material';
 import { IconButton, LinearProgress, Snackbar, Alert, Button } from '@mui/material';
+import { Box, lighten } from '@mui/material';
 import Swal from 'sweetalert2';
-import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
+import { MaterialReactTable, useMaterialReactTable, MRT_GlobalFilterTextField, MRT_ToggleFiltersButton } from 'material-react-table';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const VITE_API_UPLOAD_URL = import.meta.env.VITE_API_UPLOAD_URL;
@@ -156,9 +157,11 @@ export default function Upload({ empresas }) {
     () => [
       {
         accessorKey: 'nombre',
+        id: 'nombre',
         header: 'Nombre',
         size: 50, //small column
         grow: false, //don't allow this column to grow (if layoutMode is grid)
+        filterVariant: 'autocomplete',
         muiTableHeadCellProps: {
           sx: {
             fontWeight: '100',
@@ -170,6 +173,7 @@ export default function Upload({ empresas }) {
         accessorKey: 'tamano',
         header: 'Tamaño',
         size: 50, //small column
+        filterVariant: 'autocomplete',
         muiTableHeadCellProps: {
           sx: {
             fontWeight: '100',
@@ -181,24 +185,14 @@ export default function Upload({ empresas }) {
         accessorKey: 'ultima_modificacion',
         header: 'Fecha de Modificación',
         size: 50, //small column
+        filterVariant: 'autocomplete',
         muiTableHeadCellProps: {
           sx: {
             fontWeight: '100',
             fontSize: '12px',
           },
         },
-      },
-      {
-        accessorKey: 'acciones',
-        header: 'Acciones',
-        size: 50, //small column
-        muiTableHeadCellProps: {
-          sx: {
-            fontWeight: '100',
-            fontSize: '12px',
-          },
-        },
-      }    
+      }
     ],
     [],
     //end
@@ -206,15 +200,100 @@ export default function Upload({ empresas }) {
 
   const table = useMaterialReactTable({
     columns,
-    data: uploadedFiles,
-    enableDensityToggle: false,
-    enableFullScreenToggle: false,
-    enableHiding: false,
+    data: uploadedFiles,    
     enableColumnActions: false,
     enableExpanding: false,
+    enableColumnFilterModes: true,
+    enableColumnOrdering: true,
+    enableGrouping: true,
+    enableColumnPinning: true,
+    enableFacetedValues: true,
+    enableRowSelection: true,
+    paginationDisplayMode: 'pages',
+    positionToolbarAlertBanner: 'bottom',
+    muiSearchTextFieldProps: {
+      size: 'small',
+      variant: 'outlined',
+    },
+    muiPaginationProps: {
+      color: 'secondary',
+      rowsPerPageOptions: [10, 20, 30],
+      shape: 'rounded',
+      variant: 'outlined',
+    },
     localization: MRT_Localization_ES,
-    initialState: { 
-        density: 'compact'
+    initialState: {
+        showGlobalFilter: true,
+        density: 'compact',
+        columnPinning: {
+          left: ['mrt-row-expand', 'mrt-row-select'],
+          right: ['mrt-row-actions'],
+        },
+    },
+    renderTopToolbar: ({ table }) => {
+      const handleDeactivate = () => {
+        table.getSelectedRowModel().flatRows.map((row) => {
+          alert('deactivating ' + row.getValue('nombre'));
+        });
+      };
+
+      const handleActivate = () => {
+        table.getSelectedRowModel().flatRows.map((row) => {
+          alert('activating ' + row.getValue('nombre'));
+        });
+      };
+
+      const handleContact = () => {
+        table.getSelectedRowModel().flatRows.map((row) => {
+          alert('contact ' + row.getValue('nombre'));
+        });
+      };
+      console.log(table,table.getIsSomeRowsSelected(),table.getSelectedRowModel());
+      return (
+        <Box
+          sx={(theme) => ({
+            backgroundColor: lighten(theme.palette.background.default, 0.05),
+            display: 'flex',
+            gap: '0.5rem',
+            p: '8px',
+            justifyContent: 'space-between',
+          })}
+        >
+          <Box sx={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            {/* import MRT sub-components */}
+            <MRT_GlobalFilterTextField table={table} />
+            <MRT_ToggleFiltersButton table={table} />
+          </Box>
+          <Box>
+            <Box sx={{ display: 'flex', gap: '0.5rem' }}>
+              <Button
+                color="error"
+                disabled={!table.getIsSomeRowsSelected()}
+                onClick={handleDeactivate}
+                variant="contained"
+              >
+                Deactivate
+              </Button>
+              <Button
+                color="success"
+                disabled={!table.getIsSomeRowsSelected()}
+                onClick={handleActivate}
+                variant="contained"
+              >
+                Activate
+              </Button>
+              <Button
+                color="info"
+                disabled={!table.getIsSomeRowsSelected()}
+                onClick={handleContact}
+                variant="contained"
+              >
+                Contact
+              </Button>
+            </Box>
+          </Box>
+        </Box>
+      );
     },
   });
 

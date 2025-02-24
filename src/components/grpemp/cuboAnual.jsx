@@ -607,7 +607,6 @@ export default function CuboAnual({anio, data, sumaNiveles}){
     );
     const table = useMaterialReactTable({
       columns,
-      //data:UserData,
       data: dataCubo,
       enableExpandAll: false, //hide expand all double arrow in column header
       enableExpanding: true,
@@ -625,9 +624,8 @@ export default function CuboAnual({anio, data, sumaNiveles}){
       initialState: { 
           expanded: initialExpandedRootRows,
           density: 'compact'
-      }, //only expand the root rows by default
+      },
       muiTableHeadCellProps: {
-        //simple styling with the `sx` prop, works just like a style prop in this example
         sx: {
           fontWeight: '100',
           fontSize: '12px',
