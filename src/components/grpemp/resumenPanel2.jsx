@@ -16,7 +16,6 @@ const meses = [
 ];
 
 const sumaRemuneraciones = (data) => {
-    console.log(data)
     const filteredArray1 = [data["nivel2"]['1.2.2.']?.months?.slice(0,12) || Array(12).fill(0)];
     filteredArray1.push(data["nivel2"]['1.2.3.']?.months?.slice(0,12) || Array(12).fill(0));
     filteredArray1.push(data["nivel2"]['1.2.4.']?.months?.slice(0,12) || Array(12).fill(0));
@@ -24,7 +23,6 @@ const sumaRemuneraciones = (data) => {
     const filteredArray = filteredArray1?.reduce((acc, val) => {
                 return acc.map((item, idx) => item + val[idx]);
             }, Array(12).fill(0));
-    console.log(filteredArray)
     return filteredArray;
 };
 

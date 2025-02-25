@@ -15,20 +15,19 @@ const VITE_API_LISTFILES_URL = import.meta.env.VITE_API_LISTFILES_URL;
 const VITE_API_DELFILES_URL = import.meta.env.VITE_API_DELFILES_URL;
 const VITE_API_DOWNLOAD_URL = import.meta.env.VITE_API_DOWNLOAD_URL;
 
-export default function Download({ user, empresas }) {
+export default function Download({ user, empresas, empresa:emp }) {
   const [files, setFiles] = useState([]);
   const [dragActive, setDragActive] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState(null);
   const [uploadedFiles, setUploadedFiles] = useState([]);
-  const [empresa, setEmpresa] = useState('');
+  const [empresa, setEmpresa] = useState(emp);
   const [fileDownload, setFileDownload] = useState('');
-
   useEffect(() => {
     if (empresa) {
       getUploadedFiles();
     }
-  }, [empresa]);
+  }, [empresa,emp]);
 
   const getUploadedFiles = () => {
     if (empresa) {

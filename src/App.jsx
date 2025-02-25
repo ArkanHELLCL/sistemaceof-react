@@ -31,8 +31,8 @@ function App() {
     .then(emps => {
       setEmpresas(emps.data)
       setEmpresa(emps.data[0])
-      getGraficos(emps.data[0]);
-      getBasecsv(emps.data[0]);
+      //getGraficos(emps.data[0]);
+      //getBasecsv(emps.data[0]);
     })
     .finally(() => {
     })
@@ -89,20 +89,24 @@ function App() {
       //.catch(error => console.log(error));
   }, []);  
 
-
   useEffect(() => {    
     if(user?.PER_Id === 1){
       getEmpresas();
+    }else{
+      if(user?.EMP_Id!==undefined && user?.PER_Id >= 2){
+        setEmpresa({id:user?.EMP_Id,label:user?.EMP_Descripcion,tipografico:user?.EMP_TipoGrafico});
+      }
     }
   },[user])
 
   useEffect(() => {
     if(empresa?.id!==undefined){
       getGraficos(empresa);
+      getBasecsv(empresa);
     }
   },[empresa, user])
 
-  useEffect(() => {
+  /*useEffect(() => {
     if(empresa?.id!==undefined && user?.PER_Id === 1){
       getBasecsv(empresa);
       return;
@@ -111,7 +115,7 @@ function App() {
       getBasecsv({id:user?.EMP_Id});
       return;
     }
-  }, [empresa,user]);
+  }, [empresa,user]);*/
 
 
 useEffect(() => {
