@@ -50,7 +50,8 @@ export default function Upload({ user, empresas }) {
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       const droppedFiles = Array.from(e.dataTransfer.files).filter(file => file.type === 'text/csv');
       if (droppedFiles.length > 0) {
-        setFiles((prevFiles) => [...prevFiles, ...droppedFiles]);
+        //setFiles((prevFiles) => [...prevFiles, ...droppedFiles]);
+        setFiles(droppedFiles);
         setUploadProgress(0);
       } else {
         setUploadStatus({ type: 'error', message: 'Solo se permiten archivos CSV.' });
@@ -64,7 +65,8 @@ export default function Upload({ user, empresas }) {
     if (e.target.files && e.target.files.length > 0) {
       const selectedFiles = Array.from(e.target.files).filter(file => file.type === 'text/csv');
       if (selectedFiles.length > 0) {
-        setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
+        //setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
+        setFiles(selectedFiles);
         setUploadProgress(0);
       } else {
         setUploadStatus({ type: 'error', message: 'Solo se permiten archivos CSV.' });
