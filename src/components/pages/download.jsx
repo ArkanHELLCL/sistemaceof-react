@@ -24,6 +24,12 @@ export default function Download({ user, empresas }) {
   const [empresa, setEmpresa] = useState('');
   const [fileDownload, setFileDownload] = useState('');
 
+  useEffect(() => {
+    if (empresa) {
+      getUploadedFiles();
+    }
+  }, [empresa]);
+
   const getUploadedFiles = () => {
     if (empresa) {
       fetch(`${VITE_API_LISTFILES_URL}?tipo=2&cliente_id=${empresa?.id}`)
@@ -328,57 +334,57 @@ export default function Download({ user, empresas }) {
                 </Grid>
               </Grid>
             </div>
-          </>
-        }
-        <div className="flex flex-col items-center justify-start h-full p-8 w-full relative">
-          <div
-            className={`border-4 border-dashed rounded-lg p-8 mb-4 w-full text-center peer/hoverfile cursor-pointer text-[#5D4889] group ${dragActive ? 'border-blue-500' : 'border-gray-300'}`}
-            onDragEnter={handleDrag}
-            onDragOver={handleDrag}
-            onDragLeave={handleDrag}
-            onDrop={handleDrop}
-            onClick={() => document.getElementById('file-upload').click()}
-          >          
-            <IconButton component="span" className='group-hover:!text-[#5D4889] group-hover:!scale-125 transition-all duration-500'>
-              <CloudUpload fontSize="large" />
-            </IconButton>
-            <p className="mt-2">Arrastra tus archivos aquí o haz clic para subir</p>
-            {files.length > 0 && (
-              <div className="mt-4">
-                {files.map((file, index) => (
-                  <div key={index} className="flex items-center">
-                    <InsertDriveFile fontSize="large" />
-                    <p className="ml-2">{file.name}</p>
+            <div className="flex flex-col items-center justify-start h-full p-8 w-full relative">
+              <div
+                className={`border-4 border-dashed rounded-lg p-8 mb-4 w-full text-center peer/hoverfile cursor-pointer text-[#5D4889] group ${dragActive ? 'border-blue-500' : 'border-gray-300'}`}
+                onDragEnter={handleDrag}
+                onDragOver={handleDrag}
+                onDragLeave={handleDrag}
+                onDrop={handleDrop}
+                onClick={() => document.getElementById('file-upload').click()}
+              >          
+                <IconButton component="span" className='group-hover:!text-[#5D4889] group-hover:!scale-125 transition-all duration-500'>
+                  <CloudUpload fontSize="large" />
+                </IconButton>
+                <p className="mt-2">Arrastra tus archivos aquí o haz clic para subir</p>
+                {files.length > 0 && (
+                  <div className="mt-4">
+                    {files.map((file, index) => (
+                      <div key={index} className="flex items-center">
+                        <InsertDriveFile fontSize="large" />
+                        <p className="ml-2">{file.name}</p>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                )}
               </div>
-            )}
+              <input
+                  type="file"
+                  accept=".csv, .pdf, .xls, .xlsx, .jpg, .png"
+                  className="hidden"
+                  id="file-upload"
+                  name="file-upload"
+                  onChange={handleChange}
+                  multiple
+                />
+              {files.length > 0 && (
+                <div className="w-full my-4">
+                  <LinearProgress variant="determinate" value={uploadProgress} className='mb-4' />
+                </div>
+              )}
+              <Button variant="contained" color="primary" onClick={handleUpload} className="my-8">
+                Subir Archivos
+              </Button>
+              {uploadStatus && (
+                <Snackbar open={true} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+                  <Alert onClose={handleCloseSnackbar} severity={uploadStatus.type} sx={{ width: '100%' }}>
+                    {uploadStatus.message}
+                  </Alert>
+                </Snackbar>
+              )}        
           </div>
-          <input
-              type="file"
-              accept=".csv, .pdf, .xls, .xlsx, .jpg, .png"
-              className="hidden"
-              id="file-upload"
-              name="file-upload"
-              onChange={handleChange}
-              multiple
-            />
-          {files.length > 0 && (
-            <div className="w-full my-4">
-              <LinearProgress variant="determinate" value={uploadProgress} className='mb-4' />
-            </div>
-          )}
-          <Button variant="contained" color="primary" onClick={handleUpload} className="my-8">
-            Subir Archivos
-          </Button>
-          {uploadStatus && (
-            <Snackbar open={true} autoHideDuration={6000} onClose={handleCloseSnackbar}>
-              <Alert onClose={handleCloseSnackbar} severity={uploadStatus.type} sx={{ width: '100%' }}>
-                {uploadStatus.message}
-              </Alert>
-            </Snackbar>
-          )}        
-        </div>
+        </>                
+        }
         <Grid container spacing={2} className='pb-4'>
             <Grid size={{ xs: 12, xl: 12 }} className='pb-4'>
                 <div className="flex justify-center rounded-xl bg-[#5d4889] text-white shadow-md py-4 align-middle">
