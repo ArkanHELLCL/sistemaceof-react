@@ -1,27 +1,27 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid2';
-import { CloudUpload, InsertDriveFile, Delete, Description } from '@mui/icons-material';
-import { IconButton, LinearProgress, Snackbar, Alert, Button } from '@mui/material';
-import { Box, lighten } from '@mui/material';
+import { CloudUpload, InsertDriveFile, Delete } from '@mui/icons-material';
+import { Box, IconButton, LinearProgress, Snackbar, Alert, Button, Tooltip } from '@mui/material';
 import Swal from 'sweetalert2';
-import { MaterialReactTable, useMaterialReactTable, MRT_GlobalFilterTextField, MRT_ToggleFiltersButton } from 'material-react-table';
+import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
 const VITE_API_UPLOAD_URL = import.meta.env.VITE_API_UPLOAD_URL;
 const VITE_API_LISTFILES_URL = import.meta.env.VITE_API_LISTFILES_URL;
+const VITE_API_DELFILES_URL = import.meta.env.VITE_API_DELFILES_URL;
 
-export default function Upload({ empresas }) {
+export default function Upload({ user, empresas }) {
   const [files, setFiles] = useState([]);
   const [dragActive, setDragActive] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState(null);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [empresa, setEmpresa] = useState('');
- 
+
   const getUploadedFiles = () => {
     if (empresa) {
       fetch(`${VITE_API_LISTFILES_URL}?tipo=1&cliente_id=${empresa?.id}`)
@@ -71,27 +71,6 @@ export default function Upload({ empresas }) {
       }
     }
   };
-/* 
-  const handleDelete = (fileName) => {
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: "No podrás revertir esto!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, eliminarlo!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        setUploadedFiles((prevFiles) => prevFiles.filter((file) => file.name !== fileName));
-        Swal.fire(
-          'Eliminado!',
-          'El archivo ha sido eliminado.',
-          'success'
-        );
-      }
-    });
-  };*/
 
   const handleUpload = () => {
     if (!empresa) {
@@ -198,17 +177,51 @@ export default function Upload({ empresas }) {
     //end
   );
 
+  const handleDeleteRow = useCallback(
+    (row) => {
+      if (
+        //!confirm(`Are you sure you want to delete ${row.getValue('nombre')}`)
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: "¿Quieres eliminar el archivo " + row.getValue('nombre') + "?",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminalo!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            if (empresa) {
+              const data = {"tipo": 1, "cliente_id": empresa?.id, "files": row.getValue('nombre')};
+              fetch(`${VITE_API_DELFILES_URL}`,{method: 'POST', body: JSON.stringify(data)})
+              .then(response => response.json())
+              .then(response => {
+                //setUploadedFiles(files.data);
+                getUploadedFiles();
+              })
+              .catch(error => console.log(error));
+            }else{
+              console.log('No hay empresa seleccionada : ' + empresa);
+            }
+          }
+        })
+      ) {
+        return;
+      }      
+    },
+    [empresa],
+  );
+
   const table = useMaterialReactTable({
     columns,
     data: uploadedFiles,    
     enableColumnActions: false,
     enableExpanding: false,
-    enableColumnFilterModes: true,
-    enableColumnOrdering: true,
-    enableGrouping: true,
-    enableColumnPinning: true,
-    enableFacetedValues: true,
-    enableRowSelection: true,
+    enableRowActions: user?.PER_Id == 1,
+    enableColumnDragging:false,
+    enableDensityToggle: false,
+    enableFullScreenToggle: false,
+    enableHiding: false,
     paginationDisplayMode: 'pages',
     positionToolbarAlertBanner: 'bottom',
     muiSearchTextFieldProps: {
@@ -230,158 +243,106 @@ export default function Upload({ empresas }) {
           right: ['mrt-row-actions'],
         },
     },
-    renderTopToolbar: ({ table }) => {
-      const handleDeactivate = () => {
-        table.getSelectedRowModel().flatRows.map((row) => {
-          alert('deactivating ' + row.getValue('nombre'));
-        });
-      };
-
-      const handleActivate = () => {
-        table.getSelectedRowModel().flatRows.map((row) => {
-          alert('activating ' + row.getValue('nombre'));
-        });
-      };
-
-      const handleContact = () => {
-        table.getSelectedRowModel().flatRows.map((row) => {
-          alert('contact ' + row.getValue('nombre'));
-        });
-      };
-      console.log(table,table.getIsSomeRowsSelected(),table.getSelectedRowModel());
-      return (
-        <Box
-          sx={(theme) => ({
-            backgroundColor: lighten(theme.palette.background.default, 0.05),
-            display: 'flex',
-            gap: '0.5rem',
-            p: '8px',
-            justifyContent: 'space-between',
-          })}
-        >
-          <Box sx={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-            {/* import MRT sub-components */}
-            <MRT_GlobalFilterTextField table={table} />
-            <MRT_ToggleFiltersButton table={table} />
-          </Box>
-          <Box>
-            <Box sx={{ display: 'flex', gap: '0.5rem' }}>
-              <Button
-                color="error"
-                disabled={!table.getIsSomeRowsSelected()}
-                onClick={handleDeactivate}
-                variant="contained"
-              >
-                Deactivate
-              </Button>
-              <Button
-                color="success"
-                disabled={!table.getIsSomeRowsSelected()}
-                onClick={handleActivate}
-                variant="contained"
-              >
-                Activate
-              </Button>
-              <Button
-                color="info"
-                disabled={!table.getIsSomeRowsSelected()}
-                onClick={handleContact}
-                variant="contained"
-              >
-                Contact
-              </Button>
-            </Box>
-          </Box>
-        </Box>
-      );
-    },
+    renderRowActions: ({ row }) => (
+      <Box sx={{ display: 'flex', gap: '1rem' }}>        
+        <Tooltip arrow placement="right" title="Delete">
+          <IconButton color="error" onClick={() => handleDeleteRow(row)}>
+            <Delete />
+          </IconButton>
+        </Tooltip>
+      </Box>
+    ),
   });
 
   useEffect(() => {
     getUploadedFiles();
   }, [empresa]);
 
-  return (
-    <section className=''>
-      <div>
-        <Grid container spacing={1}>
-          <Grid size={{ xs: 12, xl: 12 }} className='pb-4'>
-              <div className="flex justify-center rounded-xl bg-[#5d4889] text-white shadow-md py-4 align-middle">
-                  <h2 className="text-2xl font-light text-center">{'Cargar Datos de Empresa'}</h2>
+  return (    
+      <section className=''>{
+        user?.PER_Id == 1 &&
+          <>
+            <div>
+              <Grid container spacing={1}>
+                <Grid size={{ xs: 12, xl: 12 }} className='pb-4'>
+                    <div className="flex justify-center rounded-xl bg-[#5d4889] text-white shadow-md py-4 align-middle">
+                        <h2 className="text-2xl font-light text-center">{'Cargar Datos de Empresa'}</h2>
+                    </div>
+                </Grid>
+                <Grid size={{ xs: 12, xl: 6 }} className=''>
+                  <Autocomplete
+                    disablePortal
+                    disableClearable={true}
+                    id="empresas"
+                    value={empresa}
+                    options={empresas}
+                    onChange={(event, newValue) => { setEmpresa(newValue) }}
+                    sx={{ width: "100%" }}
+                    renderInput={(params) => <TextField {...params} label="Empresa" variant="standard" />}
+                  />
+                </Grid>
+              </Grid>
+            </div>
+          </>
+        }
+        <div className="flex flex-col items-center justify-start h-full p-8 w-full relative">
+          <div
+            className={`border-4 border-dashed rounded-lg p-8 mb-4 w-full text-center peer/hoverfile cursor-pointer text-[#5D4889] group ${dragActive ? 'border-blue-500' : 'border-gray-300'}`}
+            onDragEnter={handleDrag}
+            onDragOver={handleDrag}
+            onDragLeave={handleDrag}
+            onDrop={handleDrop}
+            onClick={() => document.getElementById('file-upload').click()}
+          >          
+            <IconButton component="span" className='group-hover:!text-[#5D4889] group-hover:!scale-125 transition-all duration-500'>
+              <CloudUpload fontSize="large" />
+            </IconButton>
+            <p className="mt-2">Arrastra tus archivos aquí o haz clic para subir</p>
+            {files.length > 0 && (
+              <div className="mt-4">
+                {files.map((file, index) => (
+                  <div key={index} className="flex items-center">
+                    <InsertDriveFile fontSize="large" />
+                    <p className="ml-2">{file.name}</p>
+                  </div>
+                ))}
               </div>
-          </Grid>
-          <Grid size={{ xs: 12, xl: 6 }} className=''>
-            <Autocomplete
-              disablePortal
-              disableClearable={true}
-              id="empresas"
-              value={empresa}
-              options={empresas}
-              onChange={(event, newValue) => { setEmpresa(newValue) }}
-              sx={{ width: "100%" }}
-              renderInput={(params) => <TextField {...params} label="Empresa" variant="standard" />}
+            )}
+          </div>
+          <input
+              type="file"
+              accept=".csv"
+              className="hidden"
+              id="file-upload"
+              name="file-upload"
+              onChange={handleChange}            
             />
-          </Grid>
-        </Grid>
-      </div>
-      <div className="flex flex-col items-center justify-start h-full p-8 w-full relative">
-        <div
-          className={`border-4 border-dashed rounded-lg p-8 mb-4 w-full text-center peer/hoverfile cursor-pointer text-[#5D4889] group ${dragActive ? 'border-blue-500' : 'border-gray-300'}`}
-          onDragEnter={handleDrag}
-          onDragOver={handleDrag}
-          onDragLeave={handleDrag}
-          onDrop={handleDrop}
-          onClick={() => document.getElementById('file-upload').click()}
-        >          
-          <IconButton component="span" className='group-hover:!text-[#5D4889] group-hover:!scale-125 transition-all duration-500'>
-            <CloudUpload fontSize="large" />
-          </IconButton>
-          <p className="mt-2">Arrastra tus archivos aquí o haz clic para subir</p>
           {files.length > 0 && (
-            <div className="mt-4">
-              {files.map((file, index) => (
-                <div key={index} className="flex items-center">
-                  <InsertDriveFile fontSize="large" />
-                  <p className="ml-2">{file.name}</p>
-                </div>
-              ))}
+            <div className="w-full my-4">
+              <LinearProgress variant="determinate" value={uploadProgress} className='mb-4' />
             </div>
           )}
+          <Button variant="contained" color="primary" onClick={handleUpload} className="my-8">
+            Subir Archivos
+          </Button>
+          {uploadStatus && (
+            <Snackbar open={true} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+              <Alert onClose={handleCloseSnackbar} severity={uploadStatus.type} sx={{ width: '100%' }}>
+                {uploadStatus.message}
+              </Alert>
+            </Snackbar>
+          )}        
         </div>
-        <input
-            type="file"
-            accept=".csv"
-            className="hidden"
-            id="file-upload"
-            name="file-upload"
-            onChange={handleChange}            
-          />
-        {files.length > 0 && (
-          <div className="w-full my-4">
-            <LinearProgress variant="determinate" value={uploadProgress} className='mb-4' />
-          </div>
-        )}
-        <Button variant="contained" color="primary" onClick={handleUpload} className="my-8">
-          Subir Archivos
-        </Button>
-        {uploadStatus && (
-          <Snackbar open={true} autoHideDuration={6000} onClose={handleCloseSnackbar}>
-            <Alert onClose={handleCloseSnackbar} severity={uploadStatus.type} sx={{ width: '100%' }}>
-              {uploadStatus.message}
-            </Alert>
-          </Snackbar>
-        )}        
-      </div>
-      <Grid container spacing={2} className='pb-4'>
-          <Grid size={{ xs: 12, xl: 12 }} className='pb-4'>
-              <div className="flex justify-center rounded-xl bg-[#5d4889] text-white shadow-md py-4 align-middle">
-                  <h2 className="text-2xl font-light text-center">{'Archivos en la carpeta de la Empresa'}</h2>
-              </div>
-          </Grid>                          
-          <Grid size={{ xs: 12, xl: 12 }} sx={{height: '100%'}}> 
-            <MaterialReactTable table={table} />
-          </Grid>
-      </Grid>      
-    </section>
+        <Grid container spacing={2} className='pb-4'>
+            <Grid size={{ xs: 12, xl: 12 }} className='pb-4'>
+                <div className="flex justify-center rounded-xl bg-[#5d4889] text-white shadow-md py-4 align-middle">
+                    <h2 className="text-2xl font-light text-center">{'Archivos en la carpeta de la Empresa'}</h2>
+                </div>
+            </Grid>                          
+            <Grid size={{ xs: 12, xl: 12 }} sx={{height: '100%'}}> 
+              <MaterialReactTable table={table} />
+            </Grid>
+        </Grid>      
+      </section>
   );
 }
