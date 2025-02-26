@@ -5,7 +5,7 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from 'material-react-table';
-import { Box, Button, IconButton, Tooltip, MenuItem } from '@mui/material';
+import { Box, Button, IconButton, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Grid from '@mui/material/Grid2';
@@ -23,11 +23,18 @@ const Enterprise = ({user}) => {
   const VITE_API_GETEMPRESAS_URL = import.meta.env.VITE_API_GETEMPRESAS_URL;
   const VITE_API_POSTEMPRESAS_URL = import.meta.env.VITE_API_POSTEMPRESAS_URL;
   const VITE_API_PUTEEMPRESAS_URL = import.meta.env.VITE_API_PUTEEMPRESAS_URL;
+  const VITE_API_DELEEMPRESAS_URL = import.meta.env.VITE_API_DELEEMPRESAS_URL;
+
   const tpoGraph = [
     {value :'Sin Tipo', text:1},
     {value :'Tipo 1', text:2},
     {value :'Tipo 2', text:3},
     {value :'Tipo 3', text:4},    
+  ];
+
+  const estado = [
+    {value :'Activo', text:1},
+    {value :'Inactivo', text:0}
   ];
 
   useEffect(() => {
@@ -150,7 +157,6 @@ const Enterprise = ({user}) => {
         header: 'Email',
         muiEditTextFieldProps: {
           type: 'email',
-          required: true,
           error: !!validationErrors?.EMP_Email,
           helperText: validationErrors?.EMP_Email,
           onFocus: () =>
@@ -161,24 +167,51 @@ const Enterprise = ({user}) => {
         },
       },
       {
+        accessorKey: 'EMP_UrlLogo',
+        header: 'URL del Logo',
+        muiEditTextFieldProps: {
+          type: 'url',
+          error: !!validationErrors?.EMP_UrlLogo,
+          helperText: validationErrors?.EMP_UrlLogo,
+          onFocus: () =>
+            setValidationErrors({
+              ...validationErrors,
+              EMP_UrlLogo: undefined,
+            }),
+        },
+      },
+      {
         accessorKey: 'destipografico',
-        header: 'Tipo de Gráfico',
-        /*Cell: ({ cell }) => {
-          const graph = tpoGraph.find((g) => parseInt(g.value) === cell.getValue());
-          return graph ? graph.text : cell.getValue();
-        },*/
-        editVariant: 'select',
-        /*editSelectOptions: tpoGraph.map(graph => 
-          <MenuItem key={graph.code} value={graph.code}>
-            {graph.description}
-          </MenuItem>
-        ),*/
+        header: 'Tipo de Gráfico',       
+        editVariant: 'select',       
         editSelectOptions: tpoGraph,
         muiEditTextFieldProps: {
           select: true,
           required: true,
-          error: !!validationErrors?.tipografico,
-          helperText: validationErrors?.tipografico,
+          error: !!validationErrors?.destipografico,
+          helperText: validationErrors?.destipografico,
+          onFocus: () =>
+            setValidationErrors({
+              ...validationErrors,
+              destipografico: undefined,
+            }),
+        },
+      },
+      {
+        accessorKey: 'estadodesc',
+        header: 'Estado',       
+        editVariant: 'select',       
+        editSelectOptions: estado,
+        muiEditTextFieldProps: {
+          select: true,
+          required: true,
+          error: !!validationErrors?.estadodesc,
+          helperText: validationErrors?.estadodesc,
+          onFocus: () =>
+            setValidationErrors({
+              ...validationErrors,
+              estadodesc: undefined,
+            }),
         },
       },
     ],
@@ -308,7 +341,7 @@ const Enterprise = ({user}) => {
 
 const validateRequired = (value) => !!value.length;
 const validateEmail = (email) =>
-  !!email.length &&
+  !email ||
   email
     .toLowerCase()
     .match(
@@ -328,13 +361,18 @@ const validateRut = (rut) => {
   const dvExpected = 11 - (sum % 11);
   const dvNormalized = dvExpected === 11 ? '0' : dvExpected === 10 ? 'k' : dvExpected.toString();
   return dvNormalized.toLowerCase() === dv.toLowerCase();
-};    
+};
+
+const validateUrl = (url) => !url || /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/gm.test(url);
 
 function validateEmp(emp) {
   return {
     label: !validateRequired(emp.label) ? 'Razón Social es obligatoria' : '',
     EMP_Codigo: !validateRequired(emp.EMP_Codigo) ? 'RUT es obligatorio' : !validateRut(emp.EMP_Codigo) ? 'RUT no es válido' : '',
     EMP_Email: !validateEmail(emp.EMP_Email) ? 'Incorrect Email Format' : '',
+    EMP_UrlLogo: !validateUrl(emp.EMP_UrlLogo) ? 'Formato de URL incorrecto' : '',
+    destipografico: !validateRequired(emp.destipografico) ? 'Tipo de Gráfico es obligatorio' : '',
+    estadodesc: !validateRequired(emp.estadodesc) ? 'Obligatorio' : '',
   };
 }
 

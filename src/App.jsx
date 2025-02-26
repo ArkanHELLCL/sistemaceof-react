@@ -36,8 +36,8 @@ function App() {
     })
     .finally(() => {
     })
-    .catch(error => window.location.href = 'https://ceofconsultores.com/system/');
-    //.catch(error => console.log(error));
+    //.catch(error => window.location.href = 'https://ceofconsultores.com/system/');
+    .catch(error => console.log(error));
   }
 
   const getGraficos = (empresa) => {
@@ -49,8 +49,8 @@ function App() {
     })
     .finally(() => {
     })
-    .catch(error => window.location.href = 'https://ceofconsultores.com/system/');
-    //.catch(error => console.log(error));
+    //.catch(error => window.location.href = 'https://ceofconsultores.com/system/');
+    .catch(error => console.log(error));
   }
 
   const getBasecsv = (empresa) => {
@@ -70,8 +70,8 @@ function App() {
       },
       error: function(err, file, inputElem, reason)
       {        
-        window.location.href = 'https://ceofconsultores.com/system/'
-        //console.log(err, file, inputElem, reason);
+        //window.location.href = 'https://ceofconsultores.com/system/'
+        console.log(err, file, inputElem, reason);
       },
     });    
   }
@@ -85,8 +85,8 @@ function App() {
       })
       .finally(() => {
       })
-      .catch(error => window.location.href = 'https://ceofconsultores.com/system/');
-      //.catch(error => console.log(error));
+      //.catch(error => window.location.href = 'https://ceofconsultores.com/system/');
+      .catch(error => console.log(error));
   }, []);  
 
   useEffect(() => {    
