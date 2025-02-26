@@ -24,7 +24,7 @@ export default function Main ({data, mes, user, menu, empresas, graficos, setGra
           <Contact data={data} mes={mes} user={user} menu={menu} empresa={empresa}/>
       }{
         menu.Empresas &&
-          <Enterprise data={data} mes={mes} user={user} menu={menu}/>
+          <Enterprise data={data} mes={mes} user={user} menu={menu} empresas={empresas}/>
       }{
         menu.Usuarios &&
           <User data={data} mes={mes} user={user} menu={menu}/>

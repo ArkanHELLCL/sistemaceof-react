@@ -4,17 +4,47 @@
         {
             "id": 1,
             "label": "Empresa 1",
-            "tipografico": 1
+            "tipografico": 1,
+            "destipografico": "Tipo 1",
+            "EMP_Codigo": "12345678-0",
+            "EMP_Direccion": "Calle Falsa 431",
+            "EMP_UrlLogo": "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
+            "EMP_PagWeb": "https://www.google.com",
+            "EMP_Estado": 1,
+            "EMP_Email": "empresa2@emp.cl",
+            "EMP_Telefono": "+56912345678",
+            "EMP_UsrEdit": "admin",
+            "EMP_FchEdit": "2021-01-01"
         },
         {
             "id": 2,
             "label": "Empresa 2",
-            "tipografico": 2
+            "tipografico": 2,
+            "destipografico": "Tipo 2",
+            "EMP_Codigo": "12345678-0",
+            "EMP_Direccion": "Calle Falsa 431",
+            "EMP_UrlLogo": "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
+            "EMP_PagWeb": "https://www.google.com",
+            "EMP_Estado": 1,
+            "EMP_Email": "empresa2@emp.cl",
+            "EMP_Telefono": "+56912345678",
+            "EMP_UsrEdit": "admin",
+            "EMP_FchEdit": "2021-01-01"
         },
         {
             "id": 3,
             "label": "Empresa 3",
-            "tipografico": 3
+            "tipografico": 3,
+            "destipografico": "Tipo 3",
+            "EMP_Codigo": "12345678-0",
+            "EMP_Direccion": "Calle Falsa 431",
+            "EMP_UrlLogo": "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
+            "EMP_PagWeb": "https://www.google.com",
+            "EMP_Estado": 1,
+            "EMP_Email": "empresa2@emp.cl",
+            "EMP_Telefono": "+56912345678",
+            "EMP_UsrEdit": "admin",
+            "EMP_FchEdit": "2021-01-01"
         }
     ]
 }
