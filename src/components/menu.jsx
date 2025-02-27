@@ -104,7 +104,7 @@ export default function Menu({setTitle, user, setMenu}) {
               </SimpleTreeView>
             </Box>                
           </>
-        : 
+        : user?.PER_Id === 3 ?
           <>
             <Box sx={{ minHeight: 200, minWidth: 250, maxHeight: 600, overflowY: 'auto' }} >
               <SimpleTreeView>
@@ -113,6 +113,7 @@ export default function Menu({setTitle, user, setMenu}) {
               </SimpleTreeView>
             </Box>
           </>
+        : null
     )
 }
 

@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import Header from './components/header.jsx'
 import Sidebar from './components/sidebar.jsx'
 import Footer from './components/footer.jsx'
 import Main from './components/main.jsx';
 import Papa from 'papaparse';
+import Loading from './components/loading.jsx';
 
 function App() {
   const [title, setTitle] = useState('Dashboard');
@@ -18,6 +19,7 @@ function App() {
   const [empresas, setEmpresas] = useState([]);
   const [graficos, setGraficos] = useState([]);
   const [empresa, setEmpresa] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const VITE_API_GETEMPRESAS_URL = import.meta.env.VITE_API_GETEMPRESAS_URL;
   const VITE_API_GETUSUARIO_URL = import.meta.env.VITE_API_GETUSUARIO_URL;
@@ -40,8 +42,7 @@ function App() {
     .catch(error => {
       setEmpresas([])
       setEmpresa([])
-      console.log(error)}
-    );
+    });
   }
 
   const getGraficos = (empresa) => {
@@ -56,48 +57,46 @@ function App() {
     //.catch(error => window.location.href = 'https://ceofconsultores.com/system/');
     .catch(error => {
       setGraficos([])
-      console.log(error)}
-    );
+    });
   }
 
   const getBasecsv = (empresa) => {
     if(empresa?.id===undefined) {
       setData({});
       setMesFinal(null);
-      console.log('No se encontró la empresa');
       return;
     }
+    setLoading(true);
     Papa.parse(`${VITE_API_GETBASECSV_URL}?file_id=${empresa?.id}`, { 
       worker: true, 
       download: VITE_CSVCONVERT_DOWNLOAD,
       skipEmptyLines: true,
       complete: function(results) {
         let meses = [];
-        console.log(results,"result");
         //if(results?.data[0] === undefined) {
         if(results?.errors.length > 0) {
           setData({});
           setMesFinal(null);
-          console.log('No se encontraron datos');
+          setLoading(false);
           return
         }        
         const idxMes = results.data[0]?.indexOf('N_MES') || null;
         if(idxMes===null) {
           setData({});
           setMesFinal(null);
-          console.log('No se encontró la columna N_MES');
           return;
         }
         setData(results);
         meses = results.data?.slice(1).map(row => row[idxMes]) || [];
         setMesFinal(parseInt(meses[meses.length - 1]));
+        setLoading(false);
       },
       error: function(err, file, inputElem, reason)
       {
         //window.location.href = 'https://ceofconsultores.com/system/'
         setData({"data":[]});
         setMesFinal(null);
-        console.log(err, file, inputElem, reason,"1");
+        setLoading(false);
         return;
       },
     });    
@@ -112,14 +111,13 @@ function App() {
       })
       .finally(() => {
       })
-      //.catch(error => window.location.href = 'https://ceofconsultores.com/system/');
-      .catch(error => {
+      .catch(error => window.location.href = 'https://ceofconsultores.com/system/');
+      /*.catch(error => {
         setUser([])
-        console.log(error)}
-      );
+      );*/
   }, []);  
 
-  useEffect(() => {    
+  useEffect(() => {
     if(user?.PER_Id === 1){
       getEmpresas();
     }else{
@@ -136,17 +134,6 @@ function App() {
       getBasecsv(empresa);
     }
   },[empresa])
-
-  /*useEffect(() => {
-    if(empresa?.id!==undefined && user?.PER_Id === 1){
-      getBasecsv(empresa);
-      return;
-    }
-    if(user?.EMP_Id!==undefined && user?.PER_Id > 2){
-      getBasecsv({id:user?.EMP_Id});
-      return;
-    }
-  }, [empresa,user]);*/
 
 useEffect(() => {
   if(data?.data ===  undefined) return;
@@ -229,13 +216,16 @@ useEffect(() => {
 }, [data]);
 
   return (
-    //user && empresas && dataFormatted && //graficos && headers && mesfinal &&  user &&
-      <main className="dashtemplate">
-        <Header title={title} />
-        <Sidebar setTitle={setTitle} user={user} setMenu={setMenu}/>
-        <Footer user={user}/>
-        <Main data={dataFormatted} mes={[mesfinal]} user={user} menu={menu} empresas={empresas} graficos={graficos} setGraficos={setGraficos} empresa={empresa} setEmpresa={setEmpresa}/>
-      </main>        
+    <main className="dashtemplate">{
+      loading ? <Loading /> :
+        <>
+          <Header title={title} />
+          <Sidebar setTitle={setTitle} user={user} setMenu={setMenu}/>
+          <Footer user={user}/>
+          <Main data={dataFormatted} mes={[mesfinal]} user={user} menu={menu} empresas={empresas} graficos={graficos} setGraficos={setGraficos} empresa={empresa} setEmpresa={setEmpresa}/>
+        </>
+    }
+    </main>
   );
 }
 

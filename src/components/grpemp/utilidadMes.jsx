@@ -36,7 +36,6 @@ backgroundColor: [
 export default function UtilidadMes({data, anio, mes}){
     const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico
     const [title, setTitle] = useState('Gráfico de Ventas');
-    console.log(data,anio,mes,"utilidadMes")
     const tabla = (mes) => {
         const col=[];
         let valor = parseFloat(data[0]["nivel1"]['1.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes)[0]) || 0;

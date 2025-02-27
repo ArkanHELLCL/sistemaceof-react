@@ -82,7 +82,6 @@ const DataItemMes = (anio, mes, data) => {
     otrosCostosVariacion = otrosCostosVariacion ? otrosCostosVariacion : 0;
 
     //Costos Directos serie 6 ultimos meses
-    console.log('mes1', mes)
     let totalMeses = mes - 6;
     totalMeses = mes < 6 ? 0 : totalMeses || 0;
     const costosMesSeries = year ? year['nivel2']['1.2.1.']?.months?.slice(totalMeses, mes) : Array(totalMeses).fill(0);
