@@ -19,20 +19,6 @@ const meses = [
     { "label": "Diciembre", "month": 12 }
 ]
 
-/*
-backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(255, 159, 64, 0.2)',
-                        'rgba(255, 205, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(201, 203, 207, 0.2)',
-                        'rgba(233, 180, 257, 0.2)'
-                    ],
-
-*/
-
 export default function UtilidadMes({data, anio, mes}){
     const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico
     const [title, setTitle] = useState('Gráfico de Ventas');

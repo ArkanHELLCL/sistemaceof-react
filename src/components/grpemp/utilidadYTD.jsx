@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid2';
 import DoughnutChart from '../graficos/doughnutChart.jsx';
 
-export default function UtilidadYTD({data, anio}){
+export default function UtilidadYTD({data, anio, mes}){
     const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico
     const [title, setTitle] = useState('Gráfico de Utilidades');
-
+    
     useEffect(() => {
         if(data?.length>0 && anio.length === 1){
             const col=[];

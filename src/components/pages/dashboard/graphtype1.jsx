@@ -22,7 +22,7 @@ export default function Graphtype1({anioSelected, mes, datosFiltrados, sumaNivel
                 <ResumenPanel anio={[anioSelected[0]?.year]} mes={mes} data={sumaNiveles} type={2} anios={Anios}/>
             </Grid>
             <Grid size={{ xs: 12, xl: 8 }}>
-                <UtilidadMesAnual anio={[anioSelected[0]?.year]} data={sumaNivelesFitrado}/>
+                <UtilidadMesAnual anio={[anioSelected[0]?.year]} data={sumaNivelesFitrado} mes={mes}/>
             </Grid> 
             <Grid size={{ xs: 12, xl: 12 }}>
                 <VentasAnual data={sumaNiveles} anios={Anios}/>
