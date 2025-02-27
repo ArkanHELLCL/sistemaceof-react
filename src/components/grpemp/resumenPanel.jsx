@@ -82,8 +82,9 @@ const DataItemMes = (anio, mes, data) => {
     otrosCostosVariacion = otrosCostosVariacion ? otrosCostosVariacion : 0;
 
     //Costos Directos serie 6 ultimos meses
+    console.log('mes1', mes)
     let totalMeses = mes - 6;
-    totalMeses = mes < 6 ? 0 : totalMeses;
+    totalMeses = mes < 6 ? 0 : totalMeses || 0;
     const costosMesSeries = year ? year['nivel2']['1.2.1.']?.months?.slice(totalMeses, mes) : Array(totalMeses).fill(0);
     const labels = meses.slice(totalMeses, mes).map(item => item.label);
 
@@ -180,7 +181,7 @@ const DataItemMes = (anio, mes, data) => {
         ],
         data: [
             {
-                titulo: 'INGRESOS ' + meses[mes-1].label.toUpperCase(),
+                titulo: 'INGRESOS ' + meses[mes-1]?.label?.toUpperCase(),
                 subtitulo: parseFloat(ingresosVariacion).toLocaleString?.('en-EN', {
                     style: 'percent'                           
                     }).replaceAll(',', '.') + ' respecto al mes pasado',
@@ -188,7 +189,7 @@ const DataItemMes = (anio, mes, data) => {
                 variacion: ingresosVariacion
             },
             {
-                titulo: 'COSTOS DIRECTOS ' + meses[mes-1].label.toUpperCase(),
+                titulo: 'COSTOS DIRECTOS ' + meses[mes-1]?.label?.toUpperCase(),
                 subtitulo: parseFloat(costosVariacion).toLocaleString?.('en-EN', {
                     style: 'percent'                           
                     }).replaceAll(',', '.') + ' respecto al mes pasado',
@@ -196,7 +197,7 @@ const DataItemMes = (anio, mes, data) => {
                 variacion: costosVariacion
             },
             {
-                titulo: 'OTROS COSTOS ' + meses[mes-1].label.toUpperCase(),
+                titulo: 'OTROS COSTOS ' + meses[mes-1]?.label?.toUpperCase(),
                 subtitulo: parseFloat(otrosCostosVariacion).toLocaleString?.('en-EN', {
                     style: 'percent'                           
                     }).replaceAll(',', '.') + ' respecto al mes pasado',
@@ -396,7 +397,7 @@ const DataItemAcumulado = (anio, mes, data, anios) => {
         ],
         data: [
             {
-                titulo: 'INGRESOS A ' + meses[mes-1].label.toUpperCase(),
+                titulo: 'INGRESOS A ' + meses[mes-1]?.label?.toUpperCase(),
                 subtitulo: parseFloat(ingresosVariacionAcumulada).toLocaleString?.('en-EN', {
                     style: 'percent'                           
                     }).replaceAll(',', '.') + ' respecto al acumlado pasado',
@@ -404,7 +405,7 @@ const DataItemAcumulado = (anio, mes, data, anios) => {
                 variacion: ingresosVariacionAcumulada
             },
             {
-                titulo: 'COSTO DIRECTOS A ' + meses[mes-1].label.toUpperCase(),
+                titulo: 'COSTO DIRECTOS A ' + meses[mes-1]?.label?.toUpperCase(),
                 subtitulo: parseFloat(costosVariacionAcumulado).toLocaleString?.('en-EN', {
                     style: 'percent'                           
                     }).replaceAll(',', '.') + ' respecto al acumlado pasado',
@@ -412,7 +413,7 @@ const DataItemAcumulado = (anio, mes, data, anios) => {
                 variacion: costosVariacionAcumulado
             },
             {
-                titulo: 'OTROS COSTOS A ' + meses[mes-1].label.toUpperCase(),
+                titulo: 'OTROS COSTOS A ' + meses[mes-1]?.label?.toUpperCase(),
                 subtitulo: parseFloat(otrosCostosVariacionAcumulado).toLocaleString?.('en-EN', {
                     style: 'percent'                           
                     }).replaceAll(',', '.') + ' respecto al acumlado pasado',

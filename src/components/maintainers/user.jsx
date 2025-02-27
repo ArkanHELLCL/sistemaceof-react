@@ -90,7 +90,6 @@ const User = ({user}) => {
     const userToUpdate = { ...User };
     userToUpdate.destipografico = tpoGraph.find((g) => g.value === user.destipografico).text;
 
-    console.log(userToUpdate);
     setIsUpdatingUser(true);
     try {
       await fetch(`/api/users/${user.id}`, {

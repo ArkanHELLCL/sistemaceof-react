@@ -15,19 +15,19 @@ export default function Main ({data, mes, user, menu, empresas, graficos, setGra
           <DashBoard data={data} mes={mes} user={user} empresas={empresas} graficos={graficos} setGraficos={setGraficos} empresa={empresa} setEmpresa={setEmpresa} menu={menu}/>
       }{
         menu.Download &&
-          <Download data={data} mes={mes} user={user} menu={menu} empresas={empresas} empresa={empresa}/>
+          <Download user={user} empresas={empresas} empresa={empresa}/>
       }{
         menu.Upload &&
-          <Upload data={data} mes={mes} user={user} menu={menu} empresas={empresas}/>
+          <Upload user={user} empresas={empresas}/>
       }{
         menu.Contacto &&
-          <Contact data={data} mes={mes} user={user} menu={menu} empresa={empresa}/>
+          <Contact user={user} empresa={empresa} empresas={empresas}/>
       }{
         menu.Empresas &&
-          <Enterprise data={data} mes={mes} user={user} menu={menu} empresas={empresas}/>
+          <Enterprise user={user}/>
       }{
         menu.Usuarios &&
-          <User data={data} mes={mes} user={user} menu={menu}/>
+          <User user={user}/>
       }
     </section>
   );

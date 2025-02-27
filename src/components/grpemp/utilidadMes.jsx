@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid2';
 import FloatingBarChart from '../graficos/floatingBarChart.jsx';
 
@@ -38,7 +36,7 @@ backgroundColor: [
 export default function UtilidadMes({data, anio, mes}){
     const [grpconfig, setGrpconfig] = useState({});         //Configuración del gráfico
     const [title, setTitle] = useState('Gráfico de Ventas');
-
+    console.log(data,anio,mes,"utilidadMes")
     const tabla = (mes) => {
         const col=[];
         let valor = parseFloat(data[0]["nivel1"]['1.1.']?.months?.slice(0,12).filter((item, idx) => idx === mes)[0]) || 0;
@@ -147,7 +145,7 @@ export default function UtilidadMes({data, anio, mes}){
 
     useEffect(() => {
         if(anio.length === 1){
-            setTitle('Gráfico de Utilidades Mes ' + meses[mes[0]-1].label + ' año ' + anio[0] );
+            setTitle('Gráfico de Utilidades Mes ' + meses[mes[0]-1]?.label + ' año ' + anio[0] );
         }        
         else{
            setTitle('Gráfico de Utilidades Mes');

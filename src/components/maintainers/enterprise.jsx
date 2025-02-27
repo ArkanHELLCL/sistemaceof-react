@@ -80,7 +80,6 @@ const Enterprise = ({user}) => {
     const empToUpdate = { ...emp };
     empToUpdate.destipografico = tpoGraph.find((g) => g.value === emp.destipografico).text;
 
-    console.log(empToUpdate);
     setIsUpdatingEmp(true);
     try {
       await fetch(`/api/users/${emp.id}`, {

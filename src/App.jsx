@@ -37,7 +37,11 @@ function App() {
     .finally(() => {
     })
     //.catch(error => window.location.href = 'https://ceofconsultores.com/system/');
-    .catch(error => console.log(error));
+    .catch(error => {
+      setEmpresas([])
+      setEmpresa([])
+      console.log(error)}
+    );
   }
 
   const getGraficos = (empresa) => {
@@ -50,28 +54,51 @@ function App() {
     .finally(() => {
     })
     //.catch(error => window.location.href = 'https://ceofconsultores.com/system/');
-    .catch(error => console.log(error));
+    .catch(error => {
+      setGraficos([])
+      console.log(error)}
+    );
   }
 
   const getBasecsv = (empresa) => {
-    if(empresa?.id===undefined) return;
+    if(empresa?.id===undefined) {
+      setData({});
+      setMesFinal(null);
+      console.log('No se encontró la empresa');
+      return;
+    }
     Papa.parse(`${VITE_API_GETBASECSV_URL}?file_id=${empresa?.id}`, { 
       worker: true, 
       download: VITE_CSVCONVERT_DOWNLOAD,
       skipEmptyLines: true,
       complete: function(results) {
-        setData(results || {});
         let meses = [];
-        if(results.data === undefined) return
+        console.log(results,"result");
+        //if(results?.data[0] === undefined) {
+        if(results?.errors.length > 0) {
+          setData({});
+          setMesFinal(null);
+          console.log('No se encontraron datos');
+          return
+        }        
         const idxMes = results.data[0]?.indexOf('N_MES') || null;
-        if(idxMes===null) return;
+        if(idxMes===null) {
+          setData({});
+          setMesFinal(null);
+          console.log('No se encontró la columna N_MES');
+          return;
+        }
+        setData(results);
         meses = results.data?.slice(1).map(row => row[idxMes]) || [];
         setMesFinal(parseInt(meses[meses.length - 1]));
       },
       error: function(err, file, inputElem, reason)
-      {        
+      {
         //window.location.href = 'https://ceofconsultores.com/system/'
-        console.log(err, file, inputElem, reason);
+        setData({"data":[]});
+        setMesFinal(null);
+        console.log(err, file, inputElem, reason,"1");
+        return;
       },
     });    
   }
@@ -86,7 +113,10 @@ function App() {
       .finally(() => {
       })
       //.catch(error => window.location.href = 'https://ceofconsultores.com/system/');
-      .catch(error => console.log(error));
+      .catch(error => {
+        setUser([])
+        console.log(error)}
+      );
   }, []);  
 
   useEffect(() => {    
@@ -99,12 +129,13 @@ function App() {
     }
   },[user])
 
+  //data
   useEffect(() => {
     if(empresa?.id!==undefined){
       getGraficos(empresa);
       getBasecsv(empresa);
     }
-  },[empresa, user])
+  },[empresa])
 
   /*useEffect(() => {
     if(empresa?.id!==undefined && user?.PER_Id === 1){
@@ -116,7 +147,6 @@ function App() {
       return;
     }
   }, [empresa,user]);*/
-
 
 useEffect(() => {
   if(data?.data ===  undefined) return;
@@ -199,9 +229,9 @@ useEffect(() => {
 }, [data]);
 
   return (
-    user && empresas && dataFormatted && //graficos && headers && mesfinal &&  user &&
+    //user && empresas && dataFormatted && //graficos && headers && mesfinal &&  user &&
       <main className="dashtemplate">
-        <Header title={title} user={user} menu={menu}/>
+        <Header title={title} />
         <Sidebar setTitle={setTitle} user={user} setMenu={setMenu}/>
         <Footer user={user}/>
         <Main data={dataFormatted} mes={[mesfinal]} user={user} menu={menu} empresas={empresas} graficos={graficos} setGraficos={setGraficos} empresa={empresa} setEmpresa={setEmpresa}/>

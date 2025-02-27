@@ -399,15 +399,15 @@ export default function PanelFinancieroAnual({data, anio, mes}){
                         }).replaceAll(',', '.')
             }))
         setResultData(rowsCurrencyFormatted);                
-        const MesAnt = mes === 1 ? meses[11].label : meses[mes-2].label;
+        const MesAnt = mes === 1 ? meses[11]?.label : meses[mes-2]?.label;
         const AnioAnt = mes > 1 ? anio[0]-1 : anio[0]-2;
         setAnioant(AnioAnt);
         setMesant(MesAnt);
-        setRangoMes(`${meses[0].label} a ${meses[mes-1].label}`)
+        setRangoMes(`${meses[0]?.label} a ${meses[mes-1]?.label}`)
     }
 
     useEffect(() => {
-        if(data?.length>0 && anio.length === 1 && mes[0].month > 0){
+        if(data?.length>0 && anio.length === 1 && mes[0]?.month > 0){
             tabla(mes[0].month);
         }
     }, [mes, anio]);
@@ -421,7 +421,7 @@ export default function PanelFinancieroAnual({data, anio, mes}){
 
     useEffect(() => {
         if(anio.length === 1){
-            setTitle('Panel Financiero ' + ' mes ' + meses[mes[0]-1].label + ' año ' + anio[0]  );
+            setTitle('Panel Financiero ' + ' mes ' + meses[mes[0]-1]?.label + ' año ' + anio[0]  );
         }        
         else{
            setTitle('Panel Financiero');
