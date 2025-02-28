@@ -34,12 +34,12 @@ export default function Main ({data, mes, user, menu, empresas, graficos, setGra
       }{
         menu.Empresas &&
           <Suspense fallback={<Loading />}>
-            <Enterprise user={user}/>
+            <Enterprise user={user} />
           </Suspense>
       }{
         menu.Usuarios &&
           <Suspense fallback={<Loading />}>
-            <User user={user}/>
+            <User user={user} empresas={empresas} />
           </Suspense>
       }
     </section>

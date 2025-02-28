@@ -1,18 +1,18 @@
 {
-    "data": [
-        {
-            "USR_Id": 1,
-            "PER_Id": 1,
-            "USR_Usuario": "lcastillo",
-            "USR_Nombre": "Luis",
-            "USR_Apellido": "Castillo",
-            "USR_Estado": 1,
-            "estadodesc": "Activo",
-            "PER_Descripcion": "Administrador",
-            "EMP_Descripcion": "CEOF Consultores",
-            "EMP_UrlLogo": "https:\/\/ceofconsultores.com\/wp-content\/uploads\/2025\/01\/logo-BLANCO-400px.png",
-            "EMP_Id": 9,
-            "EMP_TipoGrafico": 1
-        }
-    ]
+  "data": [
+    {
+      "USR_Id": 1,
+      "PER_Id": 1,
+      "USR_Usuario": "lcastillo",
+      "USR_Nombre": "Luis",
+      "USR_Apellido": "Castillo",
+      "USR_Estado": 1,
+      "estadodesc": "Activo",
+      "PER_Descripcion": "Administrador",
+      "EMP_Descripcion": "CEOF Consultores",
+      "EMP_UrlLogo": "https://ceofconsultores.com/wp-content/uploads/2025/01/logo-BLANCO-400px.png",
+      "EMP_Id": 2,
+      "EMP_TipoGrafico": 1
+    }
+  ]
 }

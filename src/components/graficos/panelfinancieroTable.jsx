@@ -21,7 +21,7 @@ export default function PanelFinancieroTable({anio, mes, anioant, rangomes, data
                 <tr>
                     <th rowSpan="2" className="bg-[#4cbab5] rounded-tl-xl">Panel de Finanzas</th>
                     <th colSpan="5" className="bg-[#4cbab5]">RESULTADO DE {meses[mes[0]-1].label.toUpperCase()}</th>
-                    <th colSpan="3" className="bg-[#4cbab5] rounded-tr-xl">YTD_{meses[mesant-1].label.toUpperCase().slice(0,3)}</th>
+                    <th colSpan="3" className="bg-[#4cbab5] rounded-tr-xl">YTD_{meses[mes[0]-1].label.toUpperCase().slice(0,3)}</th>
                 </tr>
                 <tr>
                     

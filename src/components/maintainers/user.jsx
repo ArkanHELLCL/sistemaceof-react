@@ -11,7 +11,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Grid from '@mui/material/Grid2';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
-const User = ({user}) => {
+const User = ({user, empresas}) => {
   const [validationErrors, setValidationErrors] = useState({});
   const [fetchedUsers, setFetchedUsers] = useState([]);
   const [isLoadingUsers, setIsLoadingUsers] = useState(true);
@@ -21,16 +21,9 @@ const User = ({user}) => {
   const [isDeletingUser, setIsDeletingUser] = useState(false);
 
   const VITE_API_GETUSUARIOS_URL = import.meta.env.VITE_API_GETUSUARIOS_URL;
-  const VITE_API_POSTEMPRESAS_URL = import.meta.env.VITE_API_POSTEMPRESAS_URL;
-  const VITE_API_PUTEEMPRESAS_URL = import.meta.env.VITE_API_PUTEEMPRESAS_URL;
-  const VITE_API_DELEEMPRESAS_URL = import.meta.env.VITE_API_DELEEMPRESAS_URL;
-
-  const tpoGraph = [
-    {value :'Sin Tipo', text:1},
-    {value :'Tipo 1', text:2},
-    {value :'Tipo 2', text:3},
-    {value :'Tipo 3', text:4},    
-  ];
+  const VITE_API_POSTUSUARIOS_URL = import.meta.env.VITE_API_POSTUSUARIOS_URL;
+  const VITE_API_PUTUSUARIOS_URL = import.meta.env.VITE_API_PUTUSUARIOS_URL;
+  const VITE_API_DELUSUARIOS_URL = import.meta.env.VITE_API_DELUSUARIOS_URL;
 
   const estado = [
     {value :'Activo', text:1},
@@ -41,11 +34,10 @@ const User = ({user}) => {
     {value :'Administrador', text:1},
     {value :'Usuario', text:2}
   ];
-
-  const empresas = [
-    {value :'Empresa 1', text:1},
-    {value :'Empresa 2', text:2}
-  ];
+  
+  const lstempresas = empresas.map((empresa) => {
+    return { value: empresa.label, text: empresa.id };
+  });
 
   useEffect(() => {
     fetchUsers();
@@ -54,7 +46,17 @@ const User = ({user}) => {
   const fetchUsers = async () => {
     setIsLoadingUsers(true);    
     fetch(`${VITE_API_GETUSUARIOS_URL}`)
-    .then(response => response.json())
+    .then(response => {
+      if(response.ok) {
+        return response.json();
+      }else{
+        if(response.status !== 500){
+          window.location.href = '../';
+        }else{
+          throw response;
+        }
+      }
+    })
     .then(Users => {
       const {data} = Users;
       setFetchedUsers(data);
@@ -62,7 +64,8 @@ const User = ({user}) => {
     })
     .finally(() => {
     })
-    .catch(error => {
+    .catch(() => {
+      setFetchedUsers([]);
       setIsLoadingUsersError(true);
       setIsLoadingUsers(false);
     })
@@ -88,7 +91,9 @@ const User = ({user}) => {
 
   const updateUser = async (user) => {
     const userToUpdate = { ...User };
-    userToUpdate.destipografico = tpoGraph.find((g) => g.value === user.destipografico).text;
+    userToUpdate.estadodesc = estado.find((e) => e.value === user.estadodesc).text;
+    userToUpdate.PER_Descripcion = perfiles.find((p) => p.value === user.PER_Descripcion).text;
+    userToUpdate.EMP_Descripcion = lstempresas.find((e) => e.value === user.EMP_Descripcion).text;
 
     setIsUpdatingUser(true);
     try {
@@ -168,7 +173,7 @@ const User = ({user}) => {
         accessorKey: 'EMP_Descripcion',
         header: 'Empresa',
         editVariant: 'select',    
-        editSelectOptions: empresas,
+        editSelectOptions: lstempresas,
         muiEditTextFieldProps: {
           select: true,
           required: true,

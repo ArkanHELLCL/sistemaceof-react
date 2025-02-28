@@ -44,7 +44,17 @@ const Enterprise = ({user}) => {
   const fetchEmps = async () => {
     setIsLoadingEmps(true);    
     fetch(`${VITE_API_GETEMPRESAS_URL}`)
-    .then(response => response.json())
+    .then(response => {
+      if(response.ok) {
+        return response.json();
+      }else{
+        if(response.status !== 500){
+          window.location.href = '../';
+        }else{
+          throw response;
+        }
+      }
+    })
     .then(emps => {
       const {data} = emps;
       setFetchedEmps(data);
@@ -52,7 +62,8 @@ const Enterprise = ({user}) => {
     })
     .finally(() => {
     })
-    .catch(error => {
+    .catch(() => {
+      setFetchedEmps([]);
       setIsLoadingEmpsError(true);
       setIsLoadingEmps(false);
     })
