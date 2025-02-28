@@ -11,7 +11,7 @@ import Loading from './components/loading.jsx';
 function App() {
   const [title, setTitle] = useState('Dashboard');
   const [user, setUser] = useState();
-  const [data, setData] = useState({});
+  const [data, setData] = useState();
   const [dataFormatted, setDataFormatted] = useState();
   const [headers, setHeaders] = useState([]);
   const [mesfinal, setMesFinal] = useState();
@@ -62,8 +62,8 @@ function App() {
 
   const getBasecsv = (empresa) => {
     if(empresa?.id===undefined) {
-      setData({});
-      setMesFinal(null);
+      setData();
+      setMesFinal();
       return;
     }
     setLoading(true);
@@ -72,32 +72,29 @@ function App() {
       download: VITE_CSVCONVERT_DOWNLOAD,
       skipEmptyLines: true,
       complete: function(results) {
-        let meses = [];
-        //if(results?.data[0] === undefined) {
         if(results?.errors.length > 0) {
-          setData({});
-          setMesFinal(null);
-          setLoading(false);
-          return
-        }        
-        const idxMes = results.data[0]?.indexOf('N_MES') || null;
-        if(idxMes===null) {
-          setData({});
-          setMesFinal(null);
-          return;
+          setData();
+          setMesFinal();
+          //return
+        }else{
+          const idxMes = results.data[0]?.indexOf('N_MES') || null;
+          if(idxMes===null) {
+            setData();
+            setMesFinal();
+            //return;
+          }else{
+            setData(results);
+            const meses = results.data?.slice(1).map(row => row[idxMes]) || [];
+            setMesFinal(parseInt(meses[meses.length - 1]));
+          }
         }
-        setData(results);
-        meses = results.data?.slice(1).map(row => row[idxMes]) || [];
-        setMesFinal(parseInt(meses[meses.length - 1]));
         setLoading(false);
       },
       error: function(err, file, inputElem, reason)
       {
-        //window.location.href = 'https://ceofconsultores.com/system/'
-        setData({"data":[]});
-        setMesFinal(null);
+        setData();
+        setMesFinal();
         setLoading(false);
-        return;
       },
     });    
   }
@@ -117,6 +114,7 @@ function App() {
       );*/
   }, []);  
 
+  //Empresas
   useEffect(() => {
     if(user?.PER_Id === 1){
       getEmpresas();
@@ -133,88 +131,89 @@ function App() {
       getGraficos(empresa);
       getBasecsv(empresa);
     }
-  },[empresa])
+  },[empresa, menu])
 
 useEffect(() => {
-  if(data?.data ===  undefined) return;
-  const Headers = data?.data[0] || [];
-  const rows = data?.data?.slice(1) || [];
-  setHeaders(Headers);
+  if(data){
+    const Headers = data?.data[0] || [];
+    const rows = data?.data?.slice(1) || [];
+    setHeaders(Headers);
 
-  const formattedData = rows?.map(row => {
-      const obj = {};
-      Headers.forEach((header, index) => {
-          obj[header] = row[index];
-      });
-      return obj;
-  },[data]);
+    const formattedData = rows?.map(row => {
+        const obj = {};
+        Headers.forEach((header, index) => {
+            obj[header] = row[index];
+        });
+        return obj;
+    },[data]);
 
-  const grouped = formattedData?.reduce((acc, item) => {
-      const anio = item["ANO"];
-      const resultado = item["RESULTADO"];
-      const nivel1 = item["NIVEL 1"];
-      const nivel2 = item["NIVEL 2"];
-      const cuenta = item["CUENTA"];
-      const mes = item["N_MES"];
-      const monto = parseFloat(item["REAL " + anio]?.replaceAll('.', '').replaceAll(',', '.'));
-  
-      // Crear la estructura si no existe
-      if (!acc[anio]) acc[anio] = {data:{}};
-      if (!acc[anio].data[resultado]) acc[anio].data[resultado] = { total: 0, data: {} };
-      if (!acc[anio].data[resultado].data[nivel1]) acc[anio].data[resultado].data[nivel1] = { total: 0, data: {} };
-      if (!acc[anio].data[resultado].data[nivel1].data[nivel2]) acc[anio].data[resultado].data[nivel1].data[nivel2] = { total: 0, data: {} };
-      if (!acc[anio].data[resultado].data[nivel1].data[nivel2].data[cuenta]) acc[anio].data[resultado].data[nivel1].data[nivel2].data[cuenta] = { total: 0, data: {} };  
-      
-      // Sumar los montos y acumular
-      /*acc[anio].data[resultado].total += monto;
-      acc[anio].data[resultado].data[nivel1].total += monto;
-      acc[anio].data[resultado].data[nivel1].data[nivel2].total += monto;
-      acc[anio].data[resultado].data[nivel1].data[nivel2].data[cuenta].total += monto;*/
+    const grouped = formattedData?.reduce((acc, item) => {
+        const anio = item["ANO"];
+        const resultado = item["RESULTADO"];
+        const nivel1 = item["NIVEL 1"];
+        const nivel2 = item["NIVEL 2"];
+        const cuenta = item["CUENTA"];
+        const mes = item["N_MES"];
+        const monto = parseFloat(item["REAL " + anio]?.replaceAll('.', '').replaceAll(',', '.'));
+    
+        // Crear la estructura si no existe
+        if (!acc[anio]) acc[anio] = {data:{}};
+        if (!acc[anio].data[resultado]) acc[anio].data[resultado] = { total: 0, data: {} };
+        if (!acc[anio].data[resultado].data[nivel1]) acc[anio].data[resultado].data[nivel1] = { total: 0, data: {} };
+        if (!acc[anio].data[resultado].data[nivel1].data[nivel2]) acc[anio].data[resultado].data[nivel1].data[nivel2] = { total: 0, data: {} };
+        if (!acc[anio].data[resultado].data[nivel1].data[nivel2].data[cuenta]) acc[anio].data[resultado].data[nivel1].data[nivel2].data[cuenta] = { total: 0, data: {} };  
+        
+        // Sumar los montos y acumular
+        /*acc[anio].data[resultado].total += monto;
+        acc[anio].data[resultado].data[nivel1].total += monto;
+        acc[anio].data[resultado].data[nivel1].data[nivel2].total += monto;
+        acc[anio].data[resultado].data[nivel1].data[nivel2].data[cuenta].total += monto;*/
 
-      // Agregar el monto por mes
-      if (!acc[anio].data[resultado].data[nivel1].data[nivel2].data[cuenta].data[mes]) {
-          acc[anio].data[resultado].data[nivel1].data[nivel2].data[cuenta].data[mes] = 0;
-      }
-      acc[anio].data[resultado].data[nivel1].data[nivel2].data[cuenta].data[mes] += monto;
-      return acc;
-  }, {});
+        // Agregar el monto por mes
+        if (!acc[anio].data[resultado].data[nivel1].data[nivel2].data[cuenta].data[mes]) {
+            acc[anio].data[resultado].data[nivel1].data[nivel2].data[cuenta].data[mes] = 0;
+        }
+        acc[anio].data[resultado].data[nivel1].data[nivel2].data[cuenta].data[mes] += monto;
+        return acc;
+    }, {});
 
-  if(grouped){
-      const resultpivot = {
-          data: Object.keys(grouped).map(anio => ({
-              anio: parseInt(anio),                    
-              data: Object.keys(grouped[anio].data).map(resultado => ({
-                  Resultado: resultado.split(' ')[0].trim(),
-                  label: resultado.substring(resultado.indexOf(' ') + 1).trim(),
-                  Total: grouped[anio].data[resultado].total, // Monto acumulado para el Resultado
-                  data: Object.keys(grouped[anio].data[resultado].data).map(nivel1 => ({
-                      "Nivel 1": nivel1.split(' ')[0].trim(),
-                      label: nivel1.substring(nivel1.indexOf(' ') + 1).trim(),
-                      Total: grouped[anio].data[resultado].data[nivel1].total, // Monto acumulado para Nivel 1
-                      data: Object.keys(grouped[anio].data[resultado].data[nivel1].data).map(nivel2 => ({
-                          "Nivel 2": nivel2.split(' ')[0].trim(),
-                          label: nivel2.substring(nivel2.indexOf(' ') + 1).trim(),
-                          Total: grouped[anio].data[resultado].data[nivel1].data[nivel2].total, // Monto acumulado para Nivel 2
-                          data: Object.keys(grouped[anio].data[resultado].data[nivel1].data[nivel2].data).map(cuenta => ({
-                              Cuenta: cuenta,
-                              Total: grouped[anio].data[resultado].data[nivel1].data[nivel2].data[cuenta].total, // Monto acumulado para Cuenta
-                              data: Object.keys(grouped[anio].data[resultado].data[nivel1].data[nivel2].data[cuenta].data).map(mes => ({                                       
-                                  month: anio + `-${mes}`,
-                                  value: grouped[anio].data[resultado].data[nivel1].data[nivel2].data[cuenta].data[mes] // Monto por mes
-                              }))
-                          }))
-                      }))
-                  }))
-              }))
-          }))
-      };
+    if(grouped){
+        const resultpivot = {
+            data: Object.keys(grouped).map(anio => ({
+                anio: parseInt(anio),                    
+                data: Object.keys(grouped[anio].data).map(resultado => ({
+                    Resultado: resultado.split(' ')[0].trim(),
+                    label: resultado.substring(resultado.indexOf(' ') + 1).trim(),
+                    Total: grouped[anio].data[resultado].total, // Monto acumulado para el Resultado
+                    data: Object.keys(grouped[anio].data[resultado].data).map(nivel1 => ({
+                        "Nivel 1": nivel1.split(' ')[0].trim(),
+                        label: nivel1.substring(nivel1.indexOf(' ') + 1).trim(),
+                        Total: grouped[anio].data[resultado].data[nivel1].total, // Monto acumulado para Nivel 1
+                        data: Object.keys(grouped[anio].data[resultado].data[nivel1].data).map(nivel2 => ({
+                            "Nivel 2": nivel2.split(' ')[0].trim(),
+                            label: nivel2.substring(nivel2.indexOf(' ') + 1).trim(),
+                            Total: grouped[anio].data[resultado].data[nivel1].data[nivel2].total, // Monto acumulado para Nivel 2
+                            data: Object.keys(grouped[anio].data[resultado].data[nivel1].data[nivel2].data).map(cuenta => ({
+                                Cuenta: cuenta,
+                                Total: grouped[anio].data[resultado].data[nivel1].data[nivel2].data[cuenta].total, // Monto acumulado para Cuenta
+                                data: Object.keys(grouped[anio].data[resultado].data[nivel1].data[nivel2].data[cuenta].data).map(mes => ({                                       
+                                    month: anio + `-${mes}`,
+                                    value: grouped[anio].data[resultado].data[nivel1].data[nivel2].data[cuenta].data[mes] // Monto por mes
+                                }))
+                            }))
+                        }))
+                    }))
+                }))
+            }))
+        };
 
-      // Convertir a JSON
-      //const jsonResult = JSON.stringify(resultpivot, null, 4);
-      setDataFormatted(resultpivot);     
+        // Convertir a JSON
+        //const jsonResult = JSON.stringify(resultpivot, null, 4);
+        setDataFormatted(resultpivot);     
+    }
   }
 }, [data]);
-
+  
   return (
     <main className="dashtemplate">{
       loading ? <Loading /> :

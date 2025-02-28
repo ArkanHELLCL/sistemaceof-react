@@ -13,6 +13,7 @@ import { MRT_Localization_ES } from 'material-react-table/locales/es';
 const VITE_API_UPLOAD_URL = import.meta.env.VITE_API_UPLOAD_URL;
 const VITE_API_LISTFILES_URL = import.meta.env.VITE_API_LISTFILES_URL;
 const VITE_API_DELFILES_URL = import.meta.env.VITE_API_DELFILES_URL;
+const VITE_API_DOWNLOAD_URL = import.meta.env.VITE_API_DOWNLOAD_URL;
 
 export default function Upload({ user, empresas }) {
   const [files, setFiles] = useState([]);
@@ -21,13 +22,22 @@ export default function Upload({ user, empresas }) {
   const [uploadStatus, setUploadStatus] = useState(null);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [empresa, setEmpresa] = useState('');
+  const [fileDownload, setFileDownload] = useState('');
 
   const getUploadedFiles = () => {
     if (empresa) {
       fetch(`${VITE_API_LISTFILES_URL}?tipo=1&cliente_id=${empresa?.id}`)
         .then(response => response.json())
         .then(files => {
-          setUploadedFiles(files.data);
+          const filteredFiles = files.data.filter(file => 
+            file.nombre.endsWith('.csv') || 
+            file.nombre.endsWith('.xls') || 
+            file.nombre.endsWith('.xlsx') || 
+            file.nombre.endsWith('.pdf') ||
+            file.nombre.endsWith('.jpg') ||
+            file.nombre.endsWith('.png')
+          );
+          setUploadedFiles(filteredFiles);
         })
         .catch(error => console.log(error));
     }
@@ -134,6 +144,30 @@ export default function Upload({ user, empresas }) {
     setUploadStatus(null);
   };
 
+  const handleDownload = (fileName) => {
+    setFileDownload(fileName);    
+  };
+
+  useEffect(() => {
+      if (fileDownload) {
+        if (empresa) {
+          fetch(`${VITE_API_DOWNLOAD_URL}?file=${fileDownload}&client_id=${empresa?.id}&tipo=1`)
+          .then(response => response.blob())
+          .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = fileDownload;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+          })
+          .catch(error => console.log(error));
+        }
+      }
+    }, [fileDownload, empresa]);
+
   const columns = useMemo(
     () => [
       {
@@ -149,6 +183,23 @@ export default function Upload({ user, empresas }) {
             fontSize: '12px',
           },
         },
+        Cell: ({ cell }) => (
+          <span
+            onClick={() => handleDownload(cell.getValue())}
+            onMouseEnter={(e) => {
+              e.target.style.color = 'blue';
+              e.target.style.textDecoration = 'underline';
+              e.target.style.cursor = 'pointer';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.color = 'inherit';
+              e.target.style.textDecoration = 'none';
+              e.target.style.cursor = 'default';
+            }}
+          >
+            {cell.getValue()}
+          </span>
+        ),
       },
       {
         accessorKey: 'tamano',

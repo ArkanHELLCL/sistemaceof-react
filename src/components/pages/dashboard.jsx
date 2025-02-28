@@ -12,7 +12,7 @@ import Loading from '../loading.jsx';
 const processData = (data) => {
     const result = [];
   
-    data.forEach(yearData => {
+    data?.data?.forEach(yearData => {
       const year = yearData.anio;
       const yearResult = {
         year,
@@ -87,38 +87,57 @@ const meses = [
   { "label": "Diciembre", "month": 12 }
 ]
 
-export default function DashBoard({data, mes, user, empresas, empresa, setEmpresa, menu}){
+const Anios = (data) => data?.data?.map(item => (
+  { label: `${item.anio}`, year: item.anio }
+)) || [];
+
+const AnioSelected = (anios) => (
+  [anios[anios?.length - 1]]
+) || null;
+
+const MesSelected = (mes) => (
+  meses?.filter(item => item.month === mes[0]).sort((a, b) => a.month - b.month)
+) || null
+
+const DatosFiltrados = (data, anioSelected) => (
+  data?.data?.filter(item => item.anio === anioSelected[0]?.year)[0]?.data
+) || [];
+
+const ResultFiltrados = (data, anioSelected) => (
+  data?.filter(item => item.year === anioSelected[0]?.year)
+) || [];
+
+export default function DashBoard({data, mes, user, empresas, empresa, setEmpresa}){
   const [datosFiltrados, setDatosFiltrados] = useState([]);
   const [sumaNiveles, setSumaNiveles] = useState([]);
   const [sumaNivelesFitrado, setSumaNivelesFiltrado] = useState([]);
-  const [anioSelected, setAnioSelected] = useState([]);
+  const [anioSelected, setAnioSelected] = useState();
   const [mesSelected, setMesSelected] = useState();
-  const [Anios, setAnios] = useState([]);
+  const [anios, setAnios] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if(data?.data?.length>0 && data?.data[0]?.anio && mes){
-      const Anios = data?.data?.map(item => (
-        { label: `${item.anio}`, year: item.anio }
-      ));
-      const selectdMes = meses?.filter(item => item.month === mes[0]).sort((a, b) => a.month - b.month)
-      setMesSelected(selectdMes);
-      const aSelected = Anios && Anios[Anios?.length - 1] ? [Anios[Anios?.length - 1]] : [];
-      setAnios(Anios);
-      setAnioSelected(aSelected);
-      const DatosFiltrados = data?.data?.filter(item => item.anio === aSelected[0]?.year)[0]?.data || []; 
-      const result = processData(data?.data) || [];
-      setDatosFiltrados(DatosFiltrados);
-      setSumaNiveles(result);
-      const resultFiltrado = result.filter(item => item.year === aSelected[0]?.year) || [];
-      setSumaNivelesFiltrado(resultFiltrado);
-      setLoading(false);
+    if(data && mes[0]){
+      setAnios(Anios(data));
+      setMesSelected(MesSelected(mes));
+      setAnioSelected(AnioSelected(Anios(data)));
     }
-  }, [data, empresa, menu, mes]);
+  },[data, mes]);
+
+  useEffect(() => {
+    setLoading(true);
+    if(data && anioSelected ){
+      setDatosFiltrados(DatosFiltrados(data, anioSelected));
+      const result = processData(data);
+      setSumaNiveles(result);
+      setSumaNivelesFiltrado(ResultFiltrados(result, anioSelected));
+    }
+    setLoading(false);
+  },[anioSelected]);
 
   return (
     loading ? <Loading /> :
-      data?.data?.length>0 && data?.data[0]?.anio && anioSelected[0] && mesSelected[0] ?
+      data && anioSelected && mesSelected ?//&& datosFiltrados && sumaNiveles && sumaNivelesFitrado && empresa && anios ?
         <Grid container spacing={1}>
           <Grid size={{ xs: 12, xl: 4 }} className='sticky !-top-3 bg-white z-10 opacity-85 !pt-2'>
             <Autocomplete
@@ -126,12 +145,12 @@ export default function DashBoard({data, mes, user, empresas, empresa, setEmpres
               disableClearable={true}
               id="graficos-anios"
               value={anioSelected[0]}
-              options={Anios}
+              options={anios}
               sx={{ width: "100%"}}
               onChange={(event, newValue) => {
-                  setAnioSelected([
-                      newValue,
-                  ]);
+                setAnioSelected([
+                    newValue,
+                ]);
               }}
 
               renderInput={(params) => <TextField {...params} label="Año a visualizar" variant="standard"/>}
@@ -146,9 +165,9 @@ export default function DashBoard({data, mes, user, empresas, empresa, setEmpres
               options={meses}
               sx={{ width: "100%"}}
               onChange={(event, newValue) => {
-                  setMesSelected([
-                      newValue,
-                  ]);
+                setMesSelected([
+                    newValue,
+                ]);
               }}
 
               renderInput={(params) => <TextField {...params} label="Mes" variant="standard"/>}
@@ -171,17 +190,17 @@ export default function DashBoard({data, mes, user, empresas, empresa, setEmpres
             }{
               ((user?.PER_Id === 1 && empresa?.tipografico === 1) || (user?.PER_Id > 1 && user?.EMP_TipoGrafico === 1))  &&
                 <Suspense fallback={<Loading />}>
-                  <Graphtype1 anioSelected={anioSelected} mes={[mesSelected[0]?.month]} datosFiltrados={datosFiltrados} sumaNiveles={sumaNiveles} sumaNivelesFitrado={sumaNivelesFitrado} Anios={Anios}/>
+                  <Graphtype1 anioSelected={anioSelected} mes={[mesSelected[0]?.month]} datosFiltrados={datosFiltrados} sumaNiveles={sumaNiveles} sumaNivelesFitrado={sumaNivelesFitrado} Anios={anios}/>
                 </Suspense>
             }{
               ((user?.PER_Id === 1 && empresa?.tipografico === 2) || (user?.PER_Id > 1 && user?.EMP_TipoGrafico === 2))  &&
                 <Suspense fallback={<Loading />}>
-                  <Graphtype2 anioSelected={anioSelected} mes={[mesSelected[0]?.month]} datosFiltrados={datosFiltrados} sumaNiveles={sumaNiveles} sumaNivelesFitrado={sumaNivelesFitrado} Anios={Anios}/>
+                  <Graphtype2 anioSelected={anioSelected} mes={[mesSelected[0]?.month]} datosFiltrados={datosFiltrados} sumaNiveles={sumaNiveles} sumaNivelesFitrado={sumaNivelesFitrado} Anios={anios}/>
                 </Suspense>
             }{
               ((user?.PER_Id === 1 && empresa?.tipografico === 3) || (user?.PER_Id > 1 && user?.EMP_TipoGrafico === 3))  &&
                 <Suspense fallback={<Loading />}>
-                  <Graphtype3 anioSelected={anioSelected} mes={[mesSelected[0]?.month]} datosFiltrados={datosFiltrados} sumaNiveles={sumaNiveles} sumaNivelesFitrado={sumaNivelesFitrado} Anios={Anios}/>
+                  <Graphtype3 anioSelected={anioSelected} mes={[mesSelected[0]?.month]} datosFiltrados={datosFiltrados} sumaNiveles={sumaNiveles} sumaNivelesFitrado={sumaNivelesFitrado} Anios={anios}/>
                 </Suspense>
             }
         </Grid>

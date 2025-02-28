@@ -23,6 +23,7 @@ export default function Download({ user, empresas, empresa:emp }) {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [empresa, setEmpresa] = useState(emp);
   const [fileDownload, setFileDownload] = useState('');
+
   useEffect(() => {
     if (empresa) {
       getUploadedFiles();
@@ -34,7 +35,15 @@ export default function Download({ user, empresas, empresa:emp }) {
       fetch(`${VITE_API_LISTFILES_URL}?tipo=2&cliente_id=${empresa?.id}`)
         .then(response => response.json())
         .then(files => {
-          setUploadedFiles(files.data);
+          const filteredFiles = files.data.filter(file => 
+            file.nombre.endsWith('.csv') || 
+            file.nombre.endsWith('.xls') || 
+            file.nombre.endsWith('.xlsx') || 
+            file.nombre.endsWith('.pdf') ||
+            file.nombre.endsWith('.jpg') ||
+            file.nombre.endsWith('.png')
+          );
+          setUploadedFiles(filteredFiles);
         })
         .catch(error => console.log(error));
     }
