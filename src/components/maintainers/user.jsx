@@ -367,7 +367,7 @@ const User = ({ user, empresas }) => {
 
   //DELETE action
   const openDeleteConfirmModal = (row) => {
-    deleteUser(row.original.id);
+    deleteUser(row.original.USR_Id);
   };
 
   const handleCloseSnackbar = () => {
