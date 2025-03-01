@@ -8,6 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Grid from '@mui/material/Grid2';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { v4 as uuid } from "uuid";
+import Swal from 'sweetalert2';
 
 const User = ({ user, empresas }) => {
   const [validationErrors, setValidationErrors] = useState({});
@@ -61,8 +62,8 @@ const User = ({ user, empresas }) => {
           }
         }
       })
-      .then(Users => {
-        const { data } = Users;
+      .then(users => {
+        const { data } = users;
         setFetchedUsers(data);
         setIsLoadingUsers(false);
         setCrudStatus({ type: 'success', message: 'Usuarios cargados con éxito.' });
@@ -84,32 +85,45 @@ const User = ({ user, empresas }) => {
     userToCreate.EMP_Descripcion = lstempresas.find((e) => e.value === user.EMP_Descripcion).text;
     userToCreate.USR_Clave = small_id;
 
-    setIsCreatingUser(true);
-    fetch(`${VITE_API_POSTUSUARIOS_URL}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userToCreate),
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Error al crear el usuario');
-        }
-      })
-      .then(newUser => {
-        setFetchedUsers((prevUsers) => [...prevUsers, newUser]);
-        setIsCreatingUser(false);
-        setCrudStatus({ type: 'success', message: 'Usuario creado con éxito.' });
-        setUserCredentials({ usuario: userToCreate.USR_Usuario, clave: userToCreate.USR_Clave });
-        setOpenDialog(true);
-      })
-      .catch(() => {
-        setIsCreatingUser(false);
-        setCrudStatus({ type: 'error', message: 'Error al crear el usuario.' });
-      });
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "¿Quieres crear este usuario?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, crear!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setIsCreatingUser(true);
+        fetch(`${VITE_API_POSTUSUARIOS_URL}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(userToCreate),
+        })
+          .then(response => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error('Error al crear el usuario');
+            }
+          })
+          .then(newUser => {
+            const { data } = newUser;
+            setFetchedUsers(data);
+            setIsCreatingUser(false);
+            setCrudStatus({ type: 'success', message: 'Usuario creado con éxito.' });
+            setUserCredentials({ usuario: userToCreate.USR_Usuario, clave: userToCreate.USR_Clave, title:'Usuario creado con éxito.'});
+            setOpenDialog(true);
+          })
+          .catch(() => {
+            setIsCreatingUser(false);
+            setCrudStatus({ type: 'error', message: 'Error al crear el usuario.' });
+          });
+      }
+    });
   };
 
   const updateUser = async (user) => {
@@ -118,56 +132,83 @@ const User = ({ user, empresas }) => {
     userToUpdate.PER_Descripcion = perfiles.find((p) => p.value === user.PER_Descripcion).text;
     userToUpdate.EMP_Descripcion = lstempresas.find((e) => e.value === user.EMP_Descripcion).text;
     userToUpdate.USR_Clave = small_id;
+    console.log(userToUpdate);
 
-    setIsUpdatingUser(true);
-    fetch(`${VITE_API_PUTUSUARIOS_URL}/${user.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userToUpdate),
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Error al actualizar el usuario');
-        }
-      })
-      .then(urers => {
-        setFetchedUsers(urers);
-        setIsUpdatingUser(false);
-        setCrudStatus({ type: 'success', message: 'Usuario actualizado con éxito.' });
-        setUserCredentials({ usuario: userToUpdate.USR_Usuario, clave: userToUpdate.USR_Clave });
-        setOpenDialog(true);
-      })
-      .catch(() => {
-        setIsUpdatingUser(false);
-        setCrudStatus({ type: 'error', message: 'Error al actualizar el usuario.' });
-      });
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "¿Quieres actualizar este usuario?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, actualizar!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setIsUpdatingUser(true);
+        fetch(`${VITE_API_PUTUSUARIOS_URL}?USR_Id=${user.USR_Id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(userToUpdate),
+        })
+          .then(response => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error('Error al actualizar el usuario');
+            }
+          })
+          .then(urers => {
+            const { data } = urers;
+            setFetchedUsers(data);
+            setIsUpdatingUser(false);
+            setCrudStatus({ type: 'success', message: 'Usuario actualizado con éxito.' });
+            setUserCredentials({ usuario: userToUpdate.USR_Usuario, clave: userToUpdate.USR_Clave, title:'Usuario actualizado con éxito.'});
+            setOpenDialog(true);
+          })
+          .catch(() => {
+            setIsUpdatingUser(false);
+            setCrudStatus({ type: 'error', message: 'Error al actualizar el usuario.' });
+          });
+      }
+    });
   };
 
   const deleteUser = async (userId) => {
-    setIsDeletingUser(true);
-    fetch(`${VITE_API_DELUSUARIOS_URL}/${userId}`, {
-      method: 'DELETE',
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Error al eliminar el usuario');
-        }
-      })
-      .then(urers => {
-        setFetchedUsers(urers);
-        setIsDeletingUser(false);
-        setCrudStatus({ type: 'success', message: 'Usuario eliminado con éxito.' });
-      })
-      .catch(() => {
-        setIsDeletingUser(false);
-        setCrudStatus({ type: 'error', message: 'Error al eliminar el usuario.' });
-      });
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "¿Quieres eliminar este usuario?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setIsDeletingUser(true);
+        fetch(`${VITE_API_DELUSUARIOS_URL}?USR_Id=${userId}`, {
+          method: 'DELETE',
+        })
+          .then(response => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error('Error al eliminar el usuario');
+            }
+          })
+          .then(urers => {
+            const { data } = urers;
+            setFetchedUsers(data);
+            setIsDeletingUser(false);
+            setCrudStatus({ type: 'success', message: 'Usuario eliminado con éxito.' });
+          })
+          .catch(() => {
+            setIsDeletingUser(false);
+            setCrudStatus({ type: 'error', message: 'Error al eliminar el usuario.' });
+          });
+      }
+    });
   };
 
   const columns = useMemo(
@@ -273,9 +314,7 @@ const User = ({ user, empresas }) => {
 
   //DELETE action
   const openDeleteConfirmModal = (row) => {
-    if (window.confirm('Are you sure you want to delete this user?')) {
-      deleteUser(row.original.id);
-    }
+    deleteUser(row.original.id);
   };
 
   const handleCloseSnackbar = () => {
@@ -387,7 +426,7 @@ const User = ({ user, empresas }) => {
           </Snackbar>
         )}
       <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogTitle>Credenciales del Usuario</DialogTitle>
+        <DialogTitle className='text-center'>{userCredentials.title} <br/>Credenciales del Usuario</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Usuario: {userCredentials.usuario}<br />
