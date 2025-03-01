@@ -356,7 +356,7 @@ const validateEmail = (email) =>
     .toLowerCase()
     .match(
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    );
+);
 
 const validateRut = (rut) => {
   const re = /^[0-9]+-[0-9kK]{1}$/;
@@ -379,7 +379,7 @@ function validateEmp(emp) {
   return {
     label: !validateRequired(emp.label) ? 'Razón Social es obligatoria' : '',
     EMP_Codigo: !validateRequired(emp.EMP_Codigo) ? 'RUT es obligatorio' : !validateRut(emp.EMP_Codigo) ? 'RUT no es válido' : '',
-    EMP_Email: !validateEmail(emp.EMP_Email) ? 'Incorrect Email Format' : '',
+    EMP_Email: !validateEmail(emp.EMP_Email) ? 'Formato de correo no válido' : '',
     EMP_UrlLogo: !validateUrl(emp.EMP_UrlLogo) ? 'Formato de URL incorrecto' : '',
     destipografico: !validateRequired(emp.destipografico) ? 'Tipo de Gráfico es obligatorio' : '',
     estadodesc: !validateRequired(emp.estadodesc) ? 'Obligatorio' : '',

@@ -1,17 +1,15 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useMemo, useState, useEffect } from 'react';
-import {
-  MaterialReactTable,
-  useMaterialReactTable,
-} from 'material-react-table';
-import { Box, Button, IconButton, Tooltip } from '@mui/material';
+import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
+import { Box, Button, IconButton, Tooltip, Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Grid from '@mui/material/Grid2';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import { v4 as uuid } from "uuid";
 
-const User = ({user, empresas}) => {
+const User = ({ user, empresas }) => {
   const [validationErrors, setValidationErrors] = useState({});
   const [fetchedUsers, setFetchedUsers] = useState([]);
   const [isLoadingUsers, setIsLoadingUsers] = useState(true);
@@ -19,22 +17,28 @@ const User = ({user, empresas}) => {
   const [isCreatingUser, setIsCreatingUser] = useState(false);
   const [isUpdatingUser, setIsUpdatingUser] = useState(false);
   const [isDeletingUser, setIsDeletingUser] = useState(false);
+  const [crudStatus, setCrudStatus] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [userCredentials, setUserCredentials] = useState({});
 
   const VITE_API_GETUSUARIOS_URL = import.meta.env.VITE_API_GETUSUARIOS_URL;
   const VITE_API_POSTUSUARIOS_URL = import.meta.env.VITE_API_POSTUSUARIOS_URL;
   const VITE_API_PUTUSUARIOS_URL = import.meta.env.VITE_API_PUTUSUARIOS_URL;
   const VITE_API_DELUSUARIOS_URL = import.meta.env.VITE_API_DELUSUARIOS_URL;
 
+  const unique_id = uuid();
+  const small_id = unique_id.slice(0, 8);
+
   const estado = [
-    {value :'Activo', text:1},
-    {value :'Inactivo', text:0}
+    { value: 'Activo', text: 1 },
+    { value: 'Inactivo', text: 0 }
   ];
 
   const perfiles = [
-    {value :'Administrador', text:1},
-    {value :'Usuario', text:2}
+    { value: 'Administrador', text: 1 },
+    { value: 'Usuario', text: 3 }
   ];
-  
+
   const lstempresas = empresas.map((empresa) => {
     return { value: empresa.label, text: empresa.id };
   });
@@ -44,90 +48,126 @@ const User = ({user, empresas}) => {
   }, []);
 
   const fetchUsers = async () => {
-    setIsLoadingUsers(true);    
+    setIsLoadingUsers(true);
     fetch(`${VITE_API_GETUSUARIOS_URL}`)
-    .then(response => {
-      if(response.ok) {
-        return response.json();
-      }else{
-        if(response.status !== 500){
-          window.location.href = '../';
-        }else{
-          throw response;
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          if (response.status !== 500) {
+            window.location.href = '../';
+          } else {
+            throw response;
+          }
         }
-      }
-    })
-    .then(Users => {
-      const {data} = Users;
-      setFetchedUsers(data);
-      setIsLoadingUsers(false);
-    })
-    .finally(() => {
-    })
-    .catch(() => {
-      setFetchedUsers([]);
-      setIsLoadingUsersError(true);
-      setIsLoadingUsers(false);
-    })
+      })
+      .then(Users => {
+        const { data } = Users;
+        setFetchedUsers(data);
+        setIsLoadingUsers(false);
+        setCrudStatus({ type: 'success', message: 'Usuarios cargados con éxito.' });
+      })
+      .finally(() => {
+      })
+      .catch(() => {
+        setFetchedUsers([]);
+        setIsLoadingUsersError(true);
+        setIsLoadingUsers(false);
+        setCrudStatus({ type: 'error', message: 'Error al cargar los usuarios.' });
+      });
   };
 
   const createUser = async (user) => {
+    const userToCreate = { ...user };
+    userToCreate.estadodesc = estado.find((e) => e.value === user.estadodesc).text;
+    userToCreate.PER_Descripcion = perfiles.find((p) => p.value === user.PER_Descripcion).text;
+    userToCreate.EMP_Descripcion = lstempresas.find((e) => e.value === user.EMP_Descripcion).text;
+    userToCreate.USR_Clave = small_id;
+
     setIsCreatingUser(true);
-    try {
-      const response = await fetch('/api/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(user),
+    fetch(`${VITE_API_POSTUSUARIOS_URL}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userToCreate),
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Error al crear el usuario');
+        }
+      })
+      .then(newUser => {
+        setFetchedUsers((prevUsers) => [...prevUsers, newUser]);
+        setIsCreatingUser(false);
+        setCrudStatus({ type: 'success', message: 'Usuario creado con éxito.' });
+        setUserCredentials({ usuario: userToCreate.USR_Usuario, clave: userToCreate.USR_Clave });
+        setOpenDialog(true);
+      })
+      .catch(() => {
+        setIsCreatingUser(false);
+        setCrudStatus({ type: 'error', message: 'Error al crear el usuario.' });
       });
-      const newUser = await response.json();
-      setFetchedUsers((prevUsers) => [...prevUsers, newUser]);
-      setIsCreatingUser(false);
-    } catch (error) {
-      setIsCreatingUser(false);
-    }
   };
 
   const updateUser = async (user) => {
-    const userToUpdate = { ...User };
+    const userToUpdate = { ...user };
     userToUpdate.estadodesc = estado.find((e) => e.value === user.estadodesc).text;
     userToUpdate.PER_Descripcion = perfiles.find((p) => p.value === user.PER_Descripcion).text;
     userToUpdate.EMP_Descripcion = lstempresas.find((e) => e.value === user.EMP_Descripcion).text;
+    userToUpdate.USR_Clave = small_id;
 
     setIsUpdatingUser(true);
-    try {
-      await fetch(`/api/users/${user.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userToUpdate),
+    fetch(`${VITE_API_PUTUSUARIOS_URL}/${user.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userToUpdate),
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Error al actualizar el usuario');
+        }
+      })
+      .then(urers => {
+        setFetchedUsers(urers);
+        setIsUpdatingUser(false);
+        setCrudStatus({ type: 'success', message: 'Usuario actualizado con éxito.' });
+        setUserCredentials({ usuario: userToUpdate.USR_Usuario, clave: userToUpdate.USR_Clave });
+        setOpenDialog(true);
+      })
+      .catch(() => {
+        setIsUpdatingUser(false);
+        setCrudStatus({ type: 'error', message: 'Error al actualizar el usuario.' });
       });
-      setFetchedUsers((prevUsers) =>
-        prevUsers.map((prevUser) =>
-          prevUser.id === user.id ? user : prevUser,
-        ),
-      );
-      setIsUpdatingUser(false);
-    } catch (error) {
-      setIsUpdatingUser(false);
-    }
   };
 
   const deleteUser = async (userId) => {
     setIsDeletingUser(true);
-    try {
-      await fetch(`/api/users/${userId}`, {
-        method: 'DELETE',
+    fetch(`${VITE_API_DELUSUARIOS_URL}/${userId}`, {
+      method: 'DELETE',
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Error al eliminar el usuario');
+        }
+      })
+      .then(urers => {
+        setFetchedUsers(urers);
+        setIsDeletingUser(false);
+        setCrudStatus({ type: 'success', message: 'Usuario eliminado con éxito.' });
+      })
+      .catch(() => {
+        setIsDeletingUser(false);
+        setCrudStatus({ type: 'error', message: 'Error al eliminar el usuario.' });
       });
-      setFetchedUsers((prevUsers) =>
-        prevUsers.filter((user) => user.id !== userId),
-      );
-      setIsDeletingUser(false);
-    } catch (error) {
-      setIsDeletingUser(false);
-    }
   };
 
   const columns = useMemo(
@@ -151,11 +191,11 @@ const User = ({user, empresas}) => {
               USR_Usuario: undefined,
             }),
         },
-      },      
+      },
       {
         accessorKey: 'PER_Descripcion',
         header: 'Perfil',
-        editVariant: 'select',    
+        editVariant: 'select',
         editSelectOptions: perfiles,
         muiEditTextFieldProps: {
           select: true,
@@ -172,7 +212,7 @@ const User = ({user, empresas}) => {
       {
         accessorKey: 'EMP_Descripcion',
         header: 'Empresa',
-        editVariant: 'select',    
+        editVariant: 'select',
         editSelectOptions: lstempresas,
         muiEditTextFieldProps: {
           select: true,
@@ -185,11 +225,11 @@ const User = ({user, empresas}) => {
               EMP_Descripcion: undefined,
             }),
         },
-      },  
+      },
       {
         accessorKey: 'estadodesc',
-        header: 'Estado',       
-        editVariant: 'select',       
+        header: 'Estado',
+        editVariant: 'select',
         editSelectOptions: estado,
         muiEditTextFieldProps: {
           select: true,
@@ -238,6 +278,19 @@ const User = ({user, empresas}) => {
     }
   };
 
+  const handleCloseSnackbar = () => {
+    setCrudStatus(null);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const handleCopyToClipboard = () => {
+    const text = `Usuario: ${userCredentials.usuario}\nClave: ${userCredentials.clave}`;
+    navigator.clipboard.writeText(text);
+  };
+
   const table = useMaterialReactTable({
     columns,
     data: fetchedUsers,
@@ -247,38 +300,38 @@ const User = ({user, empresas}) => {
     getRowId: (row) => row.id,
     muiToolbarAlertBannerProps: isLoadingUsersError
       ? {
-          color: 'error',
-          children: 'Error loading data',
-        }
-      : undefined,    
+        color: 'error',
+        children: 'Error loading data',
+      }
+      : undefined,
     enableColumnActions: false,
-        enableExpanding: false,
-        enableRowActions: user?.PER_Id == 1,
-        enableColumnDragging:false,
-        enableDensityToggle: false,
-        enableFullScreenToggle: false,
-        enableHiding: false,
-        paginationDisplayMode: 'pages',
-        positionToolbarAlertBanner: 'bottom',
-        muiSearchTextFieldProps: {
-          size: 'small',
-          variant: 'outlined',
-        },
-        muiPaginationProps: {
-          color: 'secondary',
-          rowsPerPageOptions: [10, 20, 30],
-          shape: 'rounded',
-          variant: 'outlined',
-        },
-        localization: MRT_Localization_ES,
-        initialState: {
-            showGlobalFilter: true,
-            density: 'compact',
-            columnPinning: {
-              left: ['mrt-row-expand', 'mrt-row-select'],
-              right: ['mrt-row-actions'],
-            },
-        },
+    enableExpanding: false,
+    enableRowActions: user?.PER_Id == 1,
+    enableColumnDragging: false,
+    enableDensityToggle: false,
+    enableFullScreenToggle: false,
+    enableHiding: false,
+    paginationDisplayMode: 'pages',
+    positionToolbarAlertBanner: 'bottom',
+    muiSearchTextFieldProps: {
+      size: 'small',
+      variant: 'outlined',
+    },
+    muiPaginationProps: {
+      color: 'secondary',
+      rowsPerPageOptions: [10, 20, 30],
+      shape: 'rounded',
+      variant: 'outlined',
+    },
+    localization: MRT_Localization_ES,
+    initialState: {
+      showGlobalFilter: true,
+      density: 'compact',
+      columnPinning: {
+        left: ['mrt-row-expand', 'mrt-row-select'],
+        right: ['mrt-row-actions'],
+      },
+    },
     onCreatingRowCancel: () => setValidationErrors({}),
     onCreatingRowSave: handleCreateUser,
     onEditingRowCancel: () => setValidationErrors({}),
@@ -315,53 +368,49 @@ const User = ({user, empresas}) => {
     },
   });
   return (
+    <>
       <Grid container spacing={2} className='pb-4'>
         <Grid size={{ xs: 12, xl: 12 }} className='pb-4'>
-            <div className="flex justify-center rounded-xl bg-[#5d4889] text-white shadow-md py-4 align-middle">
-                <h2 className="text-2xl font-light text-center">{'Usuarios registrados en el sistema'}</h2>
-            </div>
-        </Grid>                          
-        <Grid size={{ xs: 12, xl: 12 }} sx={{height: '100%'}}> 
+          <div className="flex justify-center rounded-xl bg-[#5d4889] text-white shadow-md py-4 align-middle">
+            <h2 className="text-2xl font-light text-center">{'Usuarios registrados en el sistema'}</h2>
+          </div>
+        </Grid>
+        <Grid size={{ xs: 12, xl: 12 }} sx={{ height: '100%' }}>
           <MaterialReactTable table={table} />
         </Grid>
-      </Grid> 
-    )
+      </Grid>{
+        crudStatus && (
+          <Snackbar open={true} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+            <Alert onClose={handleCloseSnackbar} severity={crudStatus.type} sx={{ width: '100%' }}>
+              {crudStatus.message}
+            </Alert>
+          </Snackbar>
+        )}
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>Credenciales del Usuario</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Usuario: {userCredentials.usuario}<br />
+            Clave: {userCredentials.clave}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCopyToClipboard}>Copiar al portapapeles</Button>
+          <Button onClick={handleCloseDialog}>Cerrar</Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  )
 };
 
 const validateRequired = (value) => !!value.length;
-const validateEmail = (email) =>
-  !email ||
-  email
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    );
-
-const validateRut = (rut) => {
-  const re = /^[0-9]+-[0-9kK]{1}$/;
-  if (!re.test(rut)) return false;
-  const [rutBody, dv] = rut.split('-');
-  let sum = 0;
-  let multiplier = 2;
-  for (let i = rutBody.length - 1; i >= 0; i--) {
-    sum += rutBody[i] * multiplier;
-    multiplier = multiplier < 7 ? multiplier + 1 : 2;
-  }
-  const dvExpected = 11 - (sum % 11);
-  const dvNormalized = dvExpected === 11 ? '0' : dvExpected === 10 ? 'k' : dvExpected.toString();
-  return dvNormalized.toLowerCase() === dv.toLowerCase();
-};
-
-const validateUrl = (url) => !url || /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/gm.test(url);
 
 function validateUser(user) {
   return {
-    label: !validateRequired(user.label) ? 'Razón Social es obligatoria' : '',
-    EMP_Codigo: !validateRequired(user.EMP_Codigo) ? 'RUT es obligatorio' : !validateRut(user.EMP_Codigo) ? 'RUT no es válido' : '',
-    EMP_Email: !validateEmail(user.EMP_Email) ? 'Incorrect Email Format' : '',
-    EMP_UrlLogo: !validateUrl(user.EMP_UrlLogo) ? 'Formato de URL incorrecto' : '',
-    destipografico: !validateRequired(user.destipografico) ? 'Tipo de Gráfico es obligatorio' : '',
-    estadodesc: !validateRequired(user.estadodesc) ? 'Obligatorio' : '',
+    USR_Usuario: !validateRequired(user.USR_Usuario) ? 'Usuario es obligatorio' : '',
+    PER_Descripcion: !validateRequired(user.PER_Descripcion) ? 'Perfil es obligatorio' : '',
+    EMP_Descripcion: !validateRequired(user.EMP_Descripcion) ? 'Empresa es obligatorio' : '',
+    estadodesc: !validateRequired(user.estadodesc) ? 'Estado es Obligatorio' : '',
   };
 }
 
