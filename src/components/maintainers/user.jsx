@@ -132,7 +132,6 @@ const User = ({ user, empresas }) => {
     userToUpdate.PER_Descripcion = perfiles.find((p) => p.value === user.PER_Descripcion).text;
     userToUpdate.EMP_Descripcion = lstempresas.find((e) => e.value === user.EMP_Descripcion).text;
     userToUpdate.USR_Clave = small_id;
-    console.log(userToUpdate);
 
     Swal.fire({
       title: '¿Estás seguro?',
@@ -230,6 +229,34 @@ const User = ({ user, empresas }) => {
             setValidationErrors({
               ...validationErrors,
               USR_Usuario: undefined,
+            }),
+        },
+      },
+      {
+        accessorKey: 'USR_Nombre',
+        header: 'Nombre',
+        muiEditTextFieldProps: {
+          required: true,
+          error: !!validationErrors?.USR_Nombre,
+          helperText: validationErrors?.USR_Nombre,
+          onFocus: () =>
+            setValidationErrors({
+              ...validationErrors,
+              USR_Nombre: undefined,
+            }),
+        },
+      },
+      {
+        accessorKey: 'USR_Apellido',
+        header: 'Apellido',
+        muiEditTextFieldProps: {
+          required: true,
+          error: !!validationErrors?.USR_Apellido,
+          helperText: validationErrors?.USR_Apellido,
+          onFocus: () =>
+            setValidationErrors({
+              ...validationErrors,
+              USR_Apellido: undefined,
             }),
         },
       },
@@ -447,6 +474,8 @@ const validateRequired = (value) => !!value.length;
 function validateUser(user) {
   return {
     USR_Usuario: !validateRequired(user.USR_Usuario) ? 'Usuario es obligatorio' : '',
+    USR_Nombre: !validateRequired(user.USR_Nombre) ? 'Nombre es obligatorio' : '',
+    USR_Apellido: !validateRequired(user.USR_Apellido) ? 'Apellido es obligatorio' : '',
     PER_Descripcion: !validateRequired(user.PER_Descripcion) ? 'Perfil es obligatorio' : '',
     EMP_Descripcion: !validateRequired(user.EMP_Descripcion) ? 'Empresa es obligatorio' : '',
     estadodesc: !validateRequired(user.estadodesc) ? 'Estado es Obligatorio' : '',
