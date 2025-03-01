@@ -29,17 +29,26 @@ function App() {
 
   const getEmpresas = () => {
     fetch(`${VITE_API_GETEMPRESAS_URL}`)
-    .then(response => response.json())
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        if (response.status !== 500) {
+          window.location.href = '../';
+        } else {
+          throw new Error(response);
+        }
+      }
+    })
     .then(emps => {
       setEmpresas(emps.data)
-      setEmpresa(emps.data[0])
+      setEmpresa(emps.data[1])
       //getGraficos(emps.data[0]);
       //getBasecsv(emps.data[0]);
     })
     .finally(() => {
     })
-    //.catch(error => window.location.href = 'https://ceofconsultores.com/system/');
-    .catch(error => {
+    .catch(() => {
       setEmpresas([])
       setEmpresa([])
     });
@@ -48,7 +57,17 @@ function App() {
   const getGraficos = (empresa) => {
     if(empresa?.id===undefined) return;
     fetch(`${VITE_API_GETGRAFICOS_URL}?emp_id=${empresa?.id}`)
-    .then(response => response.json())
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        if (response.status !== 500) {
+          window.location.href = '../';
+        } else {
+          throw new Error(response);
+        }
+      }
+    })
     .then(grp => {        
       setGraficos(grp.data)
     })
@@ -102,7 +121,17 @@ function App() {
   //usuario
   useEffect(() => {
     fetch(`${VITE_API_GETUSUARIO_URL}`)
-      .then(response => response.json())
+      .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        if (response.status !== 500) {
+          window.location.href = '../';
+        } else {
+          throw new Error(response);
+        }
+      }
+    })
       .then(usr => {        
         setUser(usr.data[0])
       })

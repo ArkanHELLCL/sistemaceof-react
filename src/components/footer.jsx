@@ -5,12 +5,12 @@ const VITE_API_LOGOFF_URL = import.meta.env.VITE_API_LOGOFF_URL;
 const handlleLogOff = () => {
   fetch(`${VITE_API_LOGOFF_URL}`)
   .then(response => response.json())
-  .then(usr => {        
+  .then(() => {        
     window.location.href = 'https://ceofconsultores.com/system/'
   })
   .finally(() => {
   })
-  .catch(error => window.location.href = 'https://ceofconsultores.com/system/');
+  .catch(() => window.location.href = 'https://ceofconsultores.com/system/');
 }
 
 export default function Footer({user}) {

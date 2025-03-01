@@ -33,7 +33,17 @@ export default function Download({ user, empresas, empresa:emp }) {
   const getUploadedFiles = () => {
     if (empresa) {
       fetch(`${VITE_API_LISTFILES_URL}?tipo=2&cliente_id=${empresa?.id}`)
-        .then(response => response.json())
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            if (response.status !== 500) {
+              window.location.href = '../';
+            } else {
+              throw new Error(response);
+            }
+          }
+        })
         .then(files => {
           const filteredFiles = files.data.filter(file => 
             file.nombre.endsWith('.csv') || 
@@ -158,7 +168,17 @@ export default function Download({ user, empresas, empresa:emp }) {
     if (fileDownload) {
       if (empresa) {
         fetch(`${VITE_API_DOWNLOAD_URL}?file=${fileDownload}&client_id=${empresa?.id}`)
-        .then(response => response.blob())
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            if (response.status !== 500) {
+              window.location.href = '../';
+            } else {
+              throw new Error(response);
+            }
+          }
+        })
         .then(blob => {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement('a');
@@ -253,14 +273,24 @@ export default function Download({ user, empresas, empresa:emp }) {
             if (empresa) {
               const data = {"tipo": 2, "cliente_id": empresa?.id, "files": row.getValue('nombre')};
               fetch(`${VITE_API_DELFILES_URL}`,{method: 'POST', body: JSON.stringify(data)})
-              .then(response => response.json())
               .then(response => {
-                //setUploadedFiles(files.data);
+                if (response.ok) {
+                  return response.json();
+                } else {
+                  if (response.status !== 500) {
+                    window.location.href = '../';
+                  } else {
+                    throw new Error(response);
+                  }
+                }
+              })
+              .then(() => {
+                setUploadStatus({ type: 'success', message: 'Archivo eliminado correctamente.' });
                 getUploadedFiles();
               })
-              .catch(error => console.log(error));
+              .catch(error => setUploadStatus({ type: 'error', message: error }));
             }else{
-              console.log('No hay empresa seleccionada : ' + empresa);
+              setUploadStatus({ type: 'error', message: 'No hay empresa seleccionada.' });
             }
           }
         })

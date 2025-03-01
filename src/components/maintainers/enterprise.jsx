@@ -51,7 +51,7 @@ const Enterprise = ({user}) => {
         if(response.status !== 500){
           window.location.href = '../';
         }else{
-          throw response;
+          throw new Error(response);
         }
       }
     })

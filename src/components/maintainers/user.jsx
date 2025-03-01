@@ -58,7 +58,7 @@ const User = ({ user, empresas }) => {
           if (response.status !== 500) {
             window.location.href = '../';
           } else {
-            throw response;
+            throw new Error(response);
           }
         }
       })
@@ -103,25 +103,29 @@ const User = ({ user, empresas }) => {
           },
           body: JSON.stringify(userToCreate),
         })
-          .then(response => {
-            if (response.ok) {
-              return response.json();
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            if (response.status !== 500) {
+              window.location.href = '../';
             } else {
-              throw new Error('Error al crear el usuario');
+              throw new Error(response);
             }
-          })
-          .then(newUser => {
-            const { data } = newUser;
-            setFetchedUsers(data);
-            setIsCreatingUser(false);
-            setCrudStatus({ type: 'success', message: 'Usuario creado con éxito.' });
-            setUserCredentials({ usuario: userToCreate.USR_Usuario, clave: userToCreate.USR_Clave, title:'Usuario creado con éxito.'});
-            setOpenDialog(true);
-          })
-          .catch(() => {
-            setIsCreatingUser(false);
-            setCrudStatus({ type: 'error', message: 'Error al crear el usuario.' });
-          });
+          }
+        })
+        .then(newUser => {
+          const { data } = newUser;
+          setFetchedUsers(data);
+          setIsCreatingUser(false);
+          setCrudStatus({ type: 'success', message: 'Usuario creado con éxito.' });
+          setUserCredentials({ usuario: userToCreate.USR_Usuario, clave: userToCreate.USR_Clave, title:'Usuario creado con éxito.'});
+          setOpenDialog(true);
+        })
+        .catch(() => {
+          setIsCreatingUser(false);
+          setCrudStatus({ type: 'error', message: 'Error al crear el usuario.' });
+        });
       }
     });
   };
@@ -132,7 +136,7 @@ const User = ({ user, empresas }) => {
     userToUpdate.PER_Descripcion = perfiles.find((p) => p.value === user.PER_Descripcion).text;
     userToUpdate.EMP_Descripcion = lstempresas.find((e) => e.value === user.EMP_Descripcion).text;
     userToUpdate.USR_Clave = small_id;
-
+    
     Swal.fire({
       title: '¿Estás seguro?',
       text: "¿Quieres actualizar este usuario?",
@@ -144,32 +148,36 @@ const User = ({ user, empresas }) => {
     }).then((result) => {
       if (result.isConfirmed) {
         setIsUpdatingUser(true);
-        fetch(`${VITE_API_PUTUSUARIOS_URL}?USR_Id=${user.USR_Id}`, {
+        fetch(`${VITE_API_PUTUSUARIOS_URL}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(userToUpdate),
         })
-          .then(response => {
-            if (response.ok) {
-              return response.json();
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            if (response.status !== 500) {
+              window.location.href = '../';
             } else {
-              throw new Error('Error al actualizar el usuario');
+              throw new Error(response);
             }
-          })
-          .then(urers => {
-            const { data } = urers;
-            setFetchedUsers(data);
-            setIsUpdatingUser(false);
-            setCrudStatus({ type: 'success', message: 'Usuario actualizado con éxito.' });
-            setUserCredentials({ usuario: userToUpdate.USR_Usuario, clave: userToUpdate.USR_Clave, title:'Usuario actualizado con éxito.'});
-            setOpenDialog(true);
-          })
-          .catch(() => {
-            setIsUpdatingUser(false);
-            setCrudStatus({ type: 'error', message: 'Error al actualizar el usuario.' });
-          });
+          }
+        })
+        .then(urers => {
+          const { data } = urers;
+          setFetchedUsers(data);
+          setIsUpdatingUser(false);
+          setCrudStatus({ type: 'success', message: 'Usuario actualizado con éxito.' });
+          setUserCredentials({ usuario: userToUpdate.USR_Usuario, clave: userToUpdate.USR_Clave, title:'Usuario actualizado con éxito.'});
+          setOpenDialog(true);
+        })
+        .catch(() => {
+          setIsUpdatingUser(false);
+          setCrudStatus({ type: 'error', message: 'Error al actualizar el usuario.' });
+        });
       }
     });
   };
@@ -189,23 +197,27 @@ const User = ({ user, empresas }) => {
         fetch(`${VITE_API_DELUSUARIOS_URL}?USR_Id=${userId}`, {
           method: 'DELETE',
         })
-          .then(response => {
-            if (response.ok) {
-              return response.json();
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            if (response.status !== 500) {
+              window.location.href = '../';
             } else {
-              throw new Error('Error al eliminar el usuario');
+              throw new Error(response);
             }
-          })
-          .then(urers => {
-            const { data } = urers;
-            setFetchedUsers(data);
-            setIsDeletingUser(false);
-            setCrudStatus({ type: 'success', message: 'Usuario eliminado con éxito.' });
-          })
-          .catch(() => {
-            setIsDeletingUser(false);
-            setCrudStatus({ type: 'error', message: 'Error al eliminar el usuario.' });
-          });
+          }
+        })
+        .then(urers => {
+          const { data } = urers;
+          setFetchedUsers(data);
+          setIsDeletingUser(false);
+          setCrudStatus({ type: 'success', message: 'Usuario eliminado con éxito.' });
+        })
+        .catch(() => {
+          setIsDeletingUser(false);
+          setCrudStatus({ type: 'error', message: 'Error al eliminar el usuario.' });
+        });
       }
     });
   };
@@ -257,6 +269,20 @@ const User = ({ user, empresas }) => {
             setValidationErrors({
               ...validationErrors,
               USR_Apellido: undefined,
+            }),
+        },
+      },
+       {
+        accessorKey: 'USR_Mail',
+        header: 'Email',
+        muiEditTextFieldProps: {
+          type: 'email',
+          error: !!validationErrors?.USR_Mail,
+          helperText: validationErrors?.USR_Mail,
+          onFocus: () =>
+            setValidationErrors({
+              ...validationErrors,
+              USR_Mail: undefined,
             }),
         },
       },
@@ -469,13 +495,21 @@ const User = ({ user, empresas }) => {
   )
 };
 
-const validateRequired = (value) => !!value.length;
+const validateRequired = (value) => !!value?.length;
+const validateEmail = (email) =>
+  !email ||
+  email
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+);
 
 function validateUser(user) {
   return {
     USR_Usuario: !validateRequired(user.USR_Usuario) ? 'Usuario es obligatorio' : '',
     USR_Nombre: !validateRequired(user.USR_Nombre) ? 'Nombre es obligatorio' : '',
     USR_Apellido: !validateRequired(user.USR_Apellido) ? 'Apellido es obligatorio' : '',
+    USR_Mail: !validateRequired(user.USR_Mail) ? 'Correo es obligatorio' : !validateEmail(user.USR_Mail) ? 'Formato de correo no válido' : '',
     PER_Descripcion: !validateRequired(user.PER_Descripcion) ? 'Perfil es obligatorio' : '',
     EMP_Descripcion: !validateRequired(user.EMP_Descripcion) ? 'Empresa es obligatorio' : '',
     estadodesc: !validateRequired(user.estadodesc) ? 'Estado es Obligatorio' : '',

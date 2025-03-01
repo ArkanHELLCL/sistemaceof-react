@@ -27,7 +27,17 @@ export default function Upload({ user, empresas }) {
   const getUploadedFiles = () => {
     if (empresa) {
       fetch(`${VITE_API_LISTFILES_URL}?tipo=1&cliente_id=${empresa?.id}`)
-        .then(response => response.json())
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            if (response.status !== 500) {
+              window.location.href = '../';
+            } else {
+              throw new Error(response);
+            }
+          }
+        })
         .then(files => {
           const filteredFiles = files.data.filter(file => 
             file.nombre.endsWith('.csv') || 
@@ -60,7 +70,6 @@ export default function Upload({ user, empresas }) {
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       const droppedFiles = Array.from(e.dataTransfer.files).filter(file => file.type === 'text/csv');
       if (droppedFiles.length > 0) {
-        //setFiles((prevFiles) => [...prevFiles, ...droppedFiles]);
         setFiles(droppedFiles);
         setUploadProgress(0);
       } else {
@@ -75,7 +84,6 @@ export default function Upload({ user, empresas }) {
     if (e.target.files && e.target.files.length > 0) {
       const selectedFiles = Array.from(e.target.files).filter(file => file.type === 'text/csv');
       if (selectedFiles.length > 0) {
-        //setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
         setFiles(selectedFiles);
         setUploadProgress(0);
       } else {
@@ -152,7 +160,17 @@ export default function Upload({ user, empresas }) {
       if (fileDownload) {
         if (empresa) {
           fetch(`${VITE_API_DOWNLOAD_URL}?file=${fileDownload}&client_id=${empresa?.id}&tipo=1`)
-          .then(response => response.blob())
+          .then(response => {
+            if (response.ok) {
+              return response.blob();
+            } else {
+              if (response.status !== 500) {
+                window.location.href = '../';
+              } else {
+                throw new Error(response);
+              }
+            }
+          })
           .then(blob => {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -247,14 +265,24 @@ export default function Upload({ user, empresas }) {
             if (empresa) {
               const data = {"tipo": 1, "cliente_id": empresa?.id, "files": row.getValue('nombre')};
               fetch(`${VITE_API_DELFILES_URL}`,{method: 'POST', body: JSON.stringify(data)})
-              .then(response => response.json())
               .then(response => {
-                //setUploadedFiles(files.data);
-                getUploadedFiles();
+                if (response.ok) {
+                  return response.json();
+                } else {
+                  if (response.status !== 500) {
+                    window.location.href = '../';
+                  } else {
+                    throw new Error(response);
+                  }
+                }
               })
-              .catch(error => console.log(error));
+              .then(() => {
+                getUploadedFiles();
+                setUploadStatus({ type: 'success', message: 'Archivo eliminado correctamente.' });
+              })
+              .catch(error => setUploadStatus({ type: 'error', message: error }));
             }else{
-              console.log('No hay empresa seleccionada : ' + empresa);
+              setUploadStatus({ type: 'error', message: 'No hay empresa seleccionada.' });
             }
           }
         })
