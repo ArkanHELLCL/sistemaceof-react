@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-import { Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from './components/header.jsx'
 import Sidebar from './components/sidebar.jsx'
 import Footer from './components/footer.jsx'
@@ -13,7 +13,6 @@ function App() {
   const [user, setUser] = useState();
   const [data, setData] = useState();
   const [dataFormatted, setDataFormatted] = useState();
-  const [headers, setHeaders] = useState([]);
   const [mesfinal, setMesFinal] = useState();
   const [menu, setMenu] = useState({"Dashboard" : true});
   const [empresas, setEmpresas] = useState([]);
@@ -73,8 +72,7 @@ function App() {
     })
     .finally(() => {
     })
-    //.catch(error => window.location.href = 'https://ceofconsultores.com/system/');
-    .catch(error => {
+    .catch(() => {
       setGraficos([])
     });
   }
@@ -94,13 +92,11 @@ function App() {
         if(results?.errors.length > 0) {
           setData();
           setMesFinal();
-          //return
         }else{
           const idxMes = results.data[0]?.indexOf('N_MES') || null;
           if(idxMes===null) {
             setData();
             setMesFinal();
-            //return;
           }else{
             setData(results);
             const meses = results.data?.slice(1).map(row => row[idxMes]) || [];
@@ -109,7 +105,7 @@ function App() {
         }
         setLoading(false);
       },
-      error: function(err, file, inputElem, reason)
+      error: function()
       {
         setData();
         setMesFinal();
@@ -137,10 +133,9 @@ function App() {
       })
       .finally(() => {
       })
-      .catch(error => window.location.href = 'https://ceofconsultores.com/system/');
-      /*.catch(error => {
+      .catch(() => 
         setUser([])
-      );*/
+      );      
   }, []);  
 
   //Empresas
@@ -166,7 +161,6 @@ useEffect(() => {
   if(data){
     const Headers = data?.data[0] || [];
     const rows = data?.data?.slice(1) || [];
-    setHeaders(Headers);
 
     const formattedData = rows?.map(row => {
         const obj = {};
