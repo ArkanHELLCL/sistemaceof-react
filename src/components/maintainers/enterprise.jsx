@@ -123,7 +123,7 @@ const Enterprise = ({user}) => {
     
     Swal.fire({
       title: '¿Estás seguro?',
-      text: "¿Quieres actualizar este usuario?",
+      text: "¿Quieres actualizar esta empresa?",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -165,18 +165,47 @@ const Enterprise = ({user}) => {
   };
 
   const deleteEmp = async (empId) => {
-    setIsDeletingEmp(true);
-    try {
-      await fetch(`/api/users/${empId}`, {
-        method: 'DELETE',
-      });
-      setFetchedEmps((prevEmps) =>
-        prevEmps.filter((emp) => emp.id !== empId),
-      );
-      setIsDeletingEmp(false);
-    } catch (error) {
-      setIsDeletingEmp(false);
+    if(empId === user.EMP_Id){
+      setCrudStatus({ type: 'error', message: 'No puedes eliminar tu propia empresa.' });
+      return;
     }
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "¿Quieres eliminar esta empresa?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setIsDeletingEmp(true);
+        fetch(`${VITE_API_DELEMPRESAS_URL}?EMP_Id=${empId}`, {
+          method: 'DELETE',
+        })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            if (response.status !== 500) {
+              window.location.href = '../';
+            } else {
+              throw new Error(response);
+            }
+          }
+        })
+        .then(emps => {
+          const { data } = emps;
+          setFetchedEmps(data);
+          setIsDeletingEmp(false);
+          setCrudStatus({ type: 'success', message: 'Empresa eliminada con éxito.' });
+        })
+        .catch(() => {
+          setIsDeletingEmp(false);
+          setCrudStatus({ type: 'error', message: 'Error al eliminar la Empresa.' });
+        });
+      }
+    });
   };
 
   const columns = useMemo(
@@ -307,9 +336,7 @@ const Enterprise = ({user}) => {
 
   //DELETE action
   const openDeleteConfirmModal = (row) => {
-    if (window.confirm('Are you sure you want to delete this emp?')) {
-      deleteEmp(row.original.id);
-    }
+    deleteEmp(row.original.id);
   };
 
   const handleCloseSnackbar = () => {
