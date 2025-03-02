@@ -186,7 +186,7 @@ const User = ({ user, empresas }) => {
     if(userId === user.USR_Id){
       setCrudStatus({ type: 'error', message: 'No puedes eliminar tu propio usuario.' });
       return;
-    };
+    }
     Swal.fire({
       title: '¿Estás seguro?',
       text: "¿Quieres eliminar este usuario?",

@@ -55,7 +55,7 @@ export default function Download({ user, empresas, empresa:emp }) {
           );
           setUploadedFiles(filteredFiles);
         })
-        .catch(error => console.log(error));
+        .catch(() => setUploadedFiles([]));
     }
   };
 
@@ -189,7 +189,7 @@ export default function Download({ user, empresas, empresa:emp }) {
           a.click();
           window.URL.revokeObjectURL(url);
         })
-        .catch(error => console.log(error));
+        .catch(() => setUploadStatus({ type: 'error', message: 'No se pudo descargar el archivo.' }));
       }
     }
   }, [fileDownload, empresa]);

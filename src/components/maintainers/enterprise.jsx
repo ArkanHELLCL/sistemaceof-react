@@ -1,15 +1,13 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useMemo, useState, useEffect } from 'react';
-import {
-  MaterialReactTable,
-  useMaterialReactTable,
-} from 'material-react-table';
-import { Box, Button, IconButton, Tooltip } from '@mui/material';
+import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
+import { Box, Button, IconButton, Tooltip, Snackbar, Alert } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Grid from '@mui/material/Grid2';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import Swal from 'sweetalert2';
 
 const Enterprise = ({user}) => {
   const [validationErrors, setValidationErrors] = useState({});
@@ -19,17 +17,18 @@ const Enterprise = ({user}) => {
   const [isCreatingEmp, setIsCreatingEmp] = useState(false);
   const [isUpdatingEmp, setIsUpdatingEmp] = useState(false);
   const [isDeletingEmp, setIsDeletingEmp] = useState(false);
+  const [crudStatus, setCrudStatus] = useState(null);
 
   const VITE_API_GETEMPRESAS_URL = import.meta.env.VITE_API_GETEMPRESAS_URL;
   const VITE_API_POSTEMPRESAS_URL = import.meta.env.VITE_API_POSTEMPRESAS_URL;
-  const VITE_API_PUTEEMPRESAS_URL = import.meta.env.VITE_API_PUTEEMPRESAS_URL;
-  const VITE_API_DELEEMPRESAS_URL = import.meta.env.VITE_API_DELEEMPRESAS_URL;
+  const VITE_API_PUTEMPRESAS_URL = import.meta.env.VITE_API_PUTEMPRESAS_URL;
+  const VITE_API_DELEMPRESAS_URL = import.meta.env.VITE_API_DELEMPRESAS_URL;
 
   const tpoGraph = [
-    {value :'Sin Tipo', text:1},
-    {value :'Tipo 1', text:2},
-    {value :'Tipo 2', text:3},
-    {value :'Tipo 3', text:4},    
+    {value :'Sin Tipo', text:0},
+    {value :'Tipo 1', text:1},
+    {value :'Tipo 2', text:2},
+    {value :'Tipo 3', text:3},    
   ];
 
   const estado = [
@@ -70,45 +69,99 @@ const Enterprise = ({user}) => {
   };
 
   const createEmp = async (emp) => {
-    setIsCreatingEmp(true);
-    try {
-      const response = await fetch('/api/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(emp),
-      });
-      const newEmp = await response.json();
-      setFetchedEmps((prevEmps) => [...prevEmps, newEmp]);
-      setIsCreatingEmp(false);
-    } catch (error) {
-      setIsCreatingEmp(false);
-    }
+    const empToCreate = { ...emp };
+    empToCreate.destipografico = tpoGraph.find((g) => g.value === emp.destipografico).text;
+    empToCreate.estadodesc = estado.find((e) => e.value === emp.estadodesc).text;
+    
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "¿Quieres crear esta empresa?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, crear!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setIsCreatingEmp(true);
+        fetch(`${VITE_API_POSTEMPRESAS_URL}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(empToCreate),
+        })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            if (response.status !== 500) {
+              window.location.href = '../';
+            } else {
+              throw new Error(response);
+            }
+          }
+        })
+        .then(newUser => {
+          const { data } = newUser;
+          setFetchedEmps(data);
+          setIsCreatingEmp(false);
+          setCrudStatus({ type: 'success', message: 'Empresa creada con éxito.' });
+        })
+        .catch(() => {
+          setIsCreatingEmp(false);
+          setCrudStatus({ type: 'error', message: 'Error al crear la Empresa.' });
+        });
+      }
+    });
   };
 
   const updateEmp = async (emp) => {
     const empToUpdate = { ...emp };
     empToUpdate.destipografico = tpoGraph.find((g) => g.value === emp.destipografico).text;
-
-    setIsUpdatingEmp(true);
-    try {
-      await fetch(`/api/users/${emp.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(empToUpdate),
-      });
-      setFetchedEmps((prevEmps) =>
-        prevEmps.map((prevEmp) =>
-          prevEmp.id === emp.id ? emp : prevEmp,
-        ),
-      );
-      setIsUpdatingEmp(false);
-    } catch (error) {
-      setIsUpdatingEmp(false);
-    }
+    empToUpdate.estadodesc = estado.find((e) => e.value === emp.estadodesc).text;
+    
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "¿Quieres actualizar este usuario?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, actualizar!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setIsUpdatingEmp(true);
+        fetch(`${VITE_API_PUTEMPRESAS_URL}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(empToUpdate),
+        })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            if (response.status !== 500) {
+              window.location.href = '../';
+            } else {
+              throw new Error(response);
+            }
+          }
+        })
+        .then(emps => {
+          const { data } = emps;
+          setFetchedEmps(data);
+          setIsUpdatingEmp(false);
+          setCrudStatus({ type: 'success', message: 'Empresa actualizada con éxito.' });
+        })
+        .catch(() => {
+          setIsUpdatingEmp(false);
+          setCrudStatus({ type: 'error', message: 'Error al actualizar la Empresa.' });
+        });
+      }
+    });
   };
 
   const deleteEmp = async (empId) => {
@@ -259,6 +312,10 @@ const Enterprise = ({user}) => {
     }
   };
 
+  const handleCloseSnackbar = () => {
+    setCrudStatus(null);
+  };
+
   const table = useMaterialReactTable({
     columns,
     data: fetchedEmps,
@@ -336,6 +393,7 @@ const Enterprise = ({user}) => {
     },
   });
   return (
+    <>
       <Grid container spacing={2} className='pb-4'>
         <Grid size={{ xs: 12, xl: 12 }} className='pb-4'>
             <div className="flex justify-center rounded-xl bg-[#5d4889] text-white shadow-md py-4 align-middle">
@@ -345,8 +403,16 @@ const Enterprise = ({user}) => {
         <Grid size={{ xs: 12, xl: 12 }} sx={{height: '100%'}}> 
           <MaterialReactTable table={table} />
         </Grid>
-      </Grid> 
-    )
+      </Grid>{
+        crudStatus && (
+          <Snackbar open={true} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+            <Alert onClose={handleCloseSnackbar} severity={crudStatus.type} sx={{ width: '100%' }}>
+              {crudStatus.message}
+            </Alert>
+          </Snackbar>
+        )}
+    </>
+  )
 };
 
 const validateRequired = (value) => !!value.length;

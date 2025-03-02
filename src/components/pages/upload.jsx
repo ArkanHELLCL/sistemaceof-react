@@ -49,7 +49,7 @@ export default function Upload({ user, empresas }) {
           );
           setUploadedFiles(filteredFiles);
         })
-        .catch(error => console.log(error));
+        .catch(() => setUploadedFiles([]));
     }
   };
   
@@ -181,7 +181,7 @@ export default function Upload({ user, empresas }) {
             a.click();
             window.URL.revokeObjectURL(url);
           })
-          .catch(error => console.log(error));
+          .catch(() => setUploadStatus({ type: 'error', message: 'Error al descargar el archivo.' }));
         }
       }
     }, [fileDownload, empresa]);
