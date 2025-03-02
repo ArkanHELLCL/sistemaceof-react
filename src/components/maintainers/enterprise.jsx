@@ -219,6 +219,7 @@ const Enterprise = ({user}) => {
       {
         accessorKey: 'label',
         header: 'Razón Social',
+        size: 80,
         muiEditTextFieldProps: {
           required: true,
           error: !!validationErrors?.label,
@@ -233,6 +234,7 @@ const Enterprise = ({user}) => {
       {
         accessorKey: 'EMP_Codigo',
         header: 'RUT',
+        size: 80,
         muiEditTextFieldProps: {
           required: true,
           error: !!validationErrors?.EMP_Codigo,
@@ -247,6 +249,7 @@ const Enterprise = ({user}) => {
       {
         accessorKey: 'EMP_Email',
         header: 'Email',
+        size: 200,
         muiEditTextFieldProps: {
           type: 'email',
           error: !!validationErrors?.EMP_Email,
@@ -259,39 +262,9 @@ const Enterprise = ({user}) => {
         },
       },
       {
-        accessorKey: 'EMP_UrlLogo',
-        header: 'URL del Logo',
-        muiEditTextFieldProps: {
-          type: 'url',
-          error: !!validationErrors?.EMP_UrlLogo,
-          helperText: validationErrors?.EMP_UrlLogo,
-          onFocus: () =>
-            setValidationErrors({
-              ...validationErrors,
-              EMP_UrlLogo: undefined,
-            }),
-        },
-      },
-      {
-        accessorKey: 'destipografico',
-        header: 'Tipo de Gráfico',       
-        editVariant: 'select',       
-        editSelectOptions: tpoGraph,
-        muiEditTextFieldProps: {
-          select: true,
-          required: true,
-          error: !!validationErrors?.destipografico,
-          helperText: validationErrors?.destipografico,
-          onFocus: () =>
-            setValidationErrors({
-              ...validationErrors,
-              destipografico: undefined,
-            }),
-        },
-      },
-      {
         accessorKey: 'estadodesc',
-        header: 'Estado',       
+        header: 'Estado',
+        size: 80,
         editVariant: 'select',       
         editSelectOptions: estado,
         muiEditTextFieldProps: {
@@ -306,6 +279,39 @@ const Enterprise = ({user}) => {
             }),
         },
       },
+      {
+        accessorKey: 'EMP_UrlLogo',
+        header: 'URL del Logo',
+        size: 80,
+        muiEditTextFieldProps: {
+          type: 'url',
+          error: !!validationErrors?.EMP_UrlLogo,
+          helperText: validationErrors?.EMP_UrlLogo,
+          onFocus: () =>
+            setValidationErrors({
+              ...validationErrors,
+              EMP_UrlLogo: undefined,
+            }),
+        },
+      },
+      {
+        accessorKey: 'destipografico',
+        header: 'Tipo de Gráfico',       
+        editVariant: 'select',
+        size: 80,
+        editSelectOptions: tpoGraph,
+        muiEditTextFieldProps: {
+          select: true,
+          required: true,
+          error: !!validationErrors?.destipografico,
+          helperText: validationErrors?.destipografico,
+          onFocus: () =>
+            setValidationErrors({
+              ...validationErrors,
+              destipografico: undefined,
+            }),
+        },
+      }      
     ],
     [validationErrors],
   );
