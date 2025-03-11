@@ -348,30 +348,30 @@ export default function Download({ user, empresas, empresa:emp }) {
   }, [empresa]);
 
   return (    
-      <section className=''>{
+      <section className=''>
+        <div className='pb-6'>
+          <Grid container spacing={1}>
+            <Grid size={{ xs: 12, xl: 12 }} className='pb-4'>
+                <div className="flex justify-center rounded-xl bg-[#5d4889] text-white shadow-md py-4 align-middle">
+                    <h2 className="text-2xl font-light text-center">{user?.PER_Id === 1 ? 'Subir Documentos' : 'Selecciona una Empresa'}</h2>
+                </div>
+            </Grid>
+            <Grid size={{ xs: 12, xl: 6 }} className=''>
+              <Autocomplete
+                disablePortal
+                disableClearable={true}
+                id="empresas"
+                value={empresa}
+                options={empresas}
+                onChange={(event, newValue) => { setEmpresa(newValue) }}
+                sx={{ width: "100%" }}
+                renderInput={(params) => <TextField {...params} label="Empresa" variant="standard" />}
+              />
+            </Grid>
+          </Grid>
+        </div>{
         user?.PER_Id == 1 &&
           <>
-            <div>
-              <Grid container spacing={1}>
-                <Grid size={{ xs: 12, xl: 12 }} className='pb-4'>
-                    <div className="flex justify-center rounded-xl bg-[#5d4889] text-white shadow-md py-4 align-middle">
-                        <h2 className="text-2xl font-light text-center">{'Subir Documentos'}</h2>
-                    </div>
-                </Grid>
-                <Grid size={{ xs: 12, xl: 6 }} className=''>
-                  <Autocomplete
-                    disablePortal
-                    disableClearable={true}
-                    id="empresas"
-                    value={empresa}
-                    options={empresas}
-                    onChange={(event, newValue) => { setEmpresa(newValue) }}
-                    sx={{ width: "100%" }}
-                    renderInput={(params) => <TextField {...params} label="Empresa" variant="standard" />}
-                  />
-                </Grid>
-              </Grid>
-            </div>
             <div className="flex flex-col items-center justify-start h-full p-8 w-full relative">
               <div
                 className={`border-4 border-dashed rounded-lg p-8 mb-4 w-full text-center peer/hoverfile cursor-pointer text-[#5D4889] group ${dragActive ? 'border-blue-500' : 'border-gray-300'}`}

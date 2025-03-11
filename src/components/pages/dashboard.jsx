@@ -134,7 +134,7 @@ export default function DashBoard({data, mes, user, empresas, empresa, setEmpres
     }
     setLoading(false);
   },[anioSelected]);
-
+  
   return (
     loading ? <Loading /> :
       data && anioSelected && mesSelected ?//&& datosFiltrados && sumaNiveles && sumaNivelesFitrado && empresa && anios ?
@@ -173,7 +173,8 @@ export default function DashBoard({data, mes, user, empresas, empresa, setEmpres
               renderInput={(params) => <TextField {...params} label="Mes" variant="standard"/>}
             />
           </Grid>{  
-            user?.PER_Id === 1 ?
+            //user?.PER_Id === 1 ?
+            empresas.length > 1 ?
               <Grid size={{ xs: 12, xl: 4 }} className='sticky !-top-3 bg-white z-10 opacity-85 !pt-2'>
                 <Autocomplete
                   disablePortal
@@ -188,17 +189,17 @@ export default function DashBoard({data, mes, user, empresas, empresa, setEmpres
               </Grid>
             : <Grid size={{ xs: 12, xl: 4 }}/>
             }{
-              ((user?.PER_Id === 1 && empresa?.tipografico === 1) || (user?.PER_Id > 1 && user?.EMP_TipoGrafico === 1))  &&
+              empresa?.tipografico === 1  &&
                 <Suspense fallback={<Loading />}>
                   <Graphtype1 anioSelected={anioSelected} mes={[mesSelected[0]?.month]} datosFiltrados={datosFiltrados} sumaNiveles={sumaNiveles} sumaNivelesFitrado={sumaNivelesFitrado} Anios={anios}/>
                 </Suspense>
             }{
-              ((user?.PER_Id === 1 && empresa?.tipografico === 2) || (user?.PER_Id > 1 && user?.EMP_TipoGrafico === 2))  &&
+              empresa?.tipografico === 2  &&
                 <Suspense fallback={<Loading />}>
                   <Graphtype2 anioSelected={anioSelected} mes={[mesSelected[0]?.month]} datosFiltrados={datosFiltrados} sumaNiveles={sumaNiveles} sumaNivelesFitrado={sumaNivelesFitrado} Anios={anios}/>
                 </Suspense>
             }{
-              ((user?.PER_Id === 1 && empresa?.tipografico === 3) || (user?.PER_Id > 1 && user?.EMP_TipoGrafico === 3))  &&
+              empresa?.tipografico === 3  &&
                 <Suspense fallback={<Loading />}>
                   <Graphtype3 anioSelected={anioSelected} mes={[mesSelected[0]?.month]} datosFiltrados={datosFiltrados} sumaNiveles={sumaNiveles} sumaNivelesFitrado={sumaNivelesFitrado} Anios={anios}/>
                 </Suspense>

@@ -41,7 +41,10 @@ function App() {
     })
     .then(emps => {
       setEmpresas(emps.data)
-      setEmpresa(emps.data[1])
+      if(emps.data.length > 1)
+        setEmpresa(emps.data[1])
+      else
+        setEmpresa(emps.data[0])
       //getGraficos(emps.data[0]);
       //getBasecsv(emps.data[0]);
     })
@@ -140,13 +143,14 @@ function App() {
 
   //Empresas
   useEffect(() => {
-    if(user?.PER_Id === 1){
+    if(user)
+    //if(user?.PER_Id === 1){
       getEmpresas();
-    }else{
+    /*}else{
       if(user?.EMP_Id!==undefined && user?.PER_Id >= 2){
         setEmpresa({id:user?.EMP_Id,label:user?.EMP_Descripcion,tipografico:user?.EMP_TipoGrafico});
       }
-    }
+    }*/
   },[user])
 
   //data

@@ -14,22 +14,22 @@ export default function Main ({data, mes, user, menu, empresas, graficos, setGra
       {
         menu.Dashboard &&
           <Suspense fallback={<Loading />}>
-            <DashBoard data={data} mes={mes} user={user} empresas={empresas.slice(1)} graficos={graficos} setGraficos={setGraficos} empresa={empresa} setEmpresa={setEmpresa} menu={menu}/>
+            <DashBoard data={data} mes={mes} user={user} empresas={user.PER_Id === 1 ? empresas.slice(1) : empresas } graficos={graficos} setGraficos={setGraficos} empresa={empresa} setEmpresa={setEmpresa} menu={menu}/>
           </Suspense>
       }{
         menu.Download &&
           <Suspense fallback={<Loading />}>
-            <Download user={user} empresas={empresas.slice(1)} empresa={empresa}/>
+            <Download user={user} empresas={user.PER_Id === 1 ? empresas.slice(1) : empresas} empresa={empresa}/>
           </Suspense>
       }{
         menu.Upload &&
           <Suspense fallback={<Loading />}>
-            <Upload user={user} empresas={empresas.slice(1)}/>
+            <Upload user={user} empresas={user.PER_Id === 1 ? empresas.slice(1) : empresas}/>
           </Suspense>
       }{
         menu.Contacto &&
           <Suspense fallback={<Loading />}>
-            <Contact user={user} empresa={empresa} empresas={empresas.slice(1)}/>
+            <Contact user={user} empresa={empresa} empresas={empresas}/>
           </Suspense>
       }{
         menu.Empresas &&
