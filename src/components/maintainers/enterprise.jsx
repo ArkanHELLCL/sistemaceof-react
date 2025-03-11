@@ -9,7 +9,7 @@ import Grid from '@mui/material/Grid2';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Swal from 'sweetalert2';
 
-const Enterprise = ({user}) => {
+const Enterprise = ({user, setNuevaEmpresa}) => {
   const [validationErrors, setValidationErrors] = useState({});
   const [fetchedEmps, setFetchedEmps] = useState([]);
   const [isLoadingEmps, setIsLoadingEmps] = useState(true);
@@ -106,6 +106,7 @@ const Enterprise = ({user}) => {
           const { data } = newUser;
           setFetchedEmps(data);
           setIsCreatingEmp(false);
+          setNuevaEmpresa(true);
           setCrudStatus({ type: 'success', message: 'Empresa creada con éxito.' });
         })
         .catch(() => {

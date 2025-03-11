@@ -19,6 +19,7 @@ function App() {
   const [graficos, setGraficos] = useState([]);
   const [empresa, setEmpresa] = useState('');
   const [loading, setLoading] = useState(true);
+  const [nuevaEmpresa, setNuevaEmpresa] = useState(false);
 
   const VITE_API_GETEMPRESAS_URL = import.meta.env.VITE_API_GETEMPRESAS_URL;
   const VITE_API_GETUSUARIO_URL = import.meta.env.VITE_API_GETUSUARIO_URL;
@@ -151,7 +152,7 @@ function App() {
         setEmpresa({id:user?.EMP_Id,label:user?.EMP_Descripcion,tipografico:user?.EMP_TipoGrafico});
       }
     }*/
-  },[user])
+  },[user, nuevaEmpresa])
 
   //data
   useEffect(() => {
@@ -248,7 +249,7 @@ useEffect(() => {
           <Header title={title} />
           <Sidebar setTitle={setTitle} user={user} setMenu={setMenu}/>
           <Footer user={user}/>
-          <Main data={dataFormatted} mes={[mesfinal]} user={user} menu={menu} empresas={empresas} graficos={graficos} setGraficos={setGraficos} empresa={empresa} setEmpresa={setEmpresa}/>
+          <Main data={dataFormatted} mes={[mesfinal]} user={user} menu={menu} empresas={empresas} graficos={graficos} setGraficos={setGraficos} empresa={empresa} setEmpresa={setEmpresa} setNuevaEmpresa={setNuevaEmpresa}/>
         </>
     }
     </main>

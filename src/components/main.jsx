@@ -8,7 +8,7 @@ import User from "./maintainers/user.jsx";
 import { Suspense } from "react";
 import Loading from "./loading.jsx";
 
-export default function Main ({data, mes, user, menu, empresas, graficos, setGraficos, empresa, setEmpresa}) {
+export default function Main ({data, mes, user, menu, empresas, graficos, setGraficos, empresa, setEmpresa, setNuevaEmpresa}) {
   return (
     <section className="main bg-white w-full px-10 pt-4 pb-20 relative">
       {
@@ -34,7 +34,7 @@ export default function Main ({data, mes, user, menu, empresas, graficos, setGra
       }{
         menu.Empresas &&
           <Suspense fallback={<Loading />}>
-            <Enterprise user={user} />
+            <Enterprise user={user} setNuevaEmpresa={setNuevaEmpresa}/>
           </Suspense>
       }{
         menu.Usuarios &&
