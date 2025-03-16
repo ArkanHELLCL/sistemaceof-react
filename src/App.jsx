@@ -247,7 +247,7 @@ useEffect(() => {
       loading ? <Loading /> :
         <>
           <Header title={title} />
-          <Sidebar setTitle={setTitle} user={user} setMenu={setMenu}/>
+          <Sidebar setTitle={setTitle} user={user} setMenu={setMenu} empresa={empresa}/>
           <Footer user={user}/>
           <Main data={dataFormatted} mes={[mesfinal]} user={user} menu={menu} empresas={empresas} graficos={graficos} setGraficos={setGraficos} empresa={empresa} setEmpresa={setEmpresa} setNuevaEmpresa={setNuevaEmpresa}/>
         </>
