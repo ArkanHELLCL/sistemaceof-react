@@ -5,6 +5,7 @@ import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 import { Box, Button, IconButton, Tooltip, Snackbar, Alert } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AddBusinessIcon from '@mui/icons-material/AddBusiness';
 import Grid from '@mui/material/Grid2';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Swal from 'sweetalert2';
@@ -360,7 +361,7 @@ const Enterprise = ({user, setNuevaEmpresa}) => {
     muiToolbarAlertBannerProps: isLoadingEmpsError
       ? {
           color: 'error',
-          children: 'Error loading data',
+          children: 'Error leyendo los datos',
         }
       : undefined,    
     enableColumnActions: false,
@@ -397,12 +398,12 @@ const Enterprise = ({user, setNuevaEmpresa}) => {
     onEditingRowSave: handleSaveEmp,
     renderRowActions: ({ row, table }) => (
       <Box sx={{ display: 'flex', gap: '1rem' }}>
-        <Tooltip title="Edit">
-          <IconButton onClick={() => table.setEditingRow(row)}>
+        <Tooltip title="Editar Empresa">
+          <IconButton color="warning" onClick={() => table.setEditingRow(row)}>
             <EditIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Delete">
+        <Tooltip title="Borrar Empresa">
           <IconButton color="error" onClick={() => openDeleteConfirmModal(row)}>
             <DeleteIcon />
           </IconButton>
@@ -416,7 +417,7 @@ const Enterprise = ({user, setNuevaEmpresa}) => {
           table.setCreatingRow(true); //simplest way to open the create row modal with no default values
         }}
       >
-        Crear nueva Empresa
+        <AddBusinessIcon />
       </Button>
     ),
     state: {

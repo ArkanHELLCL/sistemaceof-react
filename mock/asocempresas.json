@@ -1,0 +1,16 @@
+{
+  "data": [
+    {
+      "USR_Id": 1,
+      "EMP_Id": 1,
+      "EMP_Descripcion": "EMPRESA 1",
+      "EMP_Codigo": "1-9"
+    },
+    {
+      "USR_Id": 1,
+      "EMP_Id": 2,
+      "EMP_Descripcion": "EMPRESA 2",
+      "EMP_Codigo": "1-9"
+    }
+  ]
+}

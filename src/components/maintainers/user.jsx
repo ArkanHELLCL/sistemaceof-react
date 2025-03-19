@@ -5,15 +5,17 @@ import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 import { Box, Button, IconButton, Tooltip, Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt'; 
 import Grid from '@mui/material/Grid2';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { v4 as uuid } from "uuid";
 import Swal from 'sweetalert2';
+import UserAsocEmp from './userAsocEmp.jsx';
 
 const User = ({ user, empresas }) => {
   const [validationErrors, setValidationErrors] = useState({});
   const [fetchedUsers, setFetchedUsers] = useState([]);
-  const [isLoadingUsers, setIsLoadingUsers] = useState(true);
+  const [isLoadingUsers, setIsLoadingUsers] = useState(false);
   const [isLoadingUsersError, setIsLoadingUsersError] = useState(false);
   const [isCreatingUser, setIsCreatingUser] = useState(false);
   const [isUpdatingUser, setIsUpdatingUser] = useState(false);
@@ -39,10 +41,6 @@ const User = ({ user, empresas }) => {
     { value: 'Administrador', text: 1 },
     { value: 'Usuario', text: 3 }
   ];
-
-  const lstempresas = empresas.map((empresa) => {
-    return { value: empresa.label, text: empresa.id };
-  });
 
   useEffect(() => {
     fetchUsers();
@@ -81,8 +79,7 @@ const User = ({ user, empresas }) => {
   const createUser = async (user) => {
     const userToCreate = { ...user };
     userToCreate.estadodesc = estado.find((e) => e.value === user.estadodesc).text;
-    userToCreate.PER_Descripcion = perfiles.find((p) => p.value === user.PER_Descripcion).text;
-    userToCreate.EMP_Descripcion = lstempresas.find((e) => e.value === user.EMP_Descripcion).text;
+    userToCreate.PER_Descripcion = perfiles.find((p) => p.value === user.PER_Descripcion).text;    
     userToCreate.USR_Clave = small_id;
 
     Swal.fire({
@@ -133,8 +130,7 @@ const User = ({ user, empresas }) => {
   const updateUser = async (user) => {
     const userToUpdate = { ...user };
     userToUpdate.estadodesc = estado.find((e) => e.value === user.estadodesc).text;
-    userToUpdate.PER_Descripcion = perfiles.find((p) => p.value === user.PER_Descripcion).text;
-    userToUpdate.EMP_Descripcion = lstempresas.find((e) => e.value === user.EMP_Descripcion).text;
+    userToUpdate.PER_Descripcion = perfiles.find((p) => p.value === user.PER_Descripcion).text;    
     userToUpdate.USR_Clave = small_id;
     
     Swal.fire({
@@ -308,23 +304,6 @@ const User = ({ user, empresas }) => {
         },
       },
       {
-        accessorKey: 'EMP_Descripcion',
-        header: 'Empresa',
-        editVariant: 'select',
-        editSelectOptions: lstempresas,
-        muiEditTextFieldProps: {
-          select: true,
-          required: true,
-          error: !!validationErrors?.EMP_Descripcion,
-          helperText: validationErrors?.EMP_Descripcion,
-          onFocus: () =>
-            setValidationErrors({
-              ...validationErrors,
-              EMP_Descripcion: undefined,
-            }),
-        },
-      },
-      {
         accessorKey: 'estadodesc',
         header: 'Estado',
         editVariant: 'select',
@@ -397,7 +376,7 @@ const User = ({ user, empresas }) => {
     muiToolbarAlertBannerProps: isLoadingUsersError
       ? {
         color: 'error',
-        children: 'Error loading data',
+        children: 'Error leyendo los datos',
       }
       : undefined,
     enableColumnActions: false,
@@ -434,16 +413,16 @@ const User = ({ user, empresas }) => {
     onEditingRowSave: handleSaveUser,
     renderRowActions: ({ row, table }) => (
       <Box sx={{ display: 'flex', gap: '1rem' }}>
-        <Tooltip title="Edit">
-          <IconButton onClick={() => table.setEditingRow(row)}>
+        <Tooltip title="Editar Usuario">
+          <IconButton color="warning" onClick={() => table.setEditingRow(row)}>
             <EditIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Delete">
+        <Tooltip title="Borrar Usuario">
           <IconButton color="error" onClick={() => openDeleteConfirmModal(row)}>
             <DeleteIcon />
           </IconButton>
-        </Tooltip>
+        </Tooltip>        
       </Box>
     ),
     renderTopToolbarCustomActions: ({ table }) => (
@@ -453,7 +432,7 @@ const User = ({ user, empresas }) => {
           table.setCreatingRow(true); //simplest way to open the create row modal with no default values
         }}
       >
-        Crear nuevo Usuario
+        <PersonAddAltIcon />
       </Button>
     ),
     state: {
@@ -462,6 +441,7 @@ const User = ({ user, empresas }) => {
       showAlertBanner: isLoadingUsersError,
       showProgressBars: isLoadingUsers,
     },
+    renderDetailPanel: ({ row }) => <UserAsocEmp row={row} user={user} empresas={empresas} />,
   });
   return (
     <>
@@ -500,6 +480,7 @@ const User = ({ user, empresas }) => {
 };
 
 const validateRequired = (value) => !!value?.length;
+
 const validateEmail = (email) =>
   !email ||
   email
@@ -514,8 +495,7 @@ function validateUser(user) {
     USR_Nombre: !validateRequired(user.USR_Nombre) ? 'Nombre es obligatorio' : '',
     USR_Apellido: !validateRequired(user.USR_Apellido) ? 'Apellido es obligatorio' : '',
     USR_Mail: !validateRequired(user.USR_Mail) ? 'Correo es obligatorio' : !validateEmail(user.USR_Mail) ? 'Formato de correo no válido' : '',
-    PER_Descripcion: !validateRequired(user.PER_Descripcion) ? 'Perfil es obligatorio' : '',
-    EMP_Descripcion: !validateRequired(user.EMP_Descripcion) ? 'Empresa es obligatorio' : '',
+    PER_Descripcion: !validateRequired(user.PER_Descripcion) ? 'Perfil es obligatorio' : '',    
     estadodesc: !validateRequired(user.estadodesc) ? 'Estado es Obligatorio' : '',
   };
 }
