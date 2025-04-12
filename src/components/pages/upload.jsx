@@ -182,6 +182,7 @@ export default function Upload({ user, empresas }) {
             window.URL.revokeObjectURL(url);
           })
           .catch(() => setUploadStatus({ type: 'error', message: 'Error al descargar el archivo.' }));
+          setFileDownload(''); // Limpiar el estado de descarga después de iniciar la descarga
         }
       }
     }, [fileDownload, empresa]);

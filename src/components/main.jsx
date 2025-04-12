@@ -19,17 +19,17 @@ export default function Main ({data, mes, user, menu, empresas, graficos, setGra
       }{
         menu.Download &&
           <Suspense fallback={<Loading />}>
-            <Download user={user} empresas={user.PER_Id === 1 ? empresas.slice(1) : empresas} empresa={empresa}/>
+            <Download user={user} empresas={user.PER_Id === 1 ? empresas.slice(1).sort((a, b) => a.label.localeCompare(b.label)) : empresas.sort((a, b) => a.label.localeCompare(b.label))} empresa={empresa}/>
           </Suspense>
       }{
         menu.Upload &&
           <Suspense fallback={<Loading />}>
-            <Upload user={user} empresas={user.PER_Id === 1 ? empresas.slice(1) : empresas}/>
+            <Upload user={user} empresas={user.PER_Id === 1 ? empresas.slice(1).sort((a, b) => a.label.localeCompare(b.label)) : empresas.sort((a, b) => a.label.localeCompare(b.label))}/>
           </Suspense>
       }{
         menu.Contacto &&
           <Suspense fallback={<Loading />}>
-            <Contact user={user} empresa={empresa} empresas={empresas}/>
+            <Contact user={user} empresa={empresa} empresas={empresas.sort((a, b) => a.label.localeCompare(b.label))}/>
           </Suspense>
       }{
         menu.Empresas &&
@@ -39,7 +39,7 @@ export default function Main ({data, mes, user, menu, empresas, graficos, setGra
       }{
         menu.Usuarios &&
           <Suspense fallback={<Loading />}>
-            <User user={user} empresas={empresas} />
+            <User user={user} empresas={empresas.sort((a, b) => a.label.localeCompare(b.label))} />
           </Suspense>
       }
     </section>

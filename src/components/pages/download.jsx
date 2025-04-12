@@ -190,6 +190,7 @@ export default function Download({ user, empresas, empresa:emp }) {
           window.URL.revokeObjectURL(url);
         })
         .catch(() => setUploadStatus({ type: 'error', message: 'No se pudo descargar el archivo.' }));
+        setFileDownload(''); // Reset fileDownload after download
       }
     }
   }, [fileDownload, empresa]);
