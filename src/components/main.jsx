@@ -14,7 +14,7 @@ export default function Main ({data, mes, user, menu, empresas, graficos, setGra
       {
         menu.Dashboard &&
           <Suspense fallback={<Loading />}>
-            <DashBoard data={data} mes={mes} user={user} empresas={user.PER_Id === 1 ? empresas.slice(1) : empresas } graficos={graficos} setGraficos={setGraficos} empresa={empresa} setEmpresa={setEmpresa} menu={menu}/>
+            <DashBoard data={data} mes={mes} user={user} empresas={user.PER_Id === 1 ? empresas.slice(1).sort((a, b) => a.label.localeCompare(b.label)) : empresas.sort((a, b) => a.label.localeCompare(b.label)) } graficos={graficos} setGraficos={setGraficos} empresa={empresa} setEmpresa={setEmpresa} menu={menu}/>
           </Suspense>
       }{
         menu.Download &&
