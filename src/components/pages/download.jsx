@@ -170,7 +170,7 @@ export default function Download({ user, empresas, empresa:emp }) {
         fetch(`${VITE_API_DOWNLOAD_URL}?file=${fileDownload}&client_id=${empresa?.id}`)
         .then(response => {
           if (response.ok) {
-            return response.json();
+            return response.blob();
           } else {
             if (response.status !== 500) {
               window.location.href = '../';
