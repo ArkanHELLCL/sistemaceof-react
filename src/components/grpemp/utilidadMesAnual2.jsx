@@ -70,7 +70,7 @@ export default function UtilidadMesAnual2({data, anio, mes}){
             valor2 = parseFloat(data[0]["nivel1"]['2.1.']?.months?.slice(0,[mes]).reduce((acc, val) => acc + val, 0)) || 0;
             valor = valor ? valor : 0;
             valor2 = valor2 ? valor2 : 0;
-            valor = valor - valor2;
+            //valor = valor - valor2;
             if(valor !== 0){
                 valor = valorAnt + valor;
                 result = [valor, valorAnt]

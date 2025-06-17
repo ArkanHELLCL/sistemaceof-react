@@ -79,7 +79,6 @@ const UserAsocEmp = ({ row, user, empresas }) => {
 
   const  saveAsocEmp = async (emp) => {
     const empToSave = { ...emp };
-    console.log(empToSave);
     empToSave.EMP_Descripcion = lstempresas.find((e) => e.value === user.EMP_Descripcion).text;
     Swal.fire({
       title: '¿Estás seguro?',
